@@ -7,7 +7,7 @@ module.exports = {
   ],
   plugins: ['prettier', '@tanstack/query'],
   rules: {
-    quotes: ['error', 'single'],
+    'quotes': ['error', 'single'],
     'comma-dangle': ['error', 'never'],
     'object-shorthand': ['error', 'always', { avoidQuotes: false }],
     'object-curly-spacing': ['error', 'always'],

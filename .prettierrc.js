@@ -7,5 +7,7 @@ module.exports = {
   quoteProps: 'consistent',
   printWidth: 90,
   singleAttributePerLine: true,
-  bracketSameLine: false
+  bracketSameLine: false,
+  bracketSpacing: true,
+  endOfLine:"auto"
 };
