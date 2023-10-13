@@ -1,8 +1,8 @@
 import React from 'react';
 import { NAVBAR } from '@constants/constants';
 import {
-  LongPressGestureHandler,
-  LongPressGestureHandlerGestureEvent
+  PanGestureHandler,
+  PanGestureHandlerGestureEvent
 } from 'react-native-gesture-handler';
 import Animated, {
   useAnimatedGestureHandler,
@@ -14,7 +14,7 @@ import HomeIcon from '@assets/svg/navbar/home.svg';
 import CompareIcon from '@assets/svg/navbar/compare.svg';
 import FavouritesIcon from '@assets/svg/navbar/favourites.svg';
 import TeamsIcon from '@assets/svg/navbar/pokeball.svg';
-import { Pressable } from 'react-native';
+import { View } from 'react-native';
 import { Colors } from '@constants/styles';
 
 type NavbarButtonProps = {
@@ -22,14 +22,14 @@ type NavbarButtonProps = {
   icon: string;
 };
 
-const AnimatedButton = Animated.createAnimatedComponent(Pressable);
+const AnimatedButton = Animated.createAnimatedComponent(View);
 
 export function NavbarButton({ focused, icon }: NavbarButtonProps) {
   const { HOME, COMPARE, FAVOURITES, TEAMS } = NAVBAR;
 
   const pressed = useSharedValue(false);
 
-  const eventHandler = useAnimatedGestureHandler<LongPressGestureHandlerGestureEvent>({
+  const eventHandler = useAnimatedGestureHandler<PanGestureHandlerGestureEvent>({
     onStart: () => {
       pressed.value = true;
     },
@@ -79,10 +79,7 @@ export function NavbarButton({ focused, icon }: NavbarButtonProps) {
   );
 
   return (
-    <LongPressGestureHandler
-      onGestureEvent={eventHandler}
-      onEnded={() => (pressed.value = false)}
-    >
+    <PanGestureHandler onGestureEvent={eventHandler}>
       <AnimatedButton
         elevation={0}
         style={uas}
@@ -92,6 +89,6 @@ export function NavbarButton({ focused, icon }: NavbarButtonProps) {
         {icon === FAVOURITES && <FavouritesButton />}
         {icon === TEAMS && <TeamsButton />}
       </AnimatedButton>
-    </LongPressGestureHandler>
+    </PanGestureHandler>
   );
 }
