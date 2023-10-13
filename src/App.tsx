@@ -5,8 +5,8 @@
  * @format
  */
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
+import React, { useEffect } from 'react';
+import type { PropsWithChildren } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -14,41 +14,48 @@ import {
   StyleSheet,
   Text,
   useColorScheme,
-  View,
+  View
 } from 'react-native';
+import SplashScreen from 'react-native-splash-screen';
 
 import {
   Colors,
   DebugInstructions,
   Header,
   LearnMoreLinks,
-  ReloadInstructions,
+  ReloadInstructions
 } from 'react-native/Libraries/NewAppScreen';
 
 type SectionProps = PropsWithChildren<{
   title: string;
 }>;
 
-function Section({children, title}: SectionProps): JSX.Element {
+function Section({ children, title }: SectionProps): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
+  useEffect(() => {
+    SplashScreen.hide();
+  }, []);
+
   return (
     <View style={styles.sectionContainer}>
       <Text
         style={[
           styles.sectionTitle,
           {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
+            color: isDarkMode ? Colors.white : Colors.black
+          }
+        ]}
+      >
         {title}
       </Text>
       <Text
         style={[
           styles.sectionDescription,
           {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
+            color: isDarkMode ? Colors.light : Colors.dark
+          }
+        ]}
+      >
         {children}
       </Text>
     </View>
@@ -59,7 +66,7 @@ function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter
   };
 
   return (
@@ -69,26 +76,26 @@ function App(): JSX.Element {
         backgroundColor={backgroundStyle.backgroundColor}
       />
       <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
+        contentInsetAdjustmentBehavior='automatic'
+        style={backgroundStyle}
+      >
         <Header />
         <View
           style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
+            backgroundColor: isDarkMode ? Colors.black : Colors.white
+          }}
+        >
+          <Section title='Step One'>
+            Edit <Text style={styles.highlight}>App.tsx</Text> to change this screen and
+            then come back to see your edits.
           </Section>
-          <Section title="See Your Changes">
+          <Section title='See Your Changes'>
             <ReloadInstructions />
           </Section>
-          <Section title="Debug">
+          <Section title='Debug'>
             <DebugInstructions />
           </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
+          <Section title='Learn More'>Read the docs to discover what to do next:</Section>
           <LearnMoreLinks />
         </View>
       </ScrollView>
@@ -99,20 +106,20 @@ function App(): JSX.Element {
 const styles = StyleSheet.create({
   sectionContainer: {
     marginTop: 32,
-    paddingHorizontal: 24,
+    paddingHorizontal: 24
   },
   sectionTitle: {
     fontSize: 24,
-    fontWeight: '600',
+    fontWeight: '600'
   },
   sectionDescription: {
     marginTop: 8,
     fontSize: 18,
-    fontWeight: '400',
+    fontWeight: '400'
   },
   highlight: {
-    fontWeight: '700',
-  },
+    fontWeight: '700'
+  }
 });
 
 export default App;
