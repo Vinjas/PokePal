@@ -5,9 +5,21 @@ const axios = setupCache(Axios);
 
 const API_URL = 'https://pokeapi.co/api/v2/';
 
-export const getPokemon = async (id: number) => {
+type TypeResource = {
+  type: {
+    name: string;
+    url: string;
+  };
+};
+
+type PokemonData = {
+  types: { type: TypeResource }[];
+  // otras propiedades de pokemonData
+};
+
+export const getPokemon = async (name: string) => {
   try {
-    const response = await axios.get(`${API_URL}/pokemon/${id}`);
+    const response = await axios.get(`${API_URL}/pokemon/${name}`);
 
     return response.data;
   } catch (error) {
@@ -15,7 +27,14 @@ export const getPokemon = async (id: number) => {
   }
 };
 
-export const getPokemonList = async (limit: number, offset: number) => {
+type PokemonListParams = {
+  limit: number;
+  offset: number;
+};
+
+export const getPokemonList = async (params: PokemonListParams) => {
+  const { limit, offset } = params;
+
   try {
     const response = await axios.get(`${API_URL}/pokemon`, {
       params: {

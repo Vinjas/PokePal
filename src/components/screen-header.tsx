@@ -1,7 +1,6 @@
+import { Colors } from '@constants/styles/colors';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { CustomText } from './custom-text';
-import { Colors } from '@constants/styles';
 
 type ScreenHeaderProps = {
   title: string;

@@ -6,7 +6,8 @@ export const DEFAULT_QUERY_OPTIONS = {
     staleTime: 10000 // 10 segundos
   }
 };
-export const PRODUCT_BY_SKU = 'PRODUCT_BY_SKU_';
-export const ALL_CATEGORIES = 'ALL_CATEGORIES';
-export const ALL_BRANDS = 'ALL_BRANDS';
-export const ALL_INGREDIENTS = 'ALL_INGREDIENTS';
+
+export const RQ_KEY = {
+  ALL_POKEMON_LISTS: 'ALL_POKEMON_LISTS',
+  POKEMON_DATA: 'POKEMON_DATA'
+};

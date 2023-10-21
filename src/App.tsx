@@ -4,9 +4,9 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { StatusBar, StyleSheet, useColorScheme } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
-import { Colors } from '@constants/styles';
 import { DEFAULT_QUERY_OPTIONS } from './constants/react-query';
 import { AppStack } from './screens/app-stack';
+import { Colors } from '@constants/styles/colors';
 
 const PokePalDefaultTheme = {
   ...DefaultTheme,

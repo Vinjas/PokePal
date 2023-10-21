@@ -14,7 +14,7 @@ export function HomeStack(): JSX.Element {
         name='Pokedex'
         component={PokedexScreen}
         options={{
-          headerShown: true,
+          headerShown: false,
           headerShadowVisible: false,
           headerTitle: () => <ScreenHeader title={t('screen-headers.pokedex')} />
         }}

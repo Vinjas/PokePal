@@ -6,7 +6,7 @@ import { NavbarButton } from './navbar-button';
 import { CompareStack } from '@screens/compare/compare-stack';
 import { FavouritesStack } from '@screens/favourites/favourites-stack';
 import { TeamsStack } from '@screens/teams/teams-stack';
-import { Colors } from '@constants/styles';
+import { Colors } from '@constants/styles/colors';
 
 const Tab = createBottomTabNavigator();
 const { HOME, COMPARE, FAVOURITES, TEAMS } = NAVBAR;
@@ -33,7 +33,7 @@ export function Navbar() {
           paddingBottom: 8,
           height: 70,
           elevation: 0,
-          backgroundColor: '#fff',
+          backgroundColor: Colors.pureWhite,
           justifyContent: 'center',
           alignItems: 'center'
         },

@@ -6,8 +6,8 @@ import HomeIcon from '@assets/svg/navbar/home.svg';
 import CompareIcon from '@assets/svg/navbar/compare.svg';
 import FavouritesIcon from '@assets/svg/navbar/favourites.svg';
 import TeamsIcon from '@assets/svg/navbar/pokeball.svg';
-import { Colors } from '@constants/styles';
 import { View } from 'react-native';
+import { Colors } from '@constants/styles/colors';
 
 type NavbarButtonProps = {
   focused: boolean;
