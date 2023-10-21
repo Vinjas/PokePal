@@ -1,11 +1,15 @@
 import { PokemonCard } from '@components/pokemon-card';
+import { SearchBar } from '@components/search-bar';
 import { RQ_KEY } from '@constants/react-query';
+import { Colors, LogoColors } from '@constants/styles/colors';
 import { HeaderText } from '@constants/styles/screen-header';
 import { getPokemonList } from '@services/poke-api';
 import { useQuery } from '@tanstack/react-query';
 import { t } from 'i18next';
-import React from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { ActivityIndicator, Image, StyleSheet, Text, View } from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type PokemonResource = {
   name: string;
@@ -13,17 +17,24 @@ type PokemonResource = {
 };
 
 export const PokedexScreen = (): JSX.Element => {
-  const {
-    data: pokemonListData,
-    isLoading,
-    isError
-  } = useQuery({
+  const [pokemonListData, setPokemonListData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+
+  const { isLoading, isError } = useQuery({
     queryKey: [RQ_KEY.ALL_POKEMON_LISTS],
-    queryFn: () => getPokemonList({ limit: 4, offset: 0 })
+    queryFn: () => getPokemonList({ limit: 1010, offset: 0 }),
+    onSuccess: data => {
+      setPokemonListData(data.results);
+      setFilteredData(data.results);
+    }
   });
 
+  const updateFilteredData = (newFilteredData: any | undefined) => {
+    setFilteredData(newFilteredData);
+  };
+
   return (
-    <View style={styles.wrapper}>
+    <SafeAreaView style={styles.wrapper}>
       <View style={styles.headerImageWrapper}>
         <Image
           style={styles.headerImage}
@@ -33,36 +44,45 @@ export const PokedexScreen = (): JSX.Element => {
 
       <Text style={styles.headerText}>{t('screen-headers.pokedex')}</Text>
 
-      {isLoading && <Text>Loading...</Text>}
+      <SearchBar
+        pokemonListData={pokemonListData}
+        onUpdateFilteredData={updateFilteredData}
+      />
+
+      {isLoading && (
+        <ActivityIndicator
+          size={90}
+          color={LogoColors.red}
+          style={styles.loader}
+        />
+      )}
 
       {isError && <Text>Error</Text>}
 
-      {!isLoading && !isError && pokemonListData && (
-        <View style={styles.content}>
-          {pokemonListData.results.map((pokemon: PokemonResource) => (
+      {!isLoading && !isError && filteredData && (
+        <FlatList
+          data={filteredData}
+          style={styles.list}
+          horizontal={false}
+          numColumns={2}
+          keyExtractor={(item: PokemonResource) => item.name}
+          renderItem={({ item }) => (
             <PokemonCard
-              key={pokemon.name}
-              name={pokemon.name}
-              url={pokemon.url}
+              name={item.name}
+              url={item.url}
             />
-          ))}
-        </View>
+          )}
+        />
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   wrapper: {
-    paddingHorizontal: 20,
-    paddingVertical: 10
-  },
-  content: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 10
+    paddingHorizontal: 0,
+    paddingTop: 10,
+    height: '100%'
   },
   headerText: HeaderText,
   headerImageWrapper: {
@@ -74,5 +94,13 @@ const styles = StyleSheet.create({
     width: 350,
     height: 350,
     opacity: 0.3
+  },
+  list: {
+    paddingHorizontal: 20
+  },
+  loader: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '80%'
   }
 });

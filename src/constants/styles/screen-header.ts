@@ -4,7 +4,8 @@ import { FontFamily } from './fontsFamily';
 export const HeaderText = {
   fontSize: 32,
   fontFamily: FontFamily.poppinsBold,
-  color: Colors.black
+  color: Colors.black,
+  paddingHorizontal: 20
 };
 
 export const HeaderImageWrapper = {

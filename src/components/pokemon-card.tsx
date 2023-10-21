@@ -1,12 +1,26 @@
 import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from 'react-native';
 import { CustomText } from './custom-text';
 import { RQ_KEY } from '@constants/react-query';
 import { useQuery } from '@tanstack/react-query';
 import { getPokemon } from '@services/poke-api';
-import { ColorTypes, ColorTypesHightlight, Colors } from '@constants/styles/colors';
+import {
+  ColorTypes,
+  ColorTypesHightlight,
+  Colors,
+  LogoColors
+} from '@constants/styles/colors';
 import { FontFamily } from '@constants/styles/fontsFamily';
 import { formatPokemonId } from '@utils/formatPokemonId';
+import { formatPokemonName } from '@utils/formatPokemonName';
+import { t } from 'i18next';
 
 type PokemonCardProps = {
   name: string;
@@ -36,19 +50,30 @@ export const PokemonCard = ({ name }: PokemonCardProps): JSX.Element => {
         ...styles.card,
         backgroundColor: pokemonData
           ? ColorTypes[pokemonData.types[0]?.type.name]
-          : Colors.ligthGrey1
+          : Colors.pureWhite
       }}
     >
-      {isLoading && <Text>Loading...</Text>}
+      <View style={styles.logoImageWrapper}>
+        <Image
+          style={styles.logoImage}
+          source={require('@assets/images/background__pokeball.png')}
+        />
+      </View>
+
+      {isLoading && (
+        <ActivityIndicator
+          size={50}
+          color={LogoColors.blue}
+          style={styles.loader}
+        />
+      )}
 
       {isError && <Text>Error</Text>}
 
       {!isLoading && !isError && pokemonData && (
         <View>
           <View style={styles.dataWrapper}>
-            <CustomText style={styles.cardName}>
-              {name[0].toUpperCase() + name.slice(1)}
-            </CustomText>
+            <CustomText style={styles.cardName}>{formatPokemonName(name)}</CustomText>
 
             <View style={styles.typesWrapper}>
               {pokemonData.types.map((typeResource: TypeResource) => (
@@ -60,8 +85,7 @@ export const PokemonCard = ({ name }: PokemonCardProps): JSX.Element => {
                   }}
                 >
                   <CustomText style={styles.typeText}>
-                    {typeResource.type.name[0].toUpperCase() +
-                      typeResource.type.name.slice(1)}
+                    {t(`pokemon-types.${typeResource.type.name}`)}
                   </CustomText>
                 </View>
               ))}
@@ -74,17 +98,14 @@ export const PokemonCard = ({ name }: PokemonCardProps): JSX.Element => {
 
           <View style={styles.cardImageWrapper}>
             <Image
+              //disableCache={true}
+              resizeMode='contain'
               style={styles.cardImage}
               source={{
-                uri: pokemonData.sprites.other['official-artwork'].front_default
+                //uri: pokemonData.sprites.other['official-artwork'].front_default
+                uri: pokemonData.sprites.versions['generation-v']['black-white'].animated
+                  .front_default
               }}
-            />
-          </View>
-
-          <View style={styles.logoImageWrapper}>
-            <Image
-              style={styles.logoImage}
-              source={require('@assets/images/background__pokeball.png')}
             />
           </View>
         </View>
@@ -99,14 +120,16 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.ligthGrey1,
     borderRadius: 15,
     elevation: 3,
-    width: '48.5%',
+    width: '48%',
     height: 120,
-    overflow: 'hidden'
+    overflow: 'hidden',
+    marginBottom: 10,
+    marginRight: '4%'
   },
   cardImageWrapper: {
     position: 'absolute',
-    right: -5,
-    top: 20,
+    right: 0,
+    bottom: 0,
     zIndex: -1
   },
   cardImage: {
@@ -154,5 +177,10 @@ const styles = StyleSheet.create({
     color: Colors.pureWhite,
     fontSize: 12,
     fontFamily: FontFamily.poppinsMedium
+  },
+  loader: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%'
   }
 });

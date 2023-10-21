@@ -8,7 +8,15 @@ export const Colors = {
   textPrimary: '#4E5F7E',
   textSecondary: '#949494',
   sortButton: '#6879D7',
-  whiteTransparent: 'rgba(255, 255, 255, 0.18)'
+  whiteTransparent: 'rgba(255, 255, 255, 0.18)',
+  greyTransparent: 'rgba(224, 224, 224, 0.5)'
+};
+
+export const LogoColors = {
+  red: '#DF355A',
+  darkBlue: '#033043',
+  blue: '#BBD9E3',
+  lightBlue: '#EDF7F9'
 };
 
 export const ColorTypes = {
@@ -17,14 +25,14 @@ export const ColorTypes = {
   flying: '#A891EC',
   poison: '#B663B1',
   ground: '#DEC16B',
-  rock: '#D3BC54 ',
+  rock: '#D3BC54',
   bug: '#BAC55E',
   ghost: '#70559B',
   steel: '#B7B9D0',
   fire: '#FB754A',
   water: '#80A7F1',
   grass: '#49D0B0',
-  electric: '#FFE583',
+  electric: '#FFD94A',
   psychic: '#FF7EA2',
   ice: '#9AD6DF',
   dragon: '#A482FB',
@@ -47,7 +55,7 @@ export const ColorTypesHightlight = {
   fire: '#FF5B14',
   water: '#9EBDF4',
   grass: '#68D6A9',
-  electric: '#FCED8E',
+  electric: '#E7BE24',
   psychic: '#FC7F93',
   ice: '#A7D4E7',
   dragon: '#B493F6',
