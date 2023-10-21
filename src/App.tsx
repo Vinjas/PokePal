@@ -1,4 +1,4 @@
-import { NavigationContainer } from '@react-navigation/native';
+import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { StatusBar, StyleSheet, useColorScheme } from 'react-native';
@@ -7,6 +7,15 @@ import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
 import { Colors } from '@constants/styles';
 import { DEFAULT_QUERY_OPTIONS } from './constants/react-query';
 import { AppStack } from './screens/app-stack';
+
+const PokePalDefaultTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: 'rgb(255, 45, 85)',
+    background: Colors.pureWhite
+  }
+};
 
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -24,7 +33,7 @@ function App(): JSX.Element {
   };
 
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={PokePalDefaultTheme}>
       <QueryClientProvider client={queryClient}>
         <StatusBar
           barStyle={isDarkMode ? 'light-content' : 'dark-content'}

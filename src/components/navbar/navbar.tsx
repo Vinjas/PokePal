@@ -5,87 +5,58 @@ import { HomeStack } from '@screens/home/home-stack';
 import { NavbarButton } from './navbar-button';
 import { CompareStack } from '@screens/compare/compare-stack';
 import { FavouritesStack } from '@screens/favourites/favourites-stack';
-import { TeamsScreen } from '@screens/teams/teams-screen';
 import { TeamsStack } from '@screens/teams/teams-stack';
+import { Colors } from '@constants/styles';
 
 const Tab = createBottomTabNavigator();
 const { HOME, COMPARE, FAVOURITES, TEAMS } = NAVBAR;
 
+const TabsArr = [
+  { route: 'HomeStack', icon: HOME, label: 'Home', component: HomeStack },
+  { route: 'CompareStack', icon: COMPARE, label: 'Compare', component: CompareStack },
+  {
+    route: 'FavouritesStack',
+    icon: FAVOURITES,
+    label: 'Favourites',
+    component: FavouritesStack
+  },
+  { route: 'TeamsStack', icon: TEAMS, label: 'Teams', component: TeamsStack }
+];
+
 export function Navbar() {
   return (
     <Tab.Navigator
-      initialRouteName={'Home'}
+      initialRouteName={'HomeStack'}
       screenOptions={{
-        tabBarActiveTintColor: '#000',
-        // tabBarShowLabel: false,
         tabBarStyle: {
           paddingHorizontal: 8,
           paddingBottom: 8,
           height: 70,
-          borderTopWidth: 1,
-          borderTopColor: '#F1F1F1',
-          elevation: 0
+          elevation: 0,
+          backgroundColor: '#fff',
+          justifyContent: 'center',
+          alignItems: 'center'
         },
-        headerShadowVisible: false
+        tabBarActiveTintColor: Colors.black
       }}
     >
-      <Tab.Screen
-        name='HomeStack'
-        component={HomeStack}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <NavbarButton
-              focused={focused}
-              icon={HOME}
-            />
-          ),
-          headerShown: false,
-          tabBarLabel: 'Home'
-        }}
-      />
-      <Tab.Screen
-        name='CompareStack'
-        component={CompareStack}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <NavbarButton
-              focused={focused}
-              icon={COMPARE}
-            />
-          ),
-          tabBarLabel: 'Compare',
-          headerShown: false
-        }}
-      />
-
-      <Tab.Screen
-        name='FavouritesStack'
-        component={FavouritesStack}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <NavbarButton
-              focused={focused}
-              icon={FAVOURITES}
-            />
-          ),
-          headerShown: false,
-          tabBarLabel: 'Favourites'
-        }}
-      />
-      <Tab.Screen
-        name='TeamsStack'
-        component={TeamsStack}
-        options={{
-          tabBarIcon: ({ focused }) => (
-            <NavbarButton
-              focused={focused}
-              icon={TEAMS}
-            />
-          ),
-          headerShown: false,
-          tabBarLabel: 'Teams'
-        }}
-      />
+      {TabsArr.map(tab => (
+        <Tab.Screen
+          key={tab.route}
+          name={tab.route}
+          component={tab.component}
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <NavbarButton
+                focused={focused}
+                icon={tab.icon}
+              />
+            ),
+            tabBarLabel: tab.label,
+            headerShown: false
+          }}
+        />
+      ))}
     </Tab.Navigator>
   );
 }

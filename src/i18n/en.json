@@ -1,1 +1,8 @@
-{}
+{
+  "screen-headers": {
+    "pokedex": "Pokedex",
+    "compare": "Compare",
+    "favorites": "Favorites",
+    "teams": "Teams"
+  }
+}

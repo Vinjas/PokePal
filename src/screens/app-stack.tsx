@@ -11,7 +11,9 @@ export const AppStack = (): JSX.Element => {
       <Stack.Screen
         name='Navbar'
         component={Navbar}
-        options={{ headerShown: false }}
+        options={{
+          headerShown: false
+        }}
       />
     </Stack.Navigator>
   );
