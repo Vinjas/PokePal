@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
-import { Colors } from '@constants/styles/colors';
+import { Colors, LogoColors } from '@constants/styles/colors';
 import { StyleSheet, TextInput, View } from 'react-native';
 import { FontFamily } from '@constants/styles/fontsFamily';
 import { t } from 'i18next';
 import SearchIcon from '@assets/svg/search--grey.svg';
+import SortIcon from '@assets/svg/sort-icon.svg';
+import { BaseButton } from 'react-native-gesture-handler';
 
 type SearchBarProps = {
   pokemonListData?: Array<any>;
   onUpdateFilteredData?: (data: Array<any>) => void;
+  filterMenuRef?: any;
 };
 
 const SearchButton = () => (
@@ -18,9 +21,17 @@ const SearchButton = () => (
   />
 );
 
+const SortButton = () => (
+  <SortIcon
+    width={28}
+    height={28}
+  />
+);
+
 export const SearchBar = ({
   pokemonListData,
-  onUpdateFilteredData
+  onUpdateFilteredData,
+  filterMenuRef
 }: SearchBarProps): JSX.Element => {
   const [searchText, setSearchText] = useState('');
 
@@ -39,30 +50,50 @@ export const SearchBar = ({
     }
   };
 
-  return (
-    <View style={styles.searchBarWrapper}>
-      <SearchButton />
+  function handleFilterOnPress() {
+    filterMenuRef.current.open();
+  }
 
-      <TextInput
-        style={styles.searchBar}
-        placeholder={t('search-bar.placeholder')}
-        onChangeText={updateSearch}
-        value={searchText}
-        placeholderTextColor={Colors.darkGrey1}
-      />
+  return (
+    <View style={styles.containerWrapper}>
+      <View style={styles.searchBarWrapper}>
+        <SearchButton />
+
+        <TextInput
+          style={styles.searchBar}
+          placeholder={t('search-bar.placeholder')}
+          onChangeText={updateSearch}
+          value={searchText}
+          placeholderTextColor={Colors.darkGrey1}
+        />
+      </View>
+
+      <BaseButton
+        style={styles.filterButtonWrapper}
+        onPress={handleFilterOnPress}
+      >
+        <SortButton />
+      </BaseButton>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  containerWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 10,
+    marginHorizontal: 20
+  },
   searchBarWrapper: {
     flexDirection: 'row',
+    flex: 1,
     justifyContent: 'flex-start',
     alignContent: 'center',
     backgroundColor: Colors.greyTransparent,
     borderRadius: 15,
-    marginBottom: 10,
-    marginHorizontal: 20,
+    marginRight: 20,
     paddingHorizontal: 15
   },
   searchBar: {
@@ -74,5 +105,17 @@ const styles = StyleSheet.create({
   searchIcon: {
     marginRight: 10,
     marginTop: 10
+  },
+  filterButtonWrapper: {
+    backgroundColor: LogoColors.red,
+    borderRadius: 50,
+    padding: 10,
+    elevation: 3
+  },
+  filterMenuWrapper: {
+    paddingHorizontal: 20,
+    borderBottomColor: Colors.ligthGrey1,
+    borderBottomWidth: 1,
+    paddingBottom: 10
   }
 });

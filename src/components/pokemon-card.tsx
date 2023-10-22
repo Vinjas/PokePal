@@ -21,6 +21,7 @@ import { FontFamily } from '@constants/styles/fontsFamily';
 import { formatPokemonId } from '@utils/formatPokemonId';
 import { formatPokemonName } from '@utils/formatPokemonName';
 import { t } from 'i18next';
+import { RectButton, TouchableHighlight } from 'react-native-gesture-handler';
 
 type PokemonCardProps = {
   name: string;
@@ -45,7 +46,7 @@ export const PokemonCard = ({ name }: PokemonCardProps): JSX.Element => {
   });
 
   return (
-    <TouchableOpacity
+    <RectButton
       style={{
         ...styles.card,
         backgroundColor: pokemonData
@@ -98,7 +99,7 @@ export const PokemonCard = ({ name }: PokemonCardProps): JSX.Element => {
 
           <View style={styles.cardImageWrapper}>
             <Image
-              //disableCache={true}
+              disableCache={true}
               resizeMode='contain'
               style={styles.cardImage}
               source={{
@@ -110,7 +111,7 @@ export const PokemonCard = ({ name }: PokemonCardProps): JSX.Element => {
           </View>
         </View>
       )}
-    </TouchableOpacity>
+    </RectButton>
   );
 };
 
@@ -139,7 +140,7 @@ const styles = StyleSheet.create({
   logoImageWrapper: {
     position: 'absolute',
     right: -40,
-    top: 5,
+    top: 15,
     zIndex: -2
   },
   logoImage: {
@@ -170,13 +171,14 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
-    width: '45%',
-    elevation: 2
+    width: '40%',
+    elevation: 1
   },
   typeText: {
     color: Colors.pureWhite,
     fontSize: 12,
-    fontFamily: FontFamily.poppinsMedium
+    fontFamily: FontFamily.poppinsMedium,
+    lineHeight: 18
   },
   loader: {
     justifyContent: 'center',

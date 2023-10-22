@@ -6,10 +6,19 @@ import { HeaderText } from '@constants/styles/screen-header';
 import { getPokemonList } from '@services/poke-api';
 import { useQuery } from '@tanstack/react-query';
 import { t } from 'i18next';
-import React, { useState } from 'react';
-import { ActivityIndicator, Image, StyleSheet, Text, View } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
+import React, { useRef, useState } from 'react';
+import {
+  ActivityIndicator,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View
+} from 'react-native';
+import { FlatList, RectButton } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import RBSheet from 'react-native-raw-bottom-sheet';
+import { CustomText } from '@components/custom-text';
 
 type PokemonResource = {
   name: string;
@@ -19,6 +28,8 @@ type PokemonResource = {
 export const PokedexScreen = (): JSX.Element => {
   const [pokemonListData, setPokemonListData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
+
+  const filterMenuRef = useRef<RBSheet>();
 
   const { isLoading, isError } = useQuery({
     queryKey: [RQ_KEY.ALL_POKEMON_LISTS],
@@ -47,6 +58,7 @@ export const PokedexScreen = (): JSX.Element => {
       <SearchBar
         pokemonListData={pokemonListData}
         onUpdateFilteredData={updateFilteredData}
+        filterMenuRef={filterMenuRef}
       />
 
       {isLoading && (
@@ -74,6 +86,53 @@ export const PokedexScreen = (): JSX.Element => {
           )}
         />
       )}
+
+      <RBSheet
+        ref={filterMenuRef}
+        closeOnDragDown
+        height={600}
+        customStyles={{
+          wrapper: {
+            backgroundColor: Colors.blackTransparent
+          },
+          container: {
+            borderTopLeftRadius: 20,
+            borderTopRightRadius: 20
+          }
+        }}
+      >
+        <View style={styles.filterMenuContent}>
+          <View>
+            <CustomText style={styles.filterMenuHeadingText}>Filter</CustomText>
+
+            <CustomText style={styles.filterMenuTitle}>Type</CustomText>
+            <ScrollView
+              style={{ height: 20 }}
+              horizontal={true}
+            >
+              <CustomText>test 12342342342342</CustomText>
+              <Text>test 23423423423423</Text>
+              <Text>test 23423423423423</Text>
+              <Text>test 23423423423423</Text>
+              <Text>test 23423423423423</Text>
+              <Text>test 23423423423423</Text>
+              <Text>test 23423423423423</Text>
+              <Text>test 23423423423423</Text>
+            </ScrollView>
+            <CustomText style={styles.filterMenuTitle}>Generation</CustomText>
+            <ScrollView horizontal={true}>
+              <Text>test 1</Text>
+              <Text>test 2</Text>
+            </ScrollView>
+
+            <CustomText style={styles.filterMenuTitle}>Sort</CustomText>
+          </View>
+
+          <RectButton style={styles.filterMenuButton}>
+            <CustomText style={styles.filterMenuButtonText}>Apply</CustomText>
+          </RectButton>
+        </View>
+      </RBSheet>
     </SafeAreaView>
   );
 };
@@ -102,5 +161,37 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: '80%'
+  },
+  filterMenuContent: {
+    flex: 1,
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    paddingHorizontal: 20,
+    paddingBottom: 30
+  },
+  filterMenuHeadingText: {
+    fontSize: 24,
+    fontFamily: 'Poppins-Bold',
+    color: Colors.black
+  },
+  filterMenuTitle: {
+    fontSize: 18,
+    fontFamily: 'Poppins-Bold',
+    color: Colors.darkGrey1
+  },
+  filterMenuButton: {
+    backgroundColor: LogoColors.red,
+    borderRadius: 30,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    textAlign: 'center',
+    width: '100%',
+    elevation: 3
+  },
+  filterMenuButtonText: {
+    color: Colors.pureWhite,
+    fontSize: 16,
+    fontFamily: 'Poppins-Bold',
+    textAlign: 'center'
   }
 });
