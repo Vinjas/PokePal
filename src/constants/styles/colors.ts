@@ -10,7 +10,7 @@ export const Colors = {
   sortButton: '#6879D7',
   whiteTransparent: 'rgba(255, 255, 255, 0.18)',
   greyTransparent: 'rgba(224, 224, 224, 0.5)',
-  blackTransparent: 'rgba(0, 0, 0, 0.5)'
+  blackTransparent: 'rgba(0, 0, 0, 0.3)'
 };
 
 export const LogoColors = {

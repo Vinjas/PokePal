@@ -22,6 +22,7 @@ import { formatPokemonId } from '@utils/formatPokemonId';
 import { formatPokemonName } from '@utils/formatPokemonName';
 import { t } from 'i18next';
 import { RectButton, TouchableHighlight } from 'react-native-gesture-handler';
+import { TypeIcon } from './type-icon';
 
 type PokemonCardProps = {
   name: string;
@@ -76,6 +77,7 @@ export const PokemonCard = ({ name }: PokemonCardProps): JSX.Element => {
           <View style={styles.dataWrapper}>
             <CustomText style={styles.cardName}>{formatPokemonName(name)}</CustomText>
 
+            {/* TYPES */}
             <View style={styles.typesWrapper}>
               {pokemonData.types.map((typeResource: TypeResource) => (
                 <View
@@ -85,6 +87,10 @@ export const PokemonCard = ({ name }: PokemonCardProps): JSX.Element => {
                     backgroundColor: ColorTypesHightlight[typeResource.type.name]
                   }}
                 >
+                  <TypeIcon
+                    type={typeResource.type.name}
+                    size={10}
+                  />
                   <CustomText style={styles.typeText}>
                     {t(`pokemon-types.${typeResource.type.name}`)}
                   </CustomText>
@@ -97,6 +103,7 @@ export const PokemonCard = ({ name }: PokemonCardProps): JSX.Element => {
             </CustomText>
           </View>
 
+          {/* IMAGE */}
           <View style={styles.cardImageWrapper}>
             <Image
               disableCache={true}
@@ -169,14 +176,15 @@ const styles = StyleSheet.create({
   },
   typeElement: {
     borderRadius: 30,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
-    width: '40%',
-    elevation: 1
+    width: '45%',
+    elevation: 1,
+    flexDirection: 'row'
   },
   typeText: {
     color: Colors.pureWhite,
-    fontSize: 12,
+    fontSize: 11,
     fontFamily: FontFamily.poppinsMedium,
     lineHeight: 18
   },

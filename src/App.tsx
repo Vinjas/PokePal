@@ -6,18 +6,19 @@ import SplashScreen from 'react-native-splash-screen';
 import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
 import { DEFAULT_QUERY_OPTIONS } from './constants/react-query';
 import { AppStack } from './screens/app-stack';
-import { Colors } from '@constants/styles/colors';
+import { Colors, LogoColors } from '@constants/styles/colors';
+import { FilterPokemonProvider } from 'context/filter-pokemon-context';
 
 const PokePalDefaultTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    primary: 'rgb(255, 45, 85)',
+    primary: LogoColors.red,
     background: Colors.pureWhite
   }
 };
 
-function App(): JSX.Element {
+function App() {
   const isDarkMode = useColorScheme() === 'dark';
 
   useEffect(() => {
@@ -39,7 +40,9 @@ function App(): JSX.Element {
           barStyle={isDarkMode ? 'light-content' : 'dark-content'}
           backgroundColor={backgroundStyle.backgroundColor}
         />
-        <AppStack />
+        <FilterPokemonProvider>
+          <AppStack />
+        </FilterPokemonProvider>
       </QueryClientProvider>
     </NavigationContainer>
   );
