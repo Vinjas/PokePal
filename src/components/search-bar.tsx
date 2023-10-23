@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Colors, LogoColors } from '@constants/styles/colors';
 import { StyleSheet, TextInput, View } from 'react-native';
 import { FontFamily } from '@constants/styles/fontsFamily';
@@ -6,10 +6,12 @@ import { t } from 'i18next';
 import SearchIcon from '@assets/svg/search--grey.svg';
 import SortIcon from '@assets/svg/sort-icon.svg';
 import { BaseButton } from 'react-native-gesture-handler';
+import { PokemonResultsContext } from 'context/pokemon-results-context';
+import { FilterPokemonContext } from 'context/filter-pokemon-context';
+import { sortPokemonList } from '@utils/sort-pokemon-list';
 
 type SearchBarProps = {
   pokemonListData?: Array<any>;
-  onUpdateFilteredData?: (data: Array<any>) => void;
   filterMenuRef?: any;
 };
 
@@ -30,10 +32,12 @@ const SortButton = () => (
 
 export const SearchBar = ({
   pokemonListData,
-  onUpdateFilteredData,
   filterMenuRef
 }: SearchBarProps): JSX.Element => {
   const [searchText, setSearchText] = useState('');
+
+  const { setPokemonResults } = useContext<any>(PokemonResultsContext);
+  const { sortValue } = useContext<any>(FilterPokemonContext);
 
   const updateSearch = (text: string) => {
     setSearchText(text);
@@ -45,9 +49,9 @@ export const SearchBar = ({
       item.name.toLowerCase().includes(text.toLowerCase())
     );
 
-    if (onUpdateFilteredData) {
-      onUpdateFilteredData(filtered);
-    }
+    const sortedFilteredPokemonResults = sortPokemonList(filtered, sortValue);
+
+    setPokemonResults(sortedFilteredPokemonResults);
   };
 
   function handleFilterOnPress() {

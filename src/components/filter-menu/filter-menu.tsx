@@ -4,14 +4,17 @@ import { TypeButton } from '@components/type-button';
 import { GENERATIONS } from '@constants/generations';
 import { Colors, LogoColors } from '@constants/styles/colors';
 import { POKEMON_TYPES } from '@constants/types';
-import React, { useEffect, useRef, useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
-import { RectButton } from 'react-native-gesture-handler';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { Button, ScrollView, StyleSheet, View } from 'react-native';
+import { RectButton, TouchableOpacity } from 'react-native-gesture-handler';
 import { Dropdown } from 'react-native-element-dropdown';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import { SORT_OPTIONS } from '@constants/sort-options';
 import { FontFamily } from '@constants/styles/fontsFamily';
 import { t } from 'i18next';
+import { FilterPokemonContext } from 'context/filter-pokemon-context';
+import { PokemonResultsContext } from 'context/pokemon-results-context';
+import { sortPokemonList } from '@utils/sort-pokemon-list';
 
 type FilterMenuProps = {
   onFilterMenuRef: (ref: any) => void;
@@ -20,11 +23,21 @@ type FilterMenuProps = {
 export const FilterMenu = ({ onFilterMenuRef }: FilterMenuProps): JSX.Element => {
   const filterMenuRef = useRef<RBSheet>();
 
-  const [sortValue, setSortValue] = useState(SORT_OPTIONS[0].value);
+  const { sortValue, setSortValue } = useContext<any>(FilterPokemonContext);
+  const { pokemonResults, setPokemonResults } = useContext<any>(PokemonResultsContext);
 
   useEffect(() => {
     onFilterMenuRef(filterMenuRef);
   }, [onFilterMenuRef]);
+
+  function handleApply() {
+    const sortedPokemonResults = [...pokemonResults];
+
+    const sortedFilteredPokemonResults = sortPokemonList(sortedPokemonResults, sortValue);
+
+    setPokemonResults(sortedFilteredPokemonResults);
+    filterMenuRef.current?.close();
+  }
 
   return (
     <RBSheet
@@ -89,9 +102,13 @@ export const FilterMenu = ({ onFilterMenuRef }: FilterMenuProps): JSX.Element =>
           />
         </View>
 
-        <RectButton style={styles.filterMenuButton}>
-          <CustomText style={styles.filterMenuButtonText}>{t('label.apply')}</CustomText>
-        </RectButton>
+        <View style={styles.filterMenuButton}>
+          <Button
+            title={t('label.apply')}
+            onPress={handleApply}
+            color={LogoColors.red}
+          />
+        </View>
       </View>
     </RBSheet>
   );
@@ -118,10 +135,7 @@ const styles = StyleSheet.create({
     marginTop: 15
   },
   filterMenuButton: {
-    backgroundColor: LogoColors.red,
-    borderRadius: 30,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingVertical: 15,
     textAlign: 'center',
     width: '100%',
     elevation: 3

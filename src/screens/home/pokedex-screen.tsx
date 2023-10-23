@@ -1,17 +1,19 @@
 import { PokemonCard } from '@components/pokemon-card';
 import { SearchBar } from '@components/search-bar';
 import { RQ_KEY } from '@constants/react-query';
-import { Colors, LogoColors } from '@constants/styles/colors';
+import { LogoColors } from '@constants/styles/colors';
 import { HeaderText } from '@constants/styles/screen-header';
 import { getPokemonList } from '@services/poke-api';
 import { useQuery } from '@tanstack/react-query';
 import { t } from 'i18next';
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, Image, StyleSheet, Text, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import RBSheet from 'react-native-raw-bottom-sheet';
 import { FilterMenu } from '@components/filter-menu/filter-menu';
+import { FilterPokemonContext } from 'context/filter-pokemon-context';
+import { getIdFromUrl } from '@utils/get-id-from-url';
+import { PokemonResultsContext } from 'context/pokemon-results-context';
 
 type PokemonResource = {
   name: string;
@@ -19,18 +21,50 @@ type PokemonResource = {
 };
 
 export const PokedexScreen = (): JSX.Element => {
-  const [pokemonListData, setPokemonListData] = useState([]);
+  const [allPokemonList, setAllPokemonList] = useState<PokemonResource[]>([]);
   const [filteredData, setFilteredData] = useState([]);
   const [filterMenuRefState, setFilterMenuRefState] = useState(null);
+
+  const { pokemonResults, setPokemonResults } = useContext<any>(PokemonResultsContext);
+  const { sortValue } = useContext<any>(FilterPokemonContext);
 
   const { isLoading, isError } = useQuery({
     queryKey: [RQ_KEY.ALL_POKEMON_LISTS],
     queryFn: () => getPokemonList({ limit: 1010, offset: 0 }),
+    select: data => {
+      return {
+        ...data,
+        results: data.results.map((pokemon: PokemonResource) => {
+          const pokemonId = getIdFromUrl(pokemon.url);
+
+          return {
+            ...pokemon,
+            id: pokemonId
+          };
+        })
+      };
+    },
     onSuccess: data => {
-      setPokemonListData(data.results);
+      setAllPokemonList(data.results);
+      setPokemonResults(data.results);
       setFilteredData(data.results);
     }
   });
+
+  /*   const pokemonResultsWithId = useMemo(() => {
+    return pokemonResults.map((pokemon: PokemonResource) => {
+      const pokemonId = getIdFromUrl(pokemon.url);
+
+      return {
+        ...pokemon,
+        id: pokemonId
+      };
+    });
+  }, [pokemonResults]); */
+
+  /* useEffect(() => {
+    setPokemonResults(pokemonResultsWithId);
+  }, [pokemonResultsWithId]); */
 
   const updateFilteredData = (newFilteredData: any | undefined) => {
     setFilteredData(newFilteredData);
@@ -52,7 +86,7 @@ export const PokedexScreen = (): JSX.Element => {
       <Text style={styles.headerText}>{t('screen-headers.pokedex')}</Text>
 
       <SearchBar
-        pokemonListData={pokemonListData}
+        pokemonListData={allPokemonList}
         onUpdateFilteredData={updateFilteredData}
         filterMenuRef={filterMenuRefState}
       />
@@ -67,9 +101,9 @@ export const PokedexScreen = (): JSX.Element => {
 
       {isError && <Text>Error</Text>}
 
-      {!isLoading && !isError && filteredData && (
+      {!isLoading && !isError && pokemonResults && (
         <FlatList
-          data={filteredData}
+          data={pokemonResults}
           style={styles.list}
           horizontal={false}
           numColumns={2}

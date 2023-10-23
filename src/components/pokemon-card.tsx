@@ -18,8 +18,8 @@ import {
   LogoColors
 } from '@constants/styles/colors';
 import { FontFamily } from '@constants/styles/fontsFamily';
-import { formatPokemonId } from '@utils/formatPokemonId';
-import { formatPokemonName } from '@utils/formatPokemonName';
+import { formatPokemonId } from '@utils/format-pokemon-id';
+import { formatPokemonName } from '@utils/format-pokemon-name';
 import { t } from 'i18next';
 import { RectButton, TouchableHighlight } from 'react-native-gesture-handler';
 import { TypeIcon } from './type-icon';
@@ -45,6 +45,15 @@ export const PokemonCard = ({ name }: PokemonCardProps): JSX.Element => {
     queryKey: [RQ_KEY.POKEMON_DATA, name],
     queryFn: () => getPokemon(name)
   });
+
+  function getImageUri(pokemon: any) {
+    const staticImage = pokemon.sprites.other['official-artwork'].front_default;
+
+    const gifImage =
+      pokemon.sprites.versions['generation-v']['black-white'].animated.front_default;
+
+    return gifImage ?? staticImage;
+  }
 
   return (
     <RectButton
@@ -110,9 +119,7 @@ export const PokemonCard = ({ name }: PokemonCardProps): JSX.Element => {
               resizeMode='contain'
               style={styles.cardImage}
               source={{
-                //uri: pokemonData.sprites.other['official-artwork'].front_default
-                uri: pokemonData.sprites.versions['generation-v']['black-white'].animated
-                  .front_default
+                uri: getImageUri(pokemonData)
               }}
             />
           </View>
