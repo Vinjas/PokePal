@@ -75,8 +75,13 @@ export const FilterMenu = ({ onFilterMenuRef }: FilterMenuProps): JSX.Element =>
 
           <CustomText style={styles.filterMenuTitle}>{t('label.sort')}</CustomText>
           <Dropdown
+            style={styles.dropdown}
+            selectedTextStyle={styles.dropdownSelectedTextStyle}
+            containerStyle={styles.dropdownContainerStyle}
+            itemTextStyle={styles.dropdownItemTextStyle}
+            mode={'modal'}
+            fontFamily={FontFamily.poppinsRegular}
             data={SORT_OPTIONS}
-            maxHeight={300}
             labelField='label'
             valueField='value'
             value={sortValue}
@@ -133,5 +138,33 @@ const styles = StyleSheet.create({
   elemList: {
     flexDirection: 'row',
     flexWrap: 'wrap'
+  },
+  dropdown: {
+    height: 45,
+    borderRadius: 15,
+    borderWidth: 1,
+    borderColor: LogoColors.blue,
+    paddingHorizontal: 20,
+    marginTop: 10,
+    marginBottom: 20
+  },
+  dropdownSelectedTextStyle: {
+    color: LogoColors.darkBlue,
+    fontSize: 14,
+    fontFamily: FontFamily.poppinsRegular
+  },
+  dropdownContainerStyle: {
+    borderRadius: 15,
+    borderWidth: 1,
+    borderColor: LogoColors.blue,
+    paddingHorizontal: 20,
+    marginTop: 10,
+    marginBottom: 20,
+    backgroundColor: Colors.pureWhite
+  },
+  dropdownItemTextStyle: {
+    color: LogoColors.darkBlue,
+    fontSize: 16,
+    fontFamily: FontFamily.poppinsRegular
   }
 });

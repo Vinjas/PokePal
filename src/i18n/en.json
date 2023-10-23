@@ -47,9 +47,9 @@
     "generation-ix": "Generation IX"
   },
   "sort-options": {
-    "a-z": "A-Z",
-    "z-a": "Z-A",
-    "first-id": "ID Older",
-    "last-id": "ID Newer"
+    "a-z": "A - Z",
+    "z-a": "Z - A",
+    "first-id": "Oldest Pokemon ID",
+    "last-id": "Newest Pokemon ID"
   }
 }

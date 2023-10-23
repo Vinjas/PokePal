@@ -25,10 +25,13 @@ export const TypeButton = ({ type }: TypeButtonProps): JSX.Element => {
         backgroundColor: isPressed ? LogoColors.lightBlue : Colors.pureWhite
       }}
     >
-      <TypeIcon
-        type={type}
-        size={12}
-      />
+      <View style={{ marginRight: 5 }}>
+        <TypeIcon
+          type={type}
+          size={12}
+        />
+      </View>
+
       <CustomText style={styles.text}>{t(`pokemon-types.${type}`)}</CustomText>
     </TouchableOpacity>
   );
