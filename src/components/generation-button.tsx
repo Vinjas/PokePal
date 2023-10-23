@@ -1,18 +1,38 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { CustomText } from './custom-text';
 import { Colors, LogoColors } from '@constants/styles/colors';
 import { FontFamily } from '@constants/styles/fontsFamily';
 import { t } from 'i18next';
+import { FilterPokemonContext } from 'context/filter-pokemon-context';
 
 type GenerationButtonProps = {
   generation: string;
 };
 
 export const GenerationButton = ({ generation }: GenerationButtonProps): JSX.Element => {
-  const [isPressed, setIsPressed] = useState(false);
+  const { filters, setFilters } = useContext<any>(FilterPokemonContext);
+
+  const [isPressed, setIsPressed] = useState(filters.generation.includes(generation));
 
   function handlePress() {
+    setFilters((prev: any) => {
+      if (!isPressed) {
+        return {
+          ...prev,
+          generation: [...prev.generation, generation]
+        };
+      } else {
+        const updatedGeneration = prev.generation.filter(
+          (item: any) => item !== generation
+        );
+        return {
+          ...prev,
+          generation: updatedGeneration
+        };
+      }
+    });
+
     setIsPressed(!isPressed);
   }
 

@@ -1,25 +1,43 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { CustomText } from './custom-text';
 import { ColorTypesHightlight, Colors, LogoColors } from '@constants/styles/colors';
 import { FontFamily } from '@constants/styles/fontsFamily';
 import { t } from 'i18next';
 import { TypeIcon } from './type-icon';
+import { FilterPokemonContext } from 'context/filter-pokemon-context';
 
 type TypeButtonProps = {
   type: string;
 };
 
 export const TypeButton = ({ type }: TypeButtonProps): JSX.Element => {
-  const [isPressed, setIsPressed] = useState(false);
+  const { filters, setFilters } = useContext<any>(FilterPokemonContext);
 
-  function handlePress() {
+  const [isPressed, setIsPressed] = useState(filters.type.includes(type));
+
+  function handleTypePress() {
+    setFilters((prev: any) => {
+      if (!isPressed) {
+        return {
+          ...prev,
+          type: [...prev.type, type]
+        };
+      } else {
+        const updatedType = prev.type.filter((item: any) => item !== type);
+        return {
+          ...prev,
+          type: updatedType
+        };
+      }
+    });
+
     setIsPressed(!isPressed);
   }
 
   return (
     <TouchableOpacity
-      onPress={handlePress}
+      onPress={handleTypePress}
       style={{
         ...styles.button,
         backgroundColor: isPressed ? LogoColors.lightBlue : Colors.pureWhite

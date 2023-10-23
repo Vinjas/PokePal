@@ -4,9 +4,8 @@ import { TypeButton } from '@components/type-button';
 import { GENERATIONS } from '@constants/generations';
 import { Colors, LogoColors } from '@constants/styles/colors';
 import { POKEMON_TYPES } from '@constants/types';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { Button, ScrollView, StyleSheet, View } from 'react-native';
-import { RectButton, TouchableOpacity } from 'react-native-gesture-handler';
 import { Dropdown } from 'react-native-element-dropdown';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import { SORT_OPTIONS } from '@constants/sort-options';
@@ -15,6 +14,7 @@ import { t } from 'i18next';
 import { FilterPokemonContext } from 'context/filter-pokemon-context';
 import { PokemonResultsContext } from 'context/pokemon-results-context';
 import { sortPokemonList } from '@utils/sort-pokemon-list';
+import { filterPokemonList } from '@utils/filter-pokemon-list';
 
 type FilterMenuProps = {
   onFilterMenuRef: (ref: any) => void;
@@ -23,17 +23,30 @@ type FilterMenuProps = {
 export const FilterMenu = ({ onFilterMenuRef }: FilterMenuProps): JSX.Element => {
   const filterMenuRef = useRef<RBSheet>();
 
+  const { filters } = useContext<any>(FilterPokemonContext);
   const { sortValue, setSortValue } = useContext<any>(FilterPokemonContext);
-  const { pokemonResults, setPokemonResults } = useContext<any>(PokemonResultsContext);
+  const { pokemonResults, setPokemonResults, fullPokemonList } =
+    useContext<any>(PokemonResultsContext);
 
   useEffect(() => {
     onFilterMenuRef(filterMenuRef);
   }, [onFilterMenuRef]);
 
-  function handleApply() {
-    const sortedPokemonResults = [...pokemonResults];
+  async function handleApply() {
+    const currentPokemonResults = [...pokemonResults];
 
-    const sortedFilteredPokemonResults = sortPokemonList(sortedPokemonResults, sortValue);
+    const filteredPokemonResults = await filterPokemonList(
+      currentPokemonResults,
+      filters,
+      fullPokemonList
+    );
+
+    console.log('sortValue :>> ', sortValue);
+
+    const sortedFilteredPokemonResults = sortPokemonList(
+      filteredPokemonResults,
+      sortValue
+    );
 
     setPokemonResults(sortedFilteredPokemonResults);
     filterMenuRef.current?.close();
@@ -93,7 +106,7 @@ export const FilterMenu = ({ onFilterMenuRef }: FilterMenuProps): JSX.Element =>
             containerStyle={styles.dropdownContainerStyle}
             itemTextStyle={styles.dropdownItemTextStyle}
             mode={'modal'}
-            fontFamily={FontFamily.poppinsRegular}
+            fontFamily={FontFamily.poppinsMedium}
             data={SORT_OPTIONS}
             labelField='label'
             valueField='value'
@@ -158,6 +171,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     borderWidth: 1,
     borderColor: LogoColors.blue,
+    backgroundColor: LogoColors.lightBlue,
     paddingHorizontal: 20,
     marginTop: 10,
     marginBottom: 20
@@ -165,7 +179,7 @@ const styles = StyleSheet.create({
   dropdownSelectedTextStyle: {
     color: LogoColors.darkBlue,
     fontSize: 14,
-    fontFamily: FontFamily.poppinsRegular
+    fontFamily: FontFamily.poppinsMedium
   },
   dropdownContainerStyle: {
     borderRadius: 15,

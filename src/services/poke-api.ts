@@ -3,19 +3,7 @@ import { setupCache } from 'axios-cache-interceptor';
 
 const axios = setupCache(Axios);
 
-const API_URL = 'https://pokeapi.co/api/v2/';
-
-type TypeResource = {
-  type: {
-    name: string;
-    url: string;
-  };
-};
-
-type PokemonData = {
-  types: { type: TypeResource }[];
-  // otras propiedades de pokemonData
-};
+const API_URL = 'https://pokeapi.co/api/v2';
 
 export const getPokemon = async (name: string) => {
   try {

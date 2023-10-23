@@ -6,12 +6,11 @@ import { HeaderText } from '@constants/styles/screen-header';
 import { getPokemonList } from '@services/poke-api';
 import { useQuery } from '@tanstack/react-query';
 import { t } from 'i18next';
-import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { ActivityIndicator, Image, StyleSheet, Text, View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FilterMenu } from '@components/filter-menu/filter-menu';
-import { FilterPokemonContext } from 'context/filter-pokemon-context';
 import { getIdFromUrl } from '@utils/get-id-from-url';
 import { PokemonResultsContext } from 'context/pokemon-results-context';
 
@@ -22,11 +21,10 @@ type PokemonResource = {
 
 export const PokedexScreen = (): JSX.Element => {
   const [allPokemonList, setAllPokemonList] = useState<PokemonResource[]>([]);
-  const [filteredData, setFilteredData] = useState([]);
   const [filterMenuRefState, setFilterMenuRefState] = useState(null);
 
-  const { pokemonResults, setPokemonResults } = useContext<any>(PokemonResultsContext);
-  const { sortValue } = useContext<any>(FilterPokemonContext);
+  const { pokemonResults, setPokemonResults, setFullPokemonList } =
+    useContext<any>(PokemonResultsContext);
 
   const { isLoading, isError } = useQuery({
     queryKey: [RQ_KEY.ALL_POKEMON_LISTS],
@@ -47,28 +45,9 @@ export const PokedexScreen = (): JSX.Element => {
     onSuccess: data => {
       setAllPokemonList(data.results);
       setPokemonResults(data.results);
-      setFilteredData(data.results);
+      setFullPokemonList(data.results);
     }
   });
-
-  /*   const pokemonResultsWithId = useMemo(() => {
-    return pokemonResults.map((pokemon: PokemonResource) => {
-      const pokemonId = getIdFromUrl(pokemon.url);
-
-      return {
-        ...pokemon,
-        id: pokemonId
-      };
-    });
-  }, [pokemonResults]); */
-
-  /* useEffect(() => {
-    setPokemonResults(pokemonResultsWithId);
-  }, [pokemonResultsWithId]); */
-
-  const updateFilteredData = (newFilteredData: any | undefined) => {
-    setFilteredData(newFilteredData);
-  };
 
   const handleFilterMenuRef = (ref: any) => {
     setFilterMenuRefState(ref);
@@ -87,7 +66,6 @@ export const PokedexScreen = (): JSX.Element => {
 
       <SearchBar
         pokemonListData={allPokemonList}
-        onUpdateFilteredData={updateFilteredData}
         filterMenuRef={filterMenuRefState}
       />
 

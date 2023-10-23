@@ -4,12 +4,15 @@ export const PokemonResultsContext = createContext<any>([]);
 
 export const PokemonResultsProvider = ({ children }: { children: ReactNode }) => {
   const [pokemonResults, setPokemonResults] = useState([]);
+  const [fullPokemonList, setFullPokemonList] = useState([]);
 
   return (
     <PokemonResultsContext.Provider
       value={{
         pokemonResults,
-        setPokemonResults
+        setPokemonResults,
+        fullPokemonList,
+        setFullPokemonList
       }}
     >
       {children}
