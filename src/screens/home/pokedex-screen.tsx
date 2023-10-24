@@ -64,10 +64,7 @@ export const PokedexScreen = (): JSX.Element => {
 
       <Text style={styles.headerText}>{t('screen-headers.pokedex')}</Text>
 
-      <SearchBar
-        pokemonListData={allPokemonList}
-        filterMenuRef={filterMenuRefState}
-      />
+      <SearchBar filterMenuRef={filterMenuRefState} />
 
       {isLoading && (
         <ActivityIndicator

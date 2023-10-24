@@ -84,7 +84,12 @@ export const PokemonCard = ({ name }: PokemonCardProps): JSX.Element => {
       {!isLoading && !isError && pokemonData && (
         <View>
           <View style={styles.dataWrapper}>
-            <CustomText style={styles.cardName}>{formatPokemonName(name)}</CustomText>
+            {/* NAME */}
+            <CustomText
+              style={{ ...styles.cardName, fontSize: name.length > 14 ? 13 : 18 }}
+            >
+              {formatPokemonName(name)}
+            </CustomText>
 
             {/* TYPES */}
             <View style={styles.typesWrapper}>
@@ -107,6 +112,7 @@ export const PokemonCard = ({ name }: PokemonCardProps): JSX.Element => {
               ))}
             </View>
 
+            {/* ID */}
             <CustomText style={styles.pokemonId}>
               {formatPokemonId(pokemonData.id)}
             </CustomText>
@@ -164,8 +170,7 @@ const styles = StyleSheet.create({
   },
   cardName: {
     color: Colors.pureWhite,
-    fontFamily: FontFamily.poppinsBold,
-    fontSize: 18
+    fontFamily: FontFamily.poppinsBold
   },
   pokemonId: {
     color: Colors.pureWhite,
@@ -185,7 +190,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    width: '45%',
+    width: '47%',
     elevation: 1,
     flexDirection: 'row'
   },

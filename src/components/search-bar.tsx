@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import { Colors, LogoColors } from '@constants/styles/colors';
 import { StyleSheet, TextInput, View } from 'react-native';
 import { FontFamily } from '@constants/styles/fontsFamily';
@@ -9,9 +9,10 @@ import { BaseButton } from 'react-native-gesture-handler';
 import { PokemonResultsContext } from 'context/pokemon-results-context';
 import { FilterPokemonContext } from 'context/filter-pokemon-context';
 import { sortPokemonList } from '@utils/sort-pokemon-list';
+import { filterPokemonList } from '@utils/filter-pokemon-list';
+import { isEmpty } from 'lodash-es';
 
 type SearchBarProps = {
-  pokemonListData?: Array<any>;
   filterMenuRef?: any;
 };
 
@@ -30,29 +31,44 @@ const SortButton = () => (
   />
 );
 
-export const SearchBar = ({
-  pokemonListData,
-  filterMenuRef
-}: SearchBarProps): JSX.Element => {
-  const [searchText, setSearchText] = useState('');
-
-  const { setPokemonResults } = useContext<any>(PokemonResultsContext);
-  const { sortValue } = useContext<any>(FilterPokemonContext);
+export const SearchBar = ({ filterMenuRef }: SearchBarProps): JSX.Element => {
+  const { pokemonResults, setPokemonResults, fullPokemonList } =
+    useContext<any>(PokemonResultsContext);
+  const { sortValue, searchText, setSearchText, filters } =
+    useContext<any>(FilterPokemonContext);
 
   const updateSearch = (text: string) => {
     setSearchText(text);
     filterData(text);
   };
 
-  const filterData = (text: string) => {
-    const filtered = pokemonListData?.filter(item =>
+  async function filterData(text: string) {
+    const currentPokemonResults = [...pokemonResults];
+    let filteredPokemonResults;
+
+    if (!isEmpty(filters.type) || !isEmpty(filters.generation)) {
+      filteredPokemonResults = await filterPokemonList(
+        currentPokemonResults,
+        filters,
+        fullPokemonList
+      );
+    }
+
+    if (!filteredPokemonResults) {
+      filteredPokemonResults = fullPokemonList;
+    }
+
+    filteredPokemonResults = filteredPokemonResults.filter(item =>
       item.name.toLowerCase().includes(text.toLowerCase())
     );
 
-    const sortedFilteredPokemonResults = sortPokemonList(filtered, sortValue);
+    const sortedFilteredPokemonResults = sortPokemonList(
+      filteredPokemonResults,
+      sortValue
+    );
 
     setPokemonResults(sortedFilteredPokemonResults);
-  };
+  }
 
   function handleFilterOnPress() {
     filterMenuRef.current.open();

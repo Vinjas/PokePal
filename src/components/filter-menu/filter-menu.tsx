@@ -24,7 +24,7 @@ export const FilterMenu = ({ onFilterMenuRef }: FilterMenuProps): JSX.Element =>
   const filterMenuRef = useRef<RBSheet>();
 
   const { filters } = useContext<any>(FilterPokemonContext);
-  const { sortValue, setSortValue } = useContext<any>(FilterPokemonContext);
+  const { sortValue, setSortValue, searchText } = useContext<any>(FilterPokemonContext);
   const { pokemonResults, setPokemonResults, fullPokemonList } =
     useContext<any>(PokemonResultsContext);
 
@@ -35,13 +35,17 @@ export const FilterMenu = ({ onFilterMenuRef }: FilterMenuProps): JSX.Element =>
   async function handleApply() {
     const currentPokemonResults = [...pokemonResults];
 
-    const filteredPokemonResults = await filterPokemonList(
+    let filteredPokemonResults = await filterPokemonList(
       currentPokemonResults,
       filters,
       fullPokemonList
     );
 
-    console.log('sortValue :>> ', sortValue);
+    if (searchText) {
+      filteredPokemonResults = filteredPokemonResults.filter(item =>
+        item.name.toLowerCase().includes(searchText.toLowerCase())
+      );
+    }
 
     const sortedFilteredPokemonResults = sortPokemonList(
       filteredPokemonResults,
