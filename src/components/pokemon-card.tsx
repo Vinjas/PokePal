@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  ActivityIndicator,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View
-} from 'react-native';
+import { ActivityIndicator, Image, StyleSheet, Text, View } from 'react-native';
 import { CustomText } from './custom-text';
 import { RQ_KEY } from '@constants/react-query';
 import { useQuery } from '@tanstack/react-query';
@@ -21,12 +14,14 @@ import { FontFamily } from '@constants/styles/fontsFamily';
 import { formatPokemonId } from '@utils/format-pokemon-id';
 import { formatPokemonName } from '@utils/format-pokemon-name';
 import { t } from 'i18next';
-import { RectButton, TouchableHighlight } from 'react-native-gesture-handler';
+import { RectButton } from 'react-native-gesture-handler';
 import { TypeIcon } from './type-icon';
+import Animated from 'react-native-reanimated';
 
 type PokemonCardProps = {
   name: string;
   url: string;
+  navigation: any;
 };
 
 type TypeResource = {
@@ -36,7 +31,7 @@ type TypeResource = {
   };
 };
 
-export const PokemonCard = ({ name }: PokemonCardProps): JSX.Element => {
+export const PokemonCard = ({ name, navigation }: PokemonCardProps): JSX.Element => {
   const {
     data: pokemonData,
     isLoading,
@@ -63,6 +58,7 @@ export const PokemonCard = ({ name }: PokemonCardProps): JSX.Element => {
           ? ColorTypes[pokemonData.types[0]?.type.name]
           : Colors.pureWhite
       }}
+      onPress={() => navigation.navigate('PokemonInfo', { pokemonData })}
     >
       <View style={styles.logoImageWrapper}>
         <Image

@@ -15,6 +15,16 @@ export const getPokemon = async (name: string) => {
   }
 };
 
+export const getPokemonSpecies = async (name: string) => {
+  try {
+    const response = await axios.get(`${API_URL}/pokemon-species/${name}`);
+
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 type PokemonListParams = {
   limit: number;
   offset: number;

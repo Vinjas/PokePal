@@ -19,7 +19,7 @@ type PokemonResource = {
   url: string;
 };
 
-export const PokedexScreen = (): JSX.Element => {
+export const PokedexScreen = ({ navigation }: any): JSX.Element => {
   const [allPokemonList, setAllPokemonList] = useState<PokemonResource[]>([]);
   const [filterMenuRefState, setFilterMenuRefState] = useState(null);
 
@@ -87,6 +87,7 @@ export const PokedexScreen = (): JSX.Element => {
             <PokemonCard
               name={item.name}
               url={item.url}
+              navigation={navigation}
             />
           )}
         />

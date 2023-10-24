@@ -51,5 +51,13 @@
     "z-a": "Z - A",
     "first-id": "Oldest Pokemon ID",
     "last-id": "Newest Pokemon ID"
+  },
+  "pokemon-info": {
+    "headers": {
+      "about": "About",
+      "stats": "Stats",
+      "evolution": "Evolution",
+      "moves": "Moves"
+    }
   }
 }

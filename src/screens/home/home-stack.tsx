@@ -1,9 +1,10 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { PokedexScreen } from './pokedex-screen';
-import { PokemonInfoScreen } from './pokemon-info-screen';
+import { PokemonInfoScreen } from './pokemon-info/pokemon-info-screen';
 import { ScreenHeader } from '@components/screen-header';
 import { t } from 'i18next';
+import { PokemonInfoHeader } from './pokemon-info/pokemon-info-header';
 
 const Stack = createNativeStackNavigator();
 
@@ -22,7 +23,14 @@ export function HomeStack(): JSX.Element {
       <Stack.Screen
         name='PokemonInfo'
         component={PokemonInfoScreen}
-        options={{ headerShown: false }}
+        options={({ navigation, route }) => ({
+          header: () => (
+            <PokemonInfoHeader
+              route={route}
+              navigation={navigation}
+            />
+          )
+        })}
       />
     </Stack.Navigator>
   );
