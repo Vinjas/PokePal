@@ -1,13 +1,17 @@
 import React from 'react';
 import { NAVBAR } from '@constants/constants';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import Animated, { useAnimatedStyle } from 'react-native-reanimated';
-import HomeIcon from '@assets/svg/navbar/home.svg';
-import CompareIcon from '@assets/svg/navbar/compare.svg';
-import FavouritesIcon from '@assets/svg/navbar/favourites.svg';
-import TeamsIcon from '@assets/svg/navbar/pokeball.svg';
 import { View } from 'react-native';
 import { Colors } from '@constants/styles/colors';
+import Animated, { useAnimatedStyle } from 'react-native-reanimated';
+import HomeIcon from '@assets/svg/navbar/home.svg';
+import HomeIconGrey from '@assets/svg/navbar/home--grey.svg';
+import CompareIcon from '@assets/svg/navbar/compare.svg';
+import CompareIconGrey from '@assets/svg/navbar/compare--grey.svg';
+import FavouritesIcon from '@assets/svg/navbar/favourites.svg';
+import FavouritesIconGrey from '@assets/svg/navbar/favourites--grey.svg';
+import TeamsIcon from '@assets/svg/navbar/pokeball.svg';
+import TeamsIconGrey from '@assets/svg/navbar/pokeball--grey.svg';
 
 type NavbarButtonProps = {
   focused: boolean;
@@ -28,30 +32,54 @@ export function NavbarButton({ focused, icon }: NavbarButtonProps) {
     };
   });
 
-  const HomeButton = () => (
-    <HomeIcon
-      width={24}
-      height={24}
-    />
-  );
-  const CompareButton = () => (
-    <CompareIcon
-      width={24}
-      height={24}
-    />
-  );
-  const FavouritesButton = () => (
-    <FavouritesIcon
-      width={24}
-      height={24}
-    />
-  );
-  const TeamsButton = () => (
-    <TeamsIcon
-      width={24}
-      height={24}
-    />
-  );
+  const HomeButton = () =>
+    focused ? (
+      <HomeIcon
+        width={24}
+        height={24}
+      />
+    ) : (
+      <HomeIconGrey
+        width={24}
+        height={24}
+      />
+    );
+  const CompareButton = () =>
+    focused ? (
+      <CompareIcon
+        width={24}
+        height={24}
+      />
+    ) : (
+      <CompareIconGrey
+        width={24}
+        height={24}
+      />
+    );
+  const FavouritesButton = () =>
+    focused ? (
+      <FavouritesIcon
+        width={24}
+        height={24}
+      />
+    ) : (
+      <FavouritesIconGrey
+        width={24}
+        height={24}
+      />
+    );
+  const TeamsButton = () =>
+    focused ? (
+      <TeamsIcon
+        width={24}
+        height={24}
+      />
+    ) : (
+      <TeamsIconGrey
+        width={24}
+        height={24}
+      />
+    );
 
   return (
     <TouchableOpacity>
