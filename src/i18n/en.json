@@ -58,6 +58,23 @@
       "stats": "Stats",
       "evolution": "Evolution",
       "moves": "Moves"
+    },
+    "about": {
+      "abilities": "Abilities",
+      "height": "Height",
+      "weight": "Weight",
+      "training": "Training",
+      "breeding": "Breeding",
+      "stats": {
+        "base-exp": "Base Exp",
+        "growth-rate": "Growth Rate",
+        "capture-rate": "Capture Rate",
+        "base-happiness": "Base Happiness",
+        "base-friendship": "Base Friendship",
+        "gender": "Gender",
+        "egg-groups": "Egg Groups",
+        "egg-cycle": "Egg Cycle"
+      }
     }
   }
 }
