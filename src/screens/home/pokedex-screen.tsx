@@ -5,14 +5,22 @@ import { LogoColors } from '@constants/styles/colors';
 import { HeaderText } from '@constants/styles/screen-header';
 import { getPokemonList } from '@services/poke-api';
 import { useQuery } from '@tanstack/react-query';
-import { t } from 'i18next';
 import React, { useContext, useState } from 'react';
 import { ActivityIndicator, Image, StyleSheet, Text, View } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
+import { BorderlessButton, FlatList } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FilterMenu } from '@components/filter-menu/filter-menu';
 import { getIdFromUrl } from '@utils/get-id-from-url';
 import { PokemonResultsContext } from 'context/pokemon-results-context';
+import BackIcon from '@assets/svg/back.svg';
+import { useTranslation } from 'react-i18next';
+
+const BackButton = () => (
+  <BackIcon
+    width={25}
+    height={25}
+  />
+);
 
 type PokemonResource = {
   name: string;
@@ -22,6 +30,8 @@ type PokemonResource = {
 export const PokedexScreen = ({ navigation }: any): JSX.Element => {
   const [allPokemonList, setAllPokemonList] = useState<PokemonResource[]>([]);
   const [filterMenuRefState, setFilterMenuRefState] = useState(null);
+
+  const { t } = useTranslation();
 
   const { pokemonResults, setPokemonResults, setFullPokemonList } =
     useContext<any>(PokemonResultsContext);
@@ -62,7 +72,12 @@ export const PokedexScreen = ({ navigation }: any): JSX.Element => {
         />
       </View>
 
-      <Text style={styles.headerText}>{t('screen-headers.pokedex')}</Text>
+      <View style={styles.headerBar}>
+        <BorderlessButton onPress={() => navigation.goBack()}>
+          <BackButton />
+        </BorderlessButton>
+        <Text style={styles.headerText}>{t('screen-headers.pokedex')}</Text>
+      </View>
 
       <SearchBar filterMenuRef={filterMenuRefState} />
 
@@ -105,6 +120,13 @@ const styles = StyleSheet.create({
     height: '100%'
   },
   headerText: HeaderText,
+  headerBar: {
+    flexDirection: 'row',
+    gap: 10,
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    marginBottom: 10
+  },
   headerImageWrapper: {
     position: 'absolute',
     right: -120,

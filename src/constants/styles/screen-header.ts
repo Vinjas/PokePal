@@ -5,7 +5,8 @@ export const HeaderText = {
   fontSize: 32,
   fontFamily: FontFamily.poppinsBold,
   color: Colors.black,
-  paddingHorizontal: 20
+  paddingHorizontal: 20,
+  lineHeight: 40
 };
 
 export const HeaderImageWrapper = {

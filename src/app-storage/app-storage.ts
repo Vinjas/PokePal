@@ -1,3 +1,3 @@
-import { MMKVLoader } from 'react-native-mmkv-storage';
+import { MMKV } from 'react-native-mmkv';
 
-export const MMKV = new MMKVLoader().initialize(); // Returns an MMKV Instance
+export const storage = new MMKV();

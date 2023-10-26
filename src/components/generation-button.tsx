@@ -3,8 +3,8 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 import { CustomText } from './custom-text';
 import { Colors, LogoColors } from '@constants/styles/colors';
 import { FontFamily } from '@constants/styles/fontsFamily';
-import { t } from 'i18next';
 import { FilterPokemonContext } from 'context/filter-pokemon-context';
+import { useTranslation } from 'react-i18next';
 
 type GenerationButtonProps = {
   generation: string;
@@ -14,6 +14,8 @@ export const GenerationButton = ({ generation }: GenerationButtonProps): JSX.Ele
   const { filters, setFilters } = useContext<any>(FilterPokemonContext);
 
   const [isPressed, setIsPressed] = useState(filters.generation.includes(generation));
+
+  const { t } = useTranslation();
 
   function handlePress() {
     setFilters((prev: any) => {

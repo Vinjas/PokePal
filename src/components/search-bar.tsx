@@ -2,7 +2,6 @@ import React, { useContext, useMemo, useState } from 'react';
 import { Colors, LogoColors } from '@constants/styles/colors';
 import { StyleSheet, TextInput, View } from 'react-native';
 import { FontFamily } from '@constants/styles/fontsFamily';
-import { t } from 'i18next';
 import SearchIcon from '@assets/svg/search--grey.svg';
 import SortIcon from '@assets/svg/sort-icon.svg';
 import { BaseButton } from 'react-native-gesture-handler';
@@ -11,6 +10,7 @@ import { FilterPokemonContext } from 'context/filter-pokemon-context';
 import { sortPokemonList } from '@utils/sort-pokemon-list';
 import { filterPokemonList } from '@utils/filter-pokemon-list';
 import { isEmpty } from 'lodash-es';
+import { useTranslation } from 'react-i18next';
 
 type SearchBarProps = {
   filterMenuRef?: any;
@@ -41,6 +41,8 @@ export const SearchBar = ({ filterMenuRef }: SearchBarProps): JSX.Element => {
     setSearchText(text);
     filterData(text);
   };
+
+  const { t } = useTranslation();
 
   async function filterData(text: string) {
     const currentPokemonResults = [...pokemonResults];

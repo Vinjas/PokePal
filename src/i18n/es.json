@@ -1,2 +1,85 @@
 {
+  "home": {
+    "mainTitle": "PokePal",
+    "subTitle": "¿Qué estás buscando?"
+  },
+  "label": {
+    "filters": "Filtros",
+    "sort": "Ordenar por",
+    "type": "Tipo",
+    "generation": "Generación",
+    "apply": "Aplicar"
+  },
+  "screen-headers": {
+    "pokedex": "Pokédex",
+    "compare": "Comparar",
+    "favorites": "Favoritos",
+    "teams": "Equipos",
+    "settings": "Ajustes"
+  },
+  "search-bar": {
+    "placeholder": "Buscar...   "
+  },
+  "pokemon-types": {
+    "normal": "Normal",
+    "fire": "Fuego",
+    "water": "Agua",
+    "electric": "Eléctrico",
+    "grass": "Planta",
+    "ice": "Hielo",
+    "fighting": "Lucha",
+    "poison": "Veneno",
+    "ground": "Tierra",
+    "flying": "Volador",
+    "psychic": "Psíquico",
+    "bug": "Bicho",
+    "rock": "Roca",
+    "ghost": "Fantasma",
+    "dragon": "Dragón",
+    "dark": "Siniestro",
+    "steel": "Acero",
+    "fairy": "Hada"
+  },
+  "generations": {
+    "generation-i": "Generación I",
+    "generation-ii": "Generación II",
+    "generation-iii": "Generación III",
+    "generation-iv": "Generación IV",
+    "generation-v": "Generación V",
+    "generation-vi": "Generación VI",
+    "generation-vii": "Generación VII",
+    "generation-viii": "Generación VIII",
+    "generation-ix": "Generación IX"
+  },
+  "sort-options": {
+    "a-z": "A - Z",
+    "z-a": "Z - A",
+    "first-id": "ID de Pokémon más antiguo",
+    "last-id": "ID de Pokémon más reciente"
+  },
+  "pokemon-info": {
+    "headers": {
+      "about": "Acerca de",
+      "stats": "Estadísticas",
+      "evolution": "Evolución",
+      "moves": "Movimientos"
+    },
+    "about": {
+      "abilities": "Habilidades",
+      "height": "Altura",
+      "weight": "Peso",
+      "training": "Entrenamiento",
+      "breeding": "Reproducción",
+      "stats": {
+        "base-exp": "Experiencia Base",
+        "growth-rate": "Tasa de Crecimiento",
+        "capture-rate": "Tasa de Captura",
+        "base-happiness": "Felicidad Base",
+        "base-friendship": "Amistad Base",
+        "gender": "Género",
+        "egg-groups": "Grupos de Huevo",
+        "egg-cycle": "Ciclo de Huevo"
+      }
+    }
+  }
 }

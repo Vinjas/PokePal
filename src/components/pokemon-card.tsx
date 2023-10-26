@@ -13,10 +13,10 @@ import {
 import { FontFamily } from '@constants/styles/fontsFamily';
 import { formatPokemonId } from '@utils/format-pokemon-id';
 import { formatPokemonName } from '@utils/format-pokemon-name';
-import { t } from 'i18next';
 import { RectButton } from 'react-native-gesture-handler';
 import { TypeIcon } from './type-icon';
-import Animated from 'react-native-reanimated';
+import { HOME_STACK } from '@constants/screens';
+import { useTranslation } from 'react-i18next';
 
 type PokemonCardProps = {
   name: string;
@@ -41,6 +41,8 @@ export const PokemonCard = ({ name, navigation }: PokemonCardProps): JSX.Element
     queryFn: () => getPokemon(name)
   });
 
+  const { t } = useTranslation();
+
   function getImageUri(pokemon: any) {
     const staticImage = pokemon.sprites.other['official-artwork'].front_default;
 
@@ -58,7 +60,7 @@ export const PokemonCard = ({ name, navigation }: PokemonCardProps): JSX.Element
           ? ColorTypes[pokemonData.types[0]?.type.name]
           : Colors.pureWhite
       }}
-      onPress={() => navigation.navigate('PokemonInfo', { pokemonData })}
+      onPress={() => navigation.navigate(HOME_STACK.POKEMON_DETAIL, { pokemonData })}
     >
       <View style={styles.logoImageWrapper}>
         <Image

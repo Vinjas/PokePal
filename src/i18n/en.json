@@ -1,4 +1,8 @@
 {
+  "home": {
+    "mainTitle": "PokePal",
+    "subTitle": "What are you looking for?"
+  },
   "label": {
     "filters": "Filters",
     "sort": "Sort By",
@@ -7,10 +11,11 @@
     "apply": "Apply"
   },
   "screen-headers": {
-    "pokedex": "Pokedex",
+    "pokedex": "Pokédex",
     "compare": "Compare",
     "favorites": "Favorites",
-    "teams": "Teams"
+    "teams": "Teams",
+    "settings": "Settings"
   },
   "search-bar": {
     "placeholder": "Search...   "

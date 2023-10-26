@@ -5,11 +5,13 @@ import { FontFamily } from '@constants/styles/fontsFamily';
 import { getPokemonSpecies } from '@services/poke-api';
 import { useQuery } from '@tanstack/react-query';
 import { parseNewLines } from '@utils/parse-new-lines';
-import { t } from 'i18next';
 import React from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 export const PokemonAboutTab = ({ route }: any) => {
+  const { t } = useTranslation();
+
   const { pokemonData } = route;
 
   const { name } = pokemonData;

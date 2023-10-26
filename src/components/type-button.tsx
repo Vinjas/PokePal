@@ -3,9 +3,9 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { CustomText } from './custom-text';
 import { ColorTypesHightlight, Colors, LogoColors } from '@constants/styles/colors';
 import { FontFamily } from '@constants/styles/fontsFamily';
-import { t } from 'i18next';
 import { TypeIcon } from './type-icon';
 import { FilterPokemonContext } from 'context/filter-pokemon-context';
+import { useTranslation } from 'react-i18next';
 
 type TypeButtonProps = {
   type: string;
@@ -13,6 +13,8 @@ type TypeButtonProps = {
 
 export const TypeButton = ({ type }: TypeButtonProps): JSX.Element => {
   const { filters, setFilters } = useContext<any>(FilterPokemonContext);
+
+  const { t } = useTranslation();
 
   const [isPressed, setIsPressed] = useState(filters.type.includes(type));
 

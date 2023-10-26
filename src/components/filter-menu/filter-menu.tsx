@@ -10,11 +10,11 @@ import { Dropdown } from 'react-native-element-dropdown';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import { SORT_OPTIONS } from '@constants/sort-options';
 import { FontFamily } from '@constants/styles/fontsFamily';
-import { t } from 'i18next';
 import { FilterPokemonContext } from 'context/filter-pokemon-context';
 import { PokemonResultsContext } from 'context/pokemon-results-context';
 import { sortPokemonList } from '@utils/sort-pokemon-list';
 import { filterPokemonList } from '@utils/filter-pokemon-list';
+import { useTranslation } from 'react-i18next';
 
 type FilterMenuProps = {
   onFilterMenuRef: (ref: any) => void;
@@ -22,6 +22,8 @@ type FilterMenuProps = {
 
 export const FilterMenu = ({ onFilterMenuRef }: FilterMenuProps): JSX.Element => {
   const filterMenuRef = useRef<RBSheet>();
+
+  const { t } = useTranslation();
 
   const { filters } = useContext<any>(FilterPokemonContext);
   const { sortValue, setSortValue, searchText } = useContext<any>(FilterPokemonContext);

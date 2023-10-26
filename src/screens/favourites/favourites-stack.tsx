@@ -2,10 +2,12 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { FavouritesScreen } from './favourites-screen';
 import { ScreenHeader } from '@components/screen-header';
-import { t } from 'i18next';
 const Stack = createNativeStackNavigator();
+import { useTranslation } from 'react-i18next';
 
 export function FavouritesStack(): JSX.Element {
+  const { t } = useTranslation();
+
   return (
     <Stack.Navigator initialRouteName='Favourites'>
       <Stack.Screen
