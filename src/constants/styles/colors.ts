@@ -4,7 +4,7 @@ export const Colors = {
   black: '#212121',
   ligthGrey1: '#E7E7E7',
   ligthGrey2: '#E0E0E0',
-  darkGrey1: '#666666',
+  darkGrey1: '#7C7C7C',
   textPrimary: '#4E5F7E',
   textSecondary: '#949494',
   sortButton: '#6879D7',

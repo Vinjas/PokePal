@@ -1,20 +1,44 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { CustomText } from '@components/custom-text';
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { FontFamily } from '@constants/styles/fontsFamily';
 import { Colors } from '@constants/styles/colors';
+import { storage } from '@app-storage/app-storage';
+import { AppThemeContext } from 'context/app-theme-context';
+import { THEME } from '@constants/theme';
+import { STORAGE } from '@constants/storage';
 
 export const SettingsScreen = () => {
+  const { isDarkMode, setIsDarkMode } = useContext(AppThemeContext);
+
+  function onPressLightTheme() {
+    setIsDarkMode(false);
+
+    storage.set(STORAGE.THEME, THEME.LIGHT);
+  }
+
+  function onPressDarkTheme() {
+    setIsDarkMode(true);
+
+    storage.set(STORAGE.THEME, THEME.DARK);
+  }
+
   return (
-    <View style={styles.wrapper}>
+    <View style={[styles.wrapper, isDarkMode ? styles.wrapperDark : styles.wrapperLight]}>
       <CustomText style={styles.header}>Theme</CustomText>
 
       <View style={styles.wrapperOptions}>
-        <TouchableOpacity style={styles.lightButton}>
+        <TouchableOpacity
+          style={styles.lightButton}
+          onPress={onPressLightTheme}
+        >
           <CustomText style={styles.lightText}>Light</CustomText>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.darkButton}>
+        <TouchableOpacity
+          style={styles.darkButton}
+          onPress={onPressDarkTheme}
+        >
           <CustomText style={styles.darkText}>Dark</CustomText>
         </TouchableOpacity>
       </View>
@@ -22,7 +46,11 @@ export const SettingsScreen = () => {
       <View style={styles.headerImageWrapper}>
         <Image
           style={styles.headerImage}
-          source={require('@assets/images/background__pokeball--transparent.png')}
+          source={
+            isDarkMode
+              ? require('@assets/images/background__pokeball--white-transparent.png')
+              : require('@assets/images/background__pokeball--transparent.png')
+          }
         />
       </View>
     </View>
@@ -32,8 +60,13 @@ export const SettingsScreen = () => {
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    backgroundColor: Colors.pureWhite,
     padding: 20
+  },
+  wrapperLight: {
+    backgroundColor: Colors.pureWhite
+  },
+  wrapperDark: {
+    backgroundColor: Colors.black
   },
   header: {
     fontSize: 18,
@@ -85,7 +118,7 @@ const styles = StyleSheet.create({
   headerImage: {
     width: 450,
     height: 450,
-    opacity: 0.3,
+    opacity: 0.5,
     zIndex: 1
   }
 });

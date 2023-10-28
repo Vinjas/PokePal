@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { NAVBAR } from '@constants/constants';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { View } from 'react-native';
@@ -12,6 +12,7 @@ import FavouritesIcon from '@assets/svg/navbar/favourites.svg';
 import FavouritesIconGrey from '@assets/svg/navbar/favourites--grey.svg';
 import TeamsIcon from '@assets/svg/navbar/pokeball.svg';
 import TeamsIconGrey from '@assets/svg/navbar/pokeball--grey.svg';
+import { AppThemeContext } from 'context/app-theme-context';
 
 type NavbarButtonProps = {
   focused: boolean;
@@ -23,10 +24,18 @@ const AnimatedButton = Animated.createAnimatedComponent(View);
 export function NavbarButton({ focused, icon }: NavbarButtonProps) {
   const { HOME, COMPARE, FAVOURITES, TEAMS } = NAVBAR;
 
+  const { isDarkMode } = useContext(AppThemeContext);
+
   const uas = useAnimatedStyle(() => {
     return {
       paddingVertical: 6,
-      backgroundColor: focused ? Colors.ligthGrey1 : Colors.pureWhite,
+      backgroundColor: !isDarkMode
+        ? focused
+          ? Colors.ligthGrey1
+          : Colors.pureWhite
+        : focused
+        ? Colors.ligthGrey1
+        : Colors.black,
       borderRadius: 15,
       paddingHorizontal: 24
     };

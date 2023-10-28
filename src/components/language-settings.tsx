@@ -8,6 +8,7 @@ import { Colors, LogoColors } from '@constants/styles/colors';
 import { FontFamily } from '@constants/styles/fontsFamily';
 import { useTranslation } from 'react-i18next';
 import { storage } from '@app-storage/app-storage';
+import { STORAGE } from '@constants/storage';
 
 export const LanguageSettings = () => {
   const { t, i18n } = useTranslation();
@@ -16,34 +17,37 @@ export const LanguageSettings = () => {
 
   function handleOnChangeLanguage({ value }: { value: string }) {
     i18n.changeLanguage(value);
-    storage.set('language', value);
+    storage.set(STORAGE.LANG, value);
     setLanguageValue(value);
   }
 
   return (
-    <Dropdown
-      search
-      style={styles.dropdown}
-      selectedTextStyle={styles.dropdownSelectedTextStyle}
-      containerStyle={styles.dropdownContainerStyle}
-      itemTextStyle={styles.dropdownItemTextStyle}
-      iconStyle={{ position: 'absolute', left: 45 }}
-      inputSearchStyle={styles.dropdownSearchStyles}
-      mode={'modal'}
-      renderItem={(item: any) => (
-        <View style={styles.dropdownRenderItem}>
-          {getFlag(item.value, '30')}
-          <CustomText style={styles.dropdownItemTextStyle}>{item.label}</CustomText>
-        </View>
-      )}
-      renderLeftIcon={() => getFlag(languageValue, '40')}
-      data={LANGUAGES_OPTIONS}
-      searchPlaceholder={t('search-bar.placeholder')}
-      labelField='label'
-      valueField='value'
-      value={languageValue}
-      onChange={(value: any) => handleOnChangeLanguage(value)}
-    />
+    <>
+      <View style={{ position: 'absolute' }}>{getFlag(languageValue, '40')}</View>
+
+      <Dropdown
+        search
+        style={styles.dropdown}
+        selectedTextStyle={styles.dropdownSelectedTextStyle}
+        containerStyle={styles.dropdownContainerStyle}
+        itemTextStyle={styles.dropdownItemTextStyle}
+        iconStyle={{ position: 'absolute', left: 45 }}
+        inputSearchStyle={styles.dropdownSearchStyles}
+        mode={'modal'}
+        renderItem={(item: any) => (
+          <View style={styles.dropdownRenderItem}>
+            {getFlag(item.value, '30')}
+            <CustomText style={styles.dropdownItemTextStyle}>{item.label}</CustomText>
+          </View>
+        )}
+        data={LANGUAGES_OPTIONS}
+        searchPlaceholder={t('search-bar.placeholder')}
+        labelField='label'
+        valueField='value'
+        value={languageValue}
+        onChange={(value: any) => handleOnChangeLanguage(value)}
+      />
+    </>
   );
 };
 
@@ -53,10 +57,7 @@ const styles = StyleSheet.create({
     borderWidth: 0
   },
   dropdownSelectedTextStyle: {
-    color: LogoColors.darkBlue,
-    fontSize: 14,
-    fontFamily: FontFamily.poppinsMedium,
-    paddingLeft: 20
+    display: 'none'
   },
   dropdownContainerStyle: {
     minWidth: 300,

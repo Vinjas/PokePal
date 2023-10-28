@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
   headerImage: {
     width: 350,
     height: 350,
-    opacity: 0.3,
+    opacity: 0.5,
     zIndex: 1
   }
 });

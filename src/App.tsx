@@ -1,5 +1,5 @@
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { StatusBar, useColorScheme } from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
@@ -9,19 +9,13 @@ import { AppStack } from './screens/app-stack';
 import { Colors, LogoColors } from '@constants/styles/colors';
 import { FilterPokemonProvider } from 'context/filter-pokemon-context';
 import { PokemonResultsProvider } from 'context/pokemon-results-context';
-
-const PokePalDefaultTheme = {
-  ...DefaultTheme,
-  colors: {
-    ...DefaultTheme.colors,
-    primary: LogoColors.red,
-    background: Colors.pureWhite
-  }
-};
+import { AppThemeContext, AppThemeProvider } from 'context/app-theme-context';
+import i18n from '@i18n/i18n';
+import { storage } from '@app-storage/app-storage';
+import { STORAGE } from '@constants/storage';
+import { THEME } from '@constants/theme';
 
 function App() {
-  const isDarkMode = useColorScheme() === 'dark';
-
   useEffect(() => {
     SplashScreen.hide();
   }, []);
@@ -30,23 +24,17 @@ function App() {
     () => new QueryClient({ defaultOptions: DEFAULT_QUERY_OPTIONS })
   );
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.pureBlack : Colors.pureWhite
-  };
-
   return (
-    <NavigationContainer theme={PokePalDefaultTheme}>
-      <QueryClientProvider client={queryClient}>
-        <StatusBar
-          barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-          backgroundColor={backgroundStyle.backgroundColor}
-        />
-        <FilterPokemonProvider>
-          <PokemonResultsProvider>
-            <AppStack />
-          </PokemonResultsProvider>
-        </FilterPokemonProvider>
-      </QueryClientProvider>
+    <NavigationContainer>
+      <AppThemeProvider>
+        <QueryClientProvider client={queryClient}>
+          <FilterPokemonProvider>
+            <PokemonResultsProvider>
+              <AppStack />
+            </PokemonResultsProvider>
+          </FilterPokemonProvider>
+        </QueryClientProvider>
+      </AppThemeProvider>
     </NavigationContainer>
   );
 }

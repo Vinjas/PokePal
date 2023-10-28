@@ -1,28 +1,49 @@
 import { CustomText } from '@components/custom-text';
 import { Colors, LogoColors } from '@constants/styles/colors';
 import { FontFamily } from '@constants/styles/fontsFamily';
-import React from 'react';
+import React, { useContext } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { BorderlessButton, RectButton } from 'react-native-gesture-handler';
 import SettingsIcon from '@assets/svg/settings.svg';
+import SettingsIconWhite from '@assets/svg/settings--white.svg';
 import { HOME_STACK } from '@constants/screens';
 import { LanguageSettings } from '@components/language-settings';
 import { useTranslation } from 'react-i18next';
-
-const SettingsButton = () => (
-  <SettingsIcon
-    width={45}
-    height={45}
-  />
-);
+import { storage } from '@app-storage/app-storage';
+import { AppThemeContext } from 'context/app-theme-context';
 
 export const HomeScreen = ({ navigation }: any): JSX.Element => {
   const { t } = useTranslation();
 
+  console.log('storage :>> ', storage.getString('THEME'));
+
+  const { isDarkMode } = useContext(AppThemeContext);
+
+  const SettingsButton = () => {
+    return isDarkMode ? (
+      <SettingsIconWhite
+        width={45}
+        height={45}
+      />
+    ) : (
+      <SettingsIcon
+        width={45}
+        height={45}
+      />
+    );
+  };
+
   return (
-    <View style={styles.wrapper}>
+    <View style={[styles.wrapper, isDarkMode ? styles.wrapperDark : styles.wrapperLight]}>
       <View style={styles.topBar}>
-        <LanguageSettings />
+        <View
+          style={{
+            height: 45,
+            width: 45
+          }}
+        >
+          <LanguageSettings />
+        </View>
 
         <BorderlessButton onPress={() => navigation.navigate(HOME_STACK.SETTINGS)}>
           <SettingsButton />
@@ -30,8 +51,22 @@ export const HomeScreen = ({ navigation }: any): JSX.Element => {
       </View>
 
       <View style={styles.titleWrapper}>
-        <CustomText style={styles.homeTitleText}>{t('home.mainTitle')}</CustomText>
-        <CustomText style={styles.homeSubitleText}>{t('home.subTitle')}</CustomText>
+        <CustomText
+          style={[
+            styles.homeTitleText,
+            isDarkMode ? styles.homeTitleTextDark : styles.homeTitleTextLight
+          ]}
+        >
+          {t('home.mainTitle')}
+        </CustomText>
+        <CustomText
+          style={[
+            styles.homeSubtitleText,
+            isDarkMode ? styles.homeSubtitleTextDark : styles.homeSubtitleTextLight
+          ]}
+        >
+          {t('home.subTitle')}
+        </CustomText>
       </View>
 
       <RectButton
@@ -50,7 +85,11 @@ export const HomeScreen = ({ navigation }: any): JSX.Element => {
       <View style={styles.headerImageWrapper}>
         <Image
           style={styles.headerImage}
-          source={require('@assets/images/background__pokeball--transparent.png')}
+          source={
+            isDarkMode
+              ? require('@assets/images/background__pokeball--white-transparent.png')
+              : require('@assets/images/background__pokeball--transparent.png')
+          }
         />
       </View>
     </View>
@@ -60,8 +99,13 @@ export const HomeScreen = ({ navigation }: any): JSX.Element => {
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    backgroundColor: Colors.pureWhite,
     padding: 20
+  },
+  wrapperLight: {
+    backgroundColor: Colors.pureWhite
+  },
+  wrapperDark: {
+    backgroundColor: Colors.black
   },
   topBar: {
     flexDirection: 'row',
@@ -76,14 +120,25 @@ const styles = StyleSheet.create({
   homeTitleText: {
     fontSize: 32,
     lineHeight: 40,
-    fontFamily: FontFamily.poppinsBold,
+    fontFamily: FontFamily.poppinsBold
+  },
+  homeTitleTextLight: {
     color: Colors.black
   },
-  homeSubitleText: {
+  homeTitleTextDark: {
+    color: Colors.pureWhite
+  },
+  homeSubtitleText: {
     fontSize: 20,
     lineHeight: 30,
     fontFamily: FontFamily.poppinsRegular,
     color: Colors.black
+  },
+  homeSubtitleTextLight: {
+    color: Colors.darkGrey1
+  },
+  homeSubtitleTextDark: {
+    color: Colors.darkGrey1
   },
   pokemonButton: {
     backgroundColor: LogoColors.red,
@@ -110,7 +165,7 @@ const styles = StyleSheet.create({
   headerImage: {
     width: 450,
     height: 450,
-    opacity: 0.3,
+    opacity: 0.5,
     zIndex: 1
   },
   buttonImageWrapper: {

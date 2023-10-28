@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NAVBAR } from '@constants/constants';
 import { HomeStack } from '@screens/home/home-stack';
@@ -7,6 +7,9 @@ import { CompareStack } from '@screens/compare/compare-stack';
 import { FavouritesStack } from '@screens/favourites/favourites-stack';
 import { TeamsStack } from '@screens/teams/teams-stack';
 import { Colors } from '@constants/styles/colors';
+import { AppThemeContext } from 'context/app-theme-context';
+import { FontFamily } from '@constants/styles/fontsFamily';
+import { useIsFocused } from '@react-navigation/native';
 
 const Tab = createBottomTabNavigator();
 const { HOME, COMPARE, FAVOURITES, TEAMS } = NAVBAR;
@@ -24,22 +27,10 @@ const TabsArr = [
 ];
 
 export function Navbar() {
+  const { isDarkMode } = useContext(AppThemeContext);
+
   return (
-    <Tab.Navigator
-      initialRouteName={'HomeStack'}
-      screenOptions={{
-        tabBarStyle: {
-          paddingHorizontal: 8,
-          paddingBottom: 8,
-          height: 70,
-          elevation: 0,
-          backgroundColor: Colors.pureWhite,
-          justifyContent: 'center',
-          alignItems: 'center'
-        },
-        tabBarActiveTintColor: Colors.black
-      }}
-    >
+    <Tab.Navigator initialRouteName={'HomeStack'}>
       {TabsArr.map(tab => (
         <Tab.Screen
           key={tab.route}
@@ -53,6 +44,17 @@ export function Navbar() {
               />
             ),
             tabBarLabel: tab.label,
+            tabBarStyle: {
+              backgroundColor: isDarkMode ? Colors.black : Colors.pureWhite,
+              height: 70,
+              paddingHorizontal: 10,
+              paddingTop: 0,
+              paddingBottom: 5
+            },
+            tabBarLabelStyle: {
+              fontFamily: FontFamily.poppinsRegular,
+              color: isDarkMode ? Colors.pureWhite : Colors.black
+            },
             headerShown: false
           }}
         />

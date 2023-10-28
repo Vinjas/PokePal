@@ -18,5 +18,5 @@ export const HeaderImageWrapper = {
 export const HeaderImage = {
   width: 350,
   height: 350,
-  opacity: 0.3
+  opacity: 0.5
 };
