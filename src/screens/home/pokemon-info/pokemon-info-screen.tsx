@@ -3,7 +3,7 @@ import { ColorTypes, Colors, LogoColors } from '@constants/styles/colors';
 import { FontFamily } from '@constants/styles/fontsFamily';
 import { formatPokemonName } from '@utils/format-pokemon-name';
 import { t } from 'i18next';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Image, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { SceneMap, TabBar, TabView } from 'react-native-tab-view';
 import {
@@ -12,6 +12,7 @@ import {
   PokemonMovesTab,
   PokemonStatsTab
 } from './pokemon-tabs';
+import { AppThemeContext } from 'context/app-theme-context';
 
 const renderScene = SceneMap({
   about: PokemonAboutTab,
@@ -20,8 +21,14 @@ const renderScene = SceneMap({
   moves: PokemonMovesTab
 });
 
-export const PokemonInfoScreen = (props): JSX.Element => {
+type PokemonInfoScreenProps = {
+  route: any;
+};
+
+export const PokemonInfoScreen = (props: PokemonInfoScreenProps): JSX.Element => {
   const { pokemonData } = props.route.params;
+
+  const { isDarkMode } = useContext(AppThemeContext);
 
   const defaultRoutes = [
     { key: 'about', title: t('pokemon-info.headers.about'), pokemonData },
@@ -39,12 +46,16 @@ export const PokemonInfoScreen = (props): JSX.Element => {
     <TabBar
       {...props}
       indicatorStyle={styles.indicator}
-      style={styles.tabbar}
+      style={[styles.tabbar, isDarkMode ? styles.tabbarDark : styles.tabbarLight]}
       renderLabel={({ route, focused, color }) => (
         <Text
           style={{
             ...styles.tabbarText,
-            color: focused ? Colors.black : Colors.textSecondary
+            color: focused
+              ? isDarkMode
+                ? Colors.pureWhite
+                : Colors.black
+              : Colors.textSecondary
           }}
         >
           {route.title}
@@ -59,6 +70,7 @@ export const PokemonInfoScreen = (props): JSX.Element => {
       renderTabBar={renderTabBar}
       renderScene={renderScene}
       onIndexChange={setIndex}
+      style={{ backgroundColor: isDarkMode ? Colors.black : Colors.pureWhite }}
       initialLayout={{ width: layout.width }}
     />
   );
@@ -66,12 +78,17 @@ export const PokemonInfoScreen = (props): JSX.Element => {
 
 const styles = StyleSheet.create({
   tabbar: {
-    backgroundColor: Colors.pureWhite,
     marginHorizontal: 20,
     elevation: 0,
     borderBottomWidth: 1,
     borderColor: Colors.ligthGrey1,
     height: 45
+  },
+  tabbarDark: {
+    backgroundColor: Colors.black
+  },
+  tabbarLight: {
+    backgroundColor: Colors.pureWhite
   },
   tabbarText: {
     fontFamily: FontFamily.poppinsSemiBold,

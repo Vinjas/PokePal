@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { PokedexScreen } from './pokedex-screen';
 import { PokemonInfoScreen } from './pokemon-info/pokemon-info-screen';
@@ -8,11 +8,15 @@ import { HomeScreen } from './home-screen';
 import { HOME_STACK } from '@constants/screens';
 import { SettingsScreen } from './settings-screen';
 import { useTranslation } from 'react-i18next';
+import { AppThemeContext } from 'context/app-theme-context';
+import { Colors } from '@constants/styles/colors';
 
 const Stack = createNativeStackNavigator();
 
 export function HomeStack(): JSX.Element {
   const { t } = useTranslation();
+
+  const { isDarkMode } = useContext(AppThemeContext);
 
   return (
     <Stack.Navigator initialRouteName={HOME_STACK.HOME}>
@@ -37,7 +41,11 @@ export function HomeStack(): JSX.Element {
         options={{
           headerShown: true,
           headerShadowVisible: false,
-          headerTitle: () => <ScreenHeader title={t('screen-headers.settings')} />
+          headerTitle: () => <ScreenHeader title={t('screen-headers.settings')} />,
+          headerStyle: {
+            backgroundColor: isDarkMode ? Colors.black : Colors.pureWhite
+          },
+          headerTintColor: isDarkMode ? Colors.pureWhite : Colors.black
         }}
       />
       <Stack.Screen

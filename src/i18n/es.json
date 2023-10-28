@@ -59,10 +59,10 @@
   },
   "pokemon-info": {
     "headers": {
-      "about": "Acerca de",
-      "stats": "Estadísticas",
+      "about": "General",
+      "stats": "Estats.",
       "evolution": "Evolución",
-      "moves": "Movimientos"
+      "moves": "Mov."
     },
     "about": {
       "abilities": "Habilidades",

@@ -5,7 +5,14 @@ import { GENERATIONS } from '@constants/generations';
 import { Colors, LogoColors } from '@constants/styles/colors';
 import { POKEMON_TYPES } from '@constants/types';
 import React, { useContext, useEffect, useRef } from 'react';
-import { Button, ScrollView, StyleSheet, View } from 'react-native';
+import {
+  Button,
+  ScrollView,
+  StyleSheet,
+  Touchable,
+  TouchableOpacity,
+  View
+} from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import { SORT_OPTIONS } from '@constants/sort-options';
@@ -15,6 +22,8 @@ import { PokemonResultsContext } from 'context/pokemon-results-context';
 import { sortPokemonList } from '@utils/sort-pokemon-list';
 import { filterPokemonList } from '@utils/filter-pokemon-list';
 import { useTranslation } from 'react-i18next';
+import { AppThemeContext } from 'context/app-theme-context';
+import { RectButton } from 'react-native-gesture-handler';
 
 type FilterMenuProps = {
   onFilterMenuRef: (ref: any) => void;
@@ -22,6 +31,8 @@ type FilterMenuProps = {
 
 export const FilterMenu = ({ onFilterMenuRef }: FilterMenuProps): JSX.Element => {
   const filterMenuRef = useRef<RBSheet>();
+
+  const { isDarkMode } = useContext(AppThemeContext);
 
   const { t } = useTranslation();
 
@@ -35,6 +46,8 @@ export const FilterMenu = ({ onFilterMenuRef }: FilterMenuProps): JSX.Element =>
   }, [onFilterMenuRef]);
 
   async function handleApply() {
+    console.log('click');
+
     const currentPokemonResults = [...pokemonResults];
 
     let filteredPokemonResults = await filterPokemonList(
@@ -71,13 +84,22 @@ export const FilterMenu = ({ onFilterMenuRef }: FilterMenuProps): JSX.Element =>
         container: {
           borderTopLeftRadius: 50,
           borderTopRightRadius: 50,
-          elevation: 30
+          elevation: 30,
+          backgroundColor: isDarkMode ? Colors.black : Colors.pureWhite,
+          zIndex: 10
         }
       }}
     >
       <View style={styles.filterMenuContent}>
         <View>
-          <CustomText style={styles.filterMenuHeadingText}>
+          <CustomText
+            style={[
+              styles.filterMenuHeadingText,
+              isDarkMode
+                ? styles.filterMenuHeadingTextDark
+                : styles.filterMenuHeadingTextLight
+            ]}
+          >
             {t('label.filters')}
           </CustomText>
 
@@ -122,11 +144,12 @@ export const FilterMenu = ({ onFilterMenuRef }: FilterMenuProps): JSX.Element =>
         </View>
 
         <View style={styles.filterMenuButton}>
-          <Button
-            title={t('label.apply')}
+          <TouchableOpacity
             onPress={handleApply}
-            color={LogoColors.red}
-          />
+            style={styles.applyButton}
+          >
+            <CustomText style={styles.applyButtonText}>{t('label.apply')}</CustomText>
+          </TouchableOpacity>
         </View>
       </View>
     </RBSheet>
@@ -146,6 +169,12 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.poppinsSemiBold,
     color: Colors.black,
     lineHeight: 28
+  },
+  filterMenuHeadingTextDark: {
+    color: Colors.pureWhite
+  },
+  filterMenuHeadingTextLight: {
+    color: Colors.black
   },
   filterMenuTitle: {
     fontSize: 14,
@@ -171,6 +200,21 @@ const styles = StyleSheet.create({
   elemList: {
     flexDirection: 'row',
     flexWrap: 'wrap'
+  },
+  applyButton: {
+    backgroundColor: LogoColors.red,
+    width: '100%',
+    paddingVertical: 15,
+    borderRadius: 30,
+    position: 'absolute',
+    zIndex: 20
+  },
+  applyButtonText: {
+    color: Colors.pureWhite,
+    textAlign: 'center',
+    fontFamily: FontFamily.poppinsMedium,
+    fontSize: 16,
+    zIndex: 30
   },
   dropdown: {
     height: 45,

@@ -6,6 +6,7 @@ import { FontFamily } from '@constants/styles/fontsFamily';
 import { TypeIcon } from './type-icon';
 import { FilterPokemonContext } from 'context/filter-pokemon-context';
 import { useTranslation } from 'react-i18next';
+import { AppThemeContext } from 'context/app-theme-context';
 
 type TypeButtonProps = {
   type: string;
@@ -13,6 +14,8 @@ type TypeButtonProps = {
 
 export const TypeButton = ({ type }: TypeButtonProps): JSX.Element => {
   const { filters, setFilters } = useContext<any>(FilterPokemonContext);
+
+  const { isDarkMode } = useContext(AppThemeContext);
 
   const { t } = useTranslation();
 
@@ -42,7 +45,13 @@ export const TypeButton = ({ type }: TypeButtonProps): JSX.Element => {
       onPress={handleTypePress}
       style={{
         ...styles.button,
-        backgroundColor: isPressed ? LogoColors.lightBlue : Colors.pureWhite
+        backgroundColor: isPressed
+          ? isDarkMode
+            ? Colors.darkGrey1
+            : LogoColors.lightBlue
+          : isDarkMode
+          ? Colors.black
+          : Colors.pureWhite
       }}
     >
       <View style={{ marginRight: 5 }}>
@@ -52,7 +61,9 @@ export const TypeButton = ({ type }: TypeButtonProps): JSX.Element => {
         />
       </View>
 
-      <CustomText style={styles.text}>{t(`pokemon-types.${type}`)}</CustomText>
+      <CustomText style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}>
+        {t(`pokemon-types.${type}`)}
+      </CustomText>
     </TouchableOpacity>
   );
 };
@@ -76,5 +87,11 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.poppinsMedium,
     fontSize: 11,
     marginTop: 2
+  },
+  textDark: {
+    color: Colors.pureWhite
+  },
+  textLight: {
+    color: LogoColors.darkBlue
   }
 });

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { ActivityIndicator, Image, StyleSheet, Text, View } from 'react-native';
 import { CustomText } from './custom-text';
 import { RQ_KEY } from '@constants/react-query';
@@ -17,6 +17,7 @@ import { RectButton } from 'react-native-gesture-handler';
 import { TypeIcon } from './type-icon';
 import { HOME_STACK } from '@constants/screens';
 import { useTranslation } from 'react-i18next';
+import { AppThemeContext } from 'context/app-theme-context';
 
 type PokemonCardProps = {
   name: string;
@@ -41,6 +42,8 @@ export const PokemonCard = ({ name, navigation }: PokemonCardProps): JSX.Element
     queryFn: () => getPokemon(name)
   });
 
+  const { isDarkMode } = useContext(AppThemeContext);
+
   const { t } = useTranslation();
 
   function getImageUri(pokemon: any) {
@@ -62,12 +65,14 @@ export const PokemonCard = ({ name, navigation }: PokemonCardProps): JSX.Element
       }}
       onPress={() => navigation.navigate(HOME_STACK.POKEMON_DETAIL, { pokemonData })}
     >
-      <View style={styles.logoImageWrapper}>
-        <Image
-          style={styles.logoImage}
-          source={require('@assets/images/background__pokeball.png')}
-        />
-      </View>
+      <Image
+        style={styles.logoImage}
+        source={
+          isDarkMode
+            ? require('@assets/images/background__pokeball--transparent.png')
+            : require('@assets/images/background__pokeball--white-transparent.png')
+        }
+      />
 
       {isLoading && (
         <ActivityIndicator
@@ -143,7 +148,8 @@ const styles = StyleSheet.create({
     height: 120,
     overflow: 'hidden',
     marginBottom: 10,
-    marginRight: '4%'
+    marginRight: '4%',
+    position: 'relative'
   },
   cardImageWrapper: {
     position: 'absolute',
@@ -155,16 +161,13 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80
   },
-  logoImageWrapper: {
-    position: 'absolute',
-    right: -40,
-    top: 15,
-    zIndex: -2
-  },
   logoImage: {
     width: 140,
     height: 140,
-    opacity: 0.15
+    right: -40,
+    top: 15,
+    position: 'absolute',
+    zIndex: 2
   },
   cardName: {
     color: Colors.pureWhite,

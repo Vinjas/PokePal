@@ -1,12 +1,13 @@
 import { ColorTypes, ColorTypesHightlight, Colors } from '@constants/styles/colors';
 import { formatPokemonName } from '@utils/format-pokemon-name';
-import React from 'react';
+import React, { useContext } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import HeartIcon from '@assets/svg/heart--white.svg';
 import BackIcon from '@assets/svg/back--white.svg';
 import { formatPokemonId } from '@utils/format-pokemon-id';
 import { TypeIcon } from '@components/type-icon';
 import { FontFamily } from '@constants/styles/fontsFamily';
+import { AppThemeContext } from 'context/app-theme-context';
 
 const HeartButton = () => (
   <HeartIcon
@@ -26,6 +27,8 @@ export const PokemonInfoHeader = ({ route, navigation }: any) => {
   const { pokemonData } = route.params;
 
   const { name, id, types } = pokemonData;
+
+  const { isDarkMode } = useContext(AppThemeContext);
 
   return (
     <View
@@ -87,7 +90,9 @@ export const PokemonInfoHeader = ({ route, navigation }: any) => {
         />
       </View>
 
-      <View style={styles.divider} />
+      <View
+        style={[styles.divider, isDarkMode ? styles.dividerDark : styles.dividerLight]}
+      />
     </View>
   );
 };
@@ -110,10 +115,15 @@ const styles = StyleSheet.create({
   divider: {
     width: '100%',
     height: 30,
-    backgroundColor: Colors.pureWhite,
     borderTopLeftRadius: 50,
     borderTopRightRadius: 50,
     zIndex: -1
+  },
+  dividerDark: {
+    backgroundColor: Colors.black
+  },
+  dividerLight: {
+    backgroundColor: Colors.pureWhite
   },
   headerWrapper: {
     alignItems: 'center',

@@ -1,8 +1,7 @@
 import { PokemonCard } from '@components/pokemon-card';
 import { SearchBar } from '@components/search-bar';
 import { RQ_KEY } from '@constants/react-query';
-import { LogoColors } from '@constants/styles/colors';
-import { HeaderText } from '@constants/styles/screen-header';
+import { Colors, LogoColors } from '@constants/styles/colors';
 import { getPokemonList } from '@services/poke-api';
 import { useQuery } from '@tanstack/react-query';
 import React, { useContext, useState } from 'react';
@@ -13,14 +12,10 @@ import { FilterMenu } from '@components/filter-menu/filter-menu';
 import { getIdFromUrl } from '@utils/get-id-from-url';
 import { PokemonResultsContext } from 'context/pokemon-results-context';
 import BackIcon from '@assets/svg/back.svg';
+import BackIconWhite from '@assets/svg/back--white.svg';
 import { useTranslation } from 'react-i18next';
-
-const BackButton = () => (
-  <BackIcon
-    width={25}
-    height={25}
-  />
-);
+import { AppThemeContext } from 'context/app-theme-context';
+import { FontFamily } from '@constants/styles/fontsFamily';
 
 type PokemonResource = {
   name: string;
@@ -28,13 +23,14 @@ type PokemonResource = {
 };
 
 export const PokedexScreen = ({ navigation }: any): JSX.Element => {
-  const [allPokemonList, setAllPokemonList] = useState<PokemonResource[]>([]);
   const [filterMenuRefState, setFilterMenuRefState] = useState(null);
 
   const { t } = useTranslation();
 
   const { pokemonResults, setPokemonResults, setFullPokemonList } =
     useContext<any>(PokemonResultsContext);
+
+  const { isDarkMode } = useContext(AppThemeContext);
 
   const { isLoading, isError } = useQuery({
     queryKey: [RQ_KEY.ALL_POKEMON_LISTS],
@@ -53,7 +49,6 @@ export const PokedexScreen = ({ navigation }: any): JSX.Element => {
       };
     },
     onSuccess: data => {
-      setAllPokemonList(data.results);
       setPokemonResults(data.results);
       setFullPokemonList(data.results);
     }
@@ -63,12 +58,32 @@ export const PokedexScreen = ({ navigation }: any): JSX.Element => {
     setFilterMenuRefState(ref);
   };
 
+  const BackButton = () => {
+    return isDarkMode ? (
+      <BackIconWhite
+        width={25}
+        height={25}
+      />
+    ) : (
+      <BackIcon
+        width={25}
+        height={25}
+      />
+    );
+  };
+
   return (
-    <SafeAreaView style={styles.wrapper}>
+    <SafeAreaView
+      style={[styles.wrapper, isDarkMode ? styles.wrapperDark : styles.wrapperLight]}
+    >
       <View style={styles.headerImageWrapper}>
         <Image
           style={styles.headerImage}
-          source={require('@assets/images/background__pokeball--transparent.png')}
+          source={
+            isDarkMode
+              ? require('@assets/images/background__pokeball--white-transparent.png')
+              : require('@assets/images/background__pokeball--transparent.png')
+          }
         />
       </View>
 
@@ -76,7 +91,14 @@ export const PokedexScreen = ({ navigation }: any): JSX.Element => {
         <BorderlessButton onPress={() => navigation.goBack()}>
           <BackButton />
         </BorderlessButton>
-        <Text style={styles.headerText}>{t('screen-headers.pokedex')}</Text>
+        <Text
+          style={[
+            styles.headerText,
+            isDarkMode ? styles.headerTextDark : styles.headerTextLight
+          ]}
+        >
+          {t('screen-headers.pokedex')}
+        </Text>
       </View>
 
       <SearchBar filterMenuRef={filterMenuRefState} />
@@ -117,9 +139,28 @@ const styles = StyleSheet.create({
   wrapper: {
     paddingHorizontal: 0,
     paddingTop: 10,
-    height: '100%'
+    height: '100%',
+    overflow: 'hidden'
   },
-  headerText: HeaderText,
+  wrapperDark: {
+    backgroundColor: Colors.black
+  },
+  wrapperLight: {
+    backgroundColor: Colors.pureWhite
+  },
+  headerText: {
+    fontSize: 32,
+    fontFamily: FontFamily.poppinsBold,
+    color: Colors.black,
+    paddingHorizontal: 20,
+    lineHeight: 40
+  },
+  headerTextLight: {
+    color: Colors.black
+  },
+  headerTextDark: {
+    color: Colors.pureWhite
+  },
   headerBar: {
     flexDirection: 'row',
     gap: 10,
@@ -138,7 +179,8 @@ const styles = StyleSheet.create({
     opacity: 0.5
   },
   list: {
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
+    overflow: 'hidden'
   },
   loader: {
     justifyContent: 'center',

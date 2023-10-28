@@ -5,14 +5,17 @@ import { FontFamily } from '@constants/styles/fontsFamily';
 import { getPokemonSpecies } from '@services/poke-api';
 import { useQuery } from '@tanstack/react-query';
 import { parseNewLines } from '@utils/parse-new-lines';
-import React from 'react';
+import React, { useContext } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { AppThemeContext } from 'context/app-theme-context';
 
 export const PokemonAboutTab = ({ route }: any) => {
   const { t } = useTranslation();
 
   const { pokemonData } = route;
+
+  const { isDarkMode } = useContext(AppThemeContext);
 
   const { name } = pokemonData;
 
@@ -35,8 +38,13 @@ export const PokemonAboutTab = ({ route }: any) => {
       )}
 
       {!isLoading && pokemonSpecies && (
-        <View style={styles.aboutWrapper}>
-          <CustomText style={styles.text}>
+        <View style={[]}>
+          <CustomText
+            style={[
+              [styles.text, isDarkMode ? styles.textDark : styles.textLight],
+              isDarkMode ? styles.textDark : styles.textLight
+            ]}
+          >
             {parseNewLines(pokemonSpecies.flavor_text_entries[0].flavor_text)}
           </CustomText>
 
@@ -47,7 +55,7 @@ export const PokemonAboutTab = ({ route }: any) => {
           {pokemonData.abilities.map((ability: any, index: number) => (
             <CustomText
               key={index}
-              style={styles.text}
+              style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}
             >
               {ability.ability.name}
             </CustomText>
@@ -57,12 +65,20 @@ export const PokemonAboutTab = ({ route }: any) => {
           <CustomText style={styles.subHeader}>
             {t('pokemon-info.about.height')}
           </CustomText>
-          <CustomText style={styles.text}>{pokemonData.height}</CustomText>
+          <CustomText
+            style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}
+          >
+            {pokemonData.height}
+          </CustomText>
 
           <CustomText style={styles.subHeader}>
             {t('pokemon-info.about.weight')}
           </CustomText>
-          <CustomText style={styles.text}>{pokemonData.weight}</CustomText>
+          <CustomText
+            style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}
+          >
+            {pokemonData.weight}
+          </CustomText>
 
           <CustomText style={styles.subHeader}>
             {pokemonSpecies.generation.name}
@@ -76,22 +92,38 @@ export const PokemonAboutTab = ({ route }: any) => {
           <CustomText style={styles.subHeader}>
             {t('pokemon-info.about.stats.base-exp')}
           </CustomText>
-          <CustomText style={styles.text}>{pokemonData.base_experience}</CustomText>
+          <CustomText
+            style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}
+          >
+            {pokemonData.base_experience}
+          </CustomText>
 
           <CustomText style={styles.subHeader}>
             {t('pokemon-info.about.stats.base-happiness')}
           </CustomText>
-          <CustomText style={styles.text}>{pokemonSpecies.base_happiness}</CustomText>
+          <CustomText
+            style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}
+          >
+            {pokemonSpecies.base_happiness}
+          </CustomText>
 
           <CustomText style={styles.subHeader}>
             {t('pokemon-info.about.stats.growth-rate')}
           </CustomText>
-          <CustomText style={styles.text}>{pokemonSpecies.growth_rate.name}</CustomText>
+          <CustomText
+            style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}
+          >
+            {pokemonSpecies.growth_rate.name}
+          </CustomText>
 
           <CustomText style={styles.subHeader}>
             {t('pokemon-info.about.stats.capture-rate')}
           </CustomText>
-          <CustomText style={styles.text}>{pokemonSpecies.capture_rate}</CustomText>
+          <CustomText
+            style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}
+          >
+            {pokemonSpecies.capture_rate}
+          </CustomText>
 
           {/* BREEDING */}
           <CustomText style={styles.header}>
@@ -101,7 +133,11 @@ export const PokemonAboutTab = ({ route }: any) => {
           <CustomText style={styles.subHeader}>
             {t('pokemon-info.about.stats.gender')}
           </CustomText>
-          <CustomText style={styles.text}>{pokemonSpecies.gender_rate}</CustomText>
+          <CustomText
+            style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}
+          >
+            {pokemonSpecies.gender_rate}
+          </CustomText>
 
           <CustomText style={styles.subHeader}>
             {t('pokemon-info.about.stats.egg-groups')}
@@ -109,7 +145,7 @@ export const PokemonAboutTab = ({ route }: any) => {
           {pokemonSpecies.egg_groups.map((eggGroup: any, index: number) => (
             <CustomText
               key={index}
-              style={styles.text}
+              style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}
             >
               {eggGroup.name}
             </CustomText>
@@ -118,7 +154,11 @@ export const PokemonAboutTab = ({ route }: any) => {
           <CustomText style={styles.subHeader}>
             {t('pokemon-info.about.stats.egg-cycle')}
           </CustomText>
-          <CustomText style={styles.text}>{pokemonSpecies.hatch_counter}</CustomText>
+          <CustomText
+            style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}
+          >
+            {pokemonSpecies.hatch_counter}
+          </CustomText>
         </View>
       )}
     </ScrollView>
@@ -135,15 +175,32 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10
   },
-  aboutWrapper: {},
+  aboutWrapperDark: {
+    backgroundColor: Colors.black
+  },
+  aboutWrapperLight: {
+    backgroundColor: Colors.pureWhite
+  },
   text: {
     fontSize: 14,
     textAlign: 'center'
+  },
+  textDark: {
+    color: Colors.pureWhite
+  },
+  textLight: {
+    color: Colors.black
   },
   header: {
     fontSize: 16,
     fontFamily: FontFamily.poppinsBold,
     marginTop: 10,
+    color: Colors.black
+  },
+  headerDark: {
+    color: Colors.pureWhite
+  },
+  headerLight: {
     color: Colors.black
   },
   subHeader: {

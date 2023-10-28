@@ -5,6 +5,7 @@ import { Colors, LogoColors } from '@constants/styles/colors';
 import { FontFamily } from '@constants/styles/fontsFamily';
 import { FilterPokemonContext } from 'context/filter-pokemon-context';
 import { useTranslation } from 'react-i18next';
+import { AppThemeContext } from 'context/app-theme-context';
 
 type GenerationButtonProps = {
   generation: string;
@@ -12,6 +13,8 @@ type GenerationButtonProps = {
 
 export const GenerationButton = ({ generation }: GenerationButtonProps): JSX.Element => {
   const { filters, setFilters } = useContext<any>(FilterPokemonContext);
+
+  const { isDarkMode } = useContext(AppThemeContext);
 
   const [isPressed, setIsPressed] = useState(filters.generation.includes(generation));
 
@@ -43,10 +46,18 @@ export const GenerationButton = ({ generation }: GenerationButtonProps): JSX.Ele
       onPress={handlePress}
       style={{
         ...styles.button,
-        backgroundColor: isPressed ? LogoColors.lightBlue : Colors.pureWhite
+        backgroundColor: isPressed
+          ? isDarkMode
+            ? Colors.darkGrey1
+            : Colors.pureWhite
+          : isDarkMode
+          ? Colors.black
+          : Colors.pureWhite
       }}
     >
-      <CustomText style={styles.text}>{t(`generations.${generation}`)}</CustomText>
+      <CustomText style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}>
+        {t(`generations.${generation}`)}
+      </CustomText>
     </TouchableOpacity>
   );
 };
@@ -67,5 +78,11 @@ const styles = StyleSheet.create({
     color: LogoColors.darkBlue,
     fontFamily: FontFamily.poppinsMedium,
     fontSize: 11
+  },
+  textLight: {
+    color: LogoColors.darkBlue
+  },
+  textDark: {
+    color: Colors.pureWhite
   }
 });

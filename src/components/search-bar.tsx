@@ -11,6 +11,7 @@ import { sortPokemonList } from '@utils/sort-pokemon-list';
 import { filterPokemonList } from '@utils/filter-pokemon-list';
 import { isEmpty } from 'lodash-es';
 import { useTranslation } from 'react-i18next';
+import { AppThemeContext } from 'context/app-theme-context';
 
 type SearchBarProps = {
   filterMenuRef?: any;
@@ -37,6 +38,8 @@ export const SearchBar = ({ filterMenuRef }: SearchBarProps): JSX.Element => {
   const { sortValue, searchText, setSearchText, filters } =
     useContext<any>(FilterPokemonContext);
 
+  const { isDarkMode } = useContext(AppThemeContext);
+
   const updateSearch = (text: string) => {
     setSearchText(text);
     filterData(text);
@@ -60,7 +63,7 @@ export const SearchBar = ({ filterMenuRef }: SearchBarProps): JSX.Element => {
       filteredPokemonResults = fullPokemonList;
     }
 
-    filteredPokemonResults = filteredPokemonResults.filter(item =>
+    filteredPokemonResults = filteredPokemonResults.filter((item: any) =>
       item.name.toLowerCase().includes(text.toLowerCase())
     );
 
@@ -82,11 +85,14 @@ export const SearchBar = ({ filterMenuRef }: SearchBarProps): JSX.Element => {
         <SearchButton />
 
         <TextInput
-          style={styles.searchBar}
+          style={[
+            styles.searchBar,
+            isDarkMode ? styles.searchBarDark : styles.searchBarLight
+          ]}
           placeholder={t('search-bar.placeholder')}
           onChangeText={updateSearch}
           value={searchText}
-          placeholderTextColor={Colors.darkGrey1}
+          placeholderTextColor={isDarkMode ? Colors.ligthGrey1 : Colors.darkGrey1}
         />
       </View>
 
@@ -121,8 +127,13 @@ const styles = StyleSheet.create({
   searchBar: {
     fontSize: 16,
     fontFamily: FontFamily.poppinsMedium,
-    color: Colors.black,
     marginTop: 5
+  },
+  searchBarDark: {
+    color: Colors.pureWhite
+  },
+  searchBarLight: {
+    color: Colors.darkGrey1
   },
   searchIcon: {
     marginRight: 10,
