@@ -46,8 +46,6 @@ export const FilterMenu = ({ onFilterMenuRef }: FilterMenuProps): JSX.Element =>
   }, [onFilterMenuRef]);
 
   async function handleApply() {
-    console.log('click');
-
     const currentPokemonResults = [...pokemonResults];
 
     let filteredPokemonResults = await filterPokemonList(

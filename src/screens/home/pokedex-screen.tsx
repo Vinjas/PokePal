@@ -61,13 +61,13 @@ export const PokedexScreen = ({ navigation }: any): JSX.Element => {
   const BackButton = () => {
     return isDarkMode ? (
       <BackIconWhite
-        width={25}
-        height={25}
+        width={20}
+        height={20}
       />
     ) : (
       <BackIcon
-        width={25}
-        height={25}
+        width={20}
+        height={20}
       />
     );
   };

@@ -8,6 +8,8 @@ import { formatPokemonId } from '@utils/format-pokemon-id';
 import { TypeIcon } from '@components/type-icon';
 import { FontFamily } from '@constants/styles/fontsFamily';
 import { AppThemeContext } from 'context/app-theme-context';
+import { BorderlessButton } from 'react-native-gesture-handler';
+import { useTranslation } from 'react-i18next';
 
 const HeartButton = () => (
   <HeartIcon
@@ -18,13 +20,15 @@ const HeartButton = () => (
 
 const BackButton = () => (
   <BackIcon
-    width={25}
-    height={25}
+    width={20}
+    height={20}
   />
 );
 
 export const PokemonInfoHeader = ({ route, navigation }: any) => {
   const { pokemonData } = route.params;
+
+  const { t } = useTranslation();
 
   const { name, id, types } = pokemonData;
 
@@ -40,19 +44,19 @@ export const PokemonInfoHeader = ({ route, navigation }: any) => {
     >
       <View style={styles.headerWrapper}>
         <View style={styles.topBarWrapper}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <BackButton />
-          </TouchableOpacity>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <BorderlessButton onPress={() => navigation.goBack()}>
+              <BackButton />
+            </BorderlessButton>
+            <Text style={styles.nameText}>{formatPokemonName(name)}</Text>
+          </View>
+
           <View>
             <HeartButton />
           </View>
         </View>
 
         <View style={styles.contentWrapper}>
-          <View style={styles.nameWrapper}>
-            <Text style={styles.nameText}>{formatPokemonName(name)}</Text>
-            <Text style={styles.idText}>{formatPokemonId(id)}</Text>
-          </View>
           <View style={styles.typesWrapper}>
             {types.map((type: any) => (
               <View
@@ -66,10 +70,13 @@ export const PokemonInfoHeader = ({ route, navigation }: any) => {
                   type={type.type.name}
                   size={15}
                 />
-                <Text style={styles.typeText}>{formatPokemonName(type.type.name)}</Text>
+                <Text style={styles.typeText}>
+                  {t(`pokemon-types.${type.type.name}`)}
+                </Text>
               </View>
             ))}
           </View>
+          <Text style={styles.idText}>{formatPokemonId(id)}</Text>
         </View>
       </View>
 
@@ -101,7 +108,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'space-between',
-    height: 300,
+    height: 280,
     overflow: 'hidden'
   },
   cardImageWrapper: {
@@ -109,8 +116,8 @@ const styles = StyleSheet.create({
     bottom: -1
   },
   cardImage: {
-    width: 220,
-    height: 220
+    width: 210,
+    height: 210
   },
   divider: {
     width: '100%',
@@ -129,17 +136,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    height: 100,
+    height: 60,
     zIndex: 10,
     paddingHorizontal: 20
   },
   topBarWrapper: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     width: '100%'
   },
   contentWrapper: {
-    width: '100%'
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   },
   nameWrapper: {
     flexDirection: 'row',
@@ -168,7 +178,9 @@ const styles = StyleSheet.create({
   nameText: {
     color: Colors.pureWhite,
     fontFamily: FontFamily.poppinsBold,
-    fontSize: 30
+    fontSize: 30,
+    paddingLeft: 30,
+    marginTop: 8
   },
   idText: {
     color: Colors.pureWhite,

@@ -48,18 +48,20 @@ export const PokemonInfoScreen = (props: PokemonInfoScreenProps): JSX.Element =>
       indicatorStyle={styles.indicator}
       style={[styles.tabbar, isDarkMode ? styles.tabbarDark : styles.tabbarLight]}
       renderLabel={({ route, focused, color }) => (
-        <Text
-          style={{
-            ...styles.tabbarText,
-            color: focused
-              ? isDarkMode
-                ? Colors.pureWhite
-                : Colors.black
-              : Colors.textSecondary
-          }}
-        >
-          {route.title}
-        </Text>
+        <View style={{ marginTop: -15 }}>
+          <Text
+            style={{
+              ...styles.tabbarText,
+              color: focused
+                ? isDarkMode
+                  ? Colors.pureWhite
+                  : Colors.black
+                : Colors.textSecondary
+            }}
+          >
+            {route.title}
+          </Text>
+        </View>
       )}
     />
   );
@@ -82,7 +84,7 @@ const styles = StyleSheet.create({
     elevation: 0,
     borderBottomWidth: 1,
     borderColor: Colors.ligthGrey1,
-    height: 45
+    height: 35
   },
   tabbarDark: {
     backgroundColor: Colors.black
@@ -97,6 +99,8 @@ const styles = StyleSheet.create({
   indicator: {
     backgroundColor: Colors.sortButton,
     color: Colors.sortButton,
-    height: 3
+    height: 3,
+    position: 'absolute',
+    bottom: -1
   }
 });

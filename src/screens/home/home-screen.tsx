@@ -15,8 +15,6 @@ import { AppThemeContext } from 'context/app-theme-context';
 export const HomeScreen = ({ navigation }: any): JSX.Element => {
   const { t } = useTranslation();
 
-  console.log('storage :>> ', storage.getString('THEME'));
-
   const { isDarkMode } = useContext(AppThemeContext);
 
   const SettingsButton = () => {

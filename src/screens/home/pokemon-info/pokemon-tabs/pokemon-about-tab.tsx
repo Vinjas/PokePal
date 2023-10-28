@@ -5,10 +5,17 @@ import { FontFamily } from '@constants/styles/fontsFamily';
 import { getPokemonSpecies } from '@services/poke-api';
 import { useQuery } from '@tanstack/react-query';
 import { parseNewLines } from '@utils/parse-new-lines';
-import React, { useContext } from 'react';
+import { last } from 'lodash-es';
+import React, { useContext, useMemo } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { AppThemeContext } from 'context/app-theme-context';
+import i18n from '@i18n/i18n';
+import { calculateWeight } from '@utils/calculate-weight';
+import { calculateHeight } from '@utils/calculate-height';
+import { calculateHappiness } from '@utils/calculate-happiness';
+import { calculateCaptureRatePercentage } from '@utils/calculate-capture-rate-percentage';
+import { calculateGenderPercentage } from '@utils/calculate-gender-percentage';
 
 export const PokemonAboutTab = ({ route }: any) => {
   const { t } = useTranslation();
@@ -23,6 +30,47 @@ export const PokemonAboutTab = ({ route }: any) => {
     queryKey: [RQ_KEY.POKEMON_SPECIES, name],
     queryFn: () => getPokemonSpecies(name)
   });
+
+  const flavorText = useMemo(() => {
+    if (!pokemonSpecies) return '';
+
+    const flavorTextEntries = pokemonSpecies.flavor_text_entries.filter(
+      (entry: { language: { name: string } }) => entry.language.name === i18n.language
+    );
+
+    if (!flavorTextEntries) return '';
+
+    const newestEntry: { flavor_text: string } = last(flavorTextEntries) ?? {
+      flavor_text: ''
+    };
+
+    return newestEntry.flavor_text;
+  }, [pokemonSpecies]);
+
+  const calculatedWeight: { kilograms: string; pounds: string } = useMemo(() => {
+    if (!pokemonData) return { kilograms: '0', pounds: '0' };
+
+    return calculateWeight(pokemonData.weight);
+  }, [pokemonData]);
+
+  const calculatedHeight: { meters: string; feet: number; inches: number } =
+    useMemo(() => {
+      if (!pokemonData) return { meters: '0', feet: 0, inches: 0 };
+
+      return calculateHeight(pokemonData.height);
+    }, [pokemonData]);
+
+  const calculateCaptureRate: string = useMemo(() => {
+    if (!pokemonSpecies) return '0%';
+
+    return calculateCaptureRatePercentage(pokemonSpecies.capture_rate);
+  }, [pokemonSpecies]);
+
+  const calculatedGenders: { male: string; female: string } = useMemo(() => {
+    if (!pokemonSpecies) return { male: '0%', female: '0%' };
+
+    return calculateGenderPercentage(pokemonSpecies.gender_rate);
+  }, [pokemonSpecies]);
 
   return (
     <ScrollView
@@ -39,13 +87,14 @@ export const PokemonAboutTab = ({ route }: any) => {
 
       {!isLoading && pokemonSpecies && (
         <View style={[]}>
+          {/* FLAVOR TEXT */}
           <CustomText
             style={[
               [styles.text, isDarkMode ? styles.textDark : styles.textLight],
               isDarkMode ? styles.textDark : styles.textLight
             ]}
           >
-            {parseNewLines(pokemonSpecies.flavor_text_entries[0].flavor_text)}
+            {parseNewLines(flavorText)}
           </CustomText>
 
           {/* ABILITIES */}
@@ -57,7 +106,7 @@ export const PokemonAboutTab = ({ route }: any) => {
               key={index}
               style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}
             >
-              {ability.ability.name}
+              {t(`pokemon-info.abilities.${ability.ability.name}`)}
             </CustomText>
           ))}
 
@@ -68,7 +117,7 @@ export const PokemonAboutTab = ({ route }: any) => {
           <CustomText
             style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}
           >
-            {pokemonData.height}
+            {`${calculatedHeight.meters} m - ${calculatedHeight.feet}'${calculatedHeight.inches}"`}
           </CustomText>
 
           <CustomText style={styles.subHeader}>
@@ -77,7 +126,7 @@ export const PokemonAboutTab = ({ route }: any) => {
           <CustomText
             style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}
           >
-            {pokemonData.weight}
+            {`${calculatedWeight.kilograms} kg - ${calculatedWeight.pounds} lbs`}
           </CustomText>
 
           <CustomText style={styles.subHeader}>
@@ -104,7 +153,14 @@ export const PokemonAboutTab = ({ route }: any) => {
           <CustomText
             style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}
           >
-            {pokemonSpecies.base_happiness}
+            {pokemonSpecies.base_happiness +
+              ' (' +
+              t(
+                `pokemon-info.happiness.${calculateHappiness(
+                  pokemonSpecies.base_happiness
+                )}`
+              ) +
+              ')'}
           </CustomText>
 
           <CustomText style={styles.subHeader}>
@@ -113,7 +169,7 @@ export const PokemonAboutTab = ({ route }: any) => {
           <CustomText
             style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}
           >
-            {pokemonSpecies.growth_rate.name}
+            {t(`pokemon-info.growth-rate.${pokemonSpecies.growth_rate.name}`)}
           </CustomText>
 
           <CustomText style={styles.subHeader}>
@@ -122,7 +178,7 @@ export const PokemonAboutTab = ({ route }: any) => {
           <CustomText
             style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}
           >
-            {pokemonSpecies.capture_rate}
+            {`${pokemonSpecies.capture_rate} (${calculateCaptureRate})`}
           </CustomText>
 
           {/* BREEDING */}
@@ -136,7 +192,12 @@ export const PokemonAboutTab = ({ route }: any) => {
           <CustomText
             style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}
           >
-            {pokemonSpecies.gender_rate}
+            {t('pokemon-info.gender.male') + calculatedGenders.male}
+          </CustomText>
+          <CustomText
+            style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}
+          >
+            {t('pokemon-info.gender.female') + calculatedGenders.female}
           </CustomText>
 
           <CustomText style={styles.subHeader}>
@@ -147,7 +208,7 @@ export const PokemonAboutTab = ({ route }: any) => {
               key={index}
               style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}
             >
-              {eggGroup.name}
+              {t(`pokemon-info.egg-groups.${eggGroup.name}`)}
             </CustomText>
           ))}
 
@@ -169,11 +230,11 @@ const styles = StyleSheet.create({
   loader: {
     justifyContent: 'center',
     alignItems: 'center',
-    height: '80%'
+    height: '80%',
+    marginTop: 50
   },
   container: {
-    paddingHorizontal: 20,
-    paddingVertical: 10
+    paddingHorizontal: 20
   },
   aboutWrapperDark: {
     backgroundColor: Colors.black

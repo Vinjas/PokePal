@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { HomeScreen } from './home/pokedex-screen';
 import { Navbar } from '../components/navbar/navbar';
 import { StatusBar, useColorScheme } from 'react-native';
 import { AppThemeContext } from 'context/app-theme-context';
@@ -20,8 +19,6 @@ export const AppStack = (): JSX.Element => {
   useEffect(() => {
     const hasLanguageConfig = storage.contains(STORAGE.LANG);
     const hasThemeConfig = storage.contains(STORAGE.THEME);
-
-    console.log('object');
 
     if (!hasThemeConfig) {
       storage.set(STORAGE.THEME, deviceTheme ?? THEME.LIGHT);

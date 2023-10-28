@@ -108,6 +108,18 @@
       "acc": "Acc",
       "pp": "PP"
     },
+    "gender": {
+      "male": "Male",
+      "female": "Female"
+    },
+    "happiness": {
+      "excellent": "Excelent",
+      "very-good": "Very Good",
+      "good": "Good",
+      "so-so": "So-So",
+      "not-good": "Not Good",
+      "meager": "Meager"
+    },
     "egg-groups": {
       "monster": "Monster",
       "water1": "Water 1",
