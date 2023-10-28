@@ -93,7 +93,7 @@ export const PokemonInfoHeader = ({ route, navigation }: any) => {
       <View style={styles.logoImageWrapper}>
         <Image
           style={styles.logoImage}
-          source={require('@assets/images/background__pokeball.png')}
+          source={require('@assets/images/background__pokeball--white-transparent.png')}
         />
       </View>
 
@@ -197,6 +197,6 @@ const styles = StyleSheet.create({
   logoImage: {
     width: 450,
     height: 450,
-    opacity: 0.15
+    opacity: 1
   }
 });

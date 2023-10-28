@@ -20,6 +20,13 @@ export const LogoColors = {
   lightBlue: '#EDF7F9'
 };
 
+export const StatsColors = {
+  green: '#99D68A',
+  red: '#F5746B',
+  yellow: '#D6CE8A',
+  blue: '#565B90'
+};
+
 export const ColorTypes = {
   normal: '#AAA67F',
   fighting: '#CC5264',
