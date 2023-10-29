@@ -1,24 +1,27 @@
 import { StatsBarChart } from '@components/stat-bar-chart';
 import { StatsBarTotalChart } from '@components/stat-bar-total-chart';
-import { Colors } from '@constants/styles/colors';
+import { Colors, LogoColors } from '@constants/styles/colors';
 import { FontFamily } from '@constants/styles/fontsFamily';
 import { convertPokemonStats, getPokemonTotalStat } from 'mapper/pokemon-stats-mapper';
-import React, { useMemo } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import StarIcon from '@assets/svg/star.svg';
+import { AppThemeContext } from 'context/app-theme-context';
 
 const StarButton = () => {
   return (
     <StarIcon
-      width={11}
-      height={11}
+      width={9}
+      height={9}
     />
   );
 };
 
 export const PokemonStatsTab = ({ route }: any) => {
   const { t } = useTranslation();
+
+  const { isDarkMode } = useContext(AppThemeContext);
 
   const { pokemonData } = route;
 
@@ -35,7 +38,7 @@ export const PokemonStatsTab = ({ route }: any) => {
   }, [pokemonData]);
 
   return (
-    <ScrollView style={styles.wrapper}>
+    <View style={styles.wrapper}>
       {mappedPokemonStats.map(stat => (
         <View
           key={stat.label}
@@ -48,7 +51,9 @@ export const PokemonStatsTab = ({ route }: any) => {
                 <StarButton key={index} />
               ))}
             </View>
-            <Text style={styles.stat}>{stat.value}</Text>
+            <Text style={[styles.stat, isDarkMode ? styles.statDark : styles.statLight]}>
+              {stat.value}
+            </Text>
           </View>
 
           <StatsBarChart
@@ -64,29 +69,33 @@ export const PokemonStatsTab = ({ route }: any) => {
           <Text style={styles.subHeader}>
             {t(`pokemon-info.stats.${pokemonTotalStat.label}`)}
           </Text>
-          <Text style={styles.stat}>{pokemonTotalStat.value}</Text>
+          <Text style={[styles.stat, isDarkMode ? styles.statDark : styles.statLight]}>
+            {pokemonTotalStat.value}
+          </Text>
         </View>
 
         <StatsBarTotalChart stat={pokemonTotalStat.value} />
       </View>
-    </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
+    justifyContent: 'space-around',
+    paddingVertical: 10
   },
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 12
+    marginBottom: 8
   },
   subHeader: {
     fontSize: 16,
-    fontFamily: FontFamily.poppinsSemiBold,
+    fontFamily: FontFamily.poppinsMedium,
     marginTop: 10,
     color: Colors.darkGrey1
   },
@@ -104,8 +113,15 @@ const styles = StyleSheet.create({
   },
   stat: {
     fontSize: 16,
-    fontFamily: FontFamily.poppinsBold,
+    fontFamily: FontFamily.poppinsSemiBold,
     marginTop: 10,
+    color: Colors.black,
+    borderRadius: 25
+  },
+  statDark: {
+    color: Colors.pureWhite
+  },
+  statLight: {
     color: Colors.black
   }
 });

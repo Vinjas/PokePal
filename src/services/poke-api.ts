@@ -46,3 +46,13 @@ export const getPokemonList = async (params: PokemonListParams) => {
     throw error;
   }
 };
+
+export const getEvolutionChain = async (url: string) => {
+  try {
+    const response = await axios.get(url);
+
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

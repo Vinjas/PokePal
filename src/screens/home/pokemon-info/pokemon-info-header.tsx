@@ -10,6 +10,10 @@ import { FontFamily } from '@constants/styles/fontsFamily';
 import { AppThemeContext } from 'context/app-theme-context';
 import { BorderlessButton } from 'react-native-gesture-handler';
 import { useTranslation } from 'react-i18next';
+import { getPokemon } from '@services/poke-api';
+import { useQuery } from '@tanstack/react-query';
+import { RQ_KEY } from '@constants/react-query';
+import { HOME_STACK } from '@constants/screens';
 
 const HeartButton = () => (
   <HeartIcon
@@ -30,7 +34,7 @@ export const PokemonInfoHeader = ({ route, navigation }: any) => {
 
   const { t } = useTranslation();
 
-  const { name, id, types } = pokemonData;
+  const { name, id, types, sprites } = pokemonData;
 
   const { isDarkMode } = useContext(AppThemeContext);
 
@@ -45,7 +49,7 @@ export const PokemonInfoHeader = ({ route, navigation }: any) => {
       <View style={styles.headerWrapper}>
         <View style={styles.topBarWrapper}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <BorderlessButton onPress={() => navigation.goBack()}>
+            <BorderlessButton onPress={() => navigation.navigate(HOME_STACK.POKEDEX)}>
               <BackButton />
             </BorderlessButton>
             <Text style={styles.nameText}>{formatPokemonName(name)}</Text>
@@ -85,7 +89,7 @@ export const PokemonInfoHeader = ({ route, navigation }: any) => {
           resizeMode='contain'
           style={styles.cardImage}
           source={{
-            uri: pokemonData.sprites.other['official-artwork'].front_default
+            uri: sprites.other['official-artwork'].front_default
           }}
         />
       </View>

@@ -49,7 +49,7 @@ export const GenerationButton = ({ generation }: GenerationButtonProps): JSX.Ele
         backgroundColor: isPressed
           ? isDarkMode
             ? Colors.darkGrey1
-            : Colors.pureWhite
+            : LogoColors.blue
           : isDarkMode
           ? Colors.black
           : Colors.pureWhite

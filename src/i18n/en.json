@@ -57,6 +57,43 @@
     "first-id": "Oldest Pokemon ID",
     "last-id": "Newest Pokemon ID"
   },
+  "evolution": {
+    "no-evolution": "No Evolution",
+    "triggers": {
+        "level-up": "Level Up",
+        "trade": "Trade",
+        "use-item": "Use Item",
+        "shed": "Shed",
+        "spin": "Spin",
+        "tower-of-darkness": "Tower of Darkness",
+        "tower-of-waters": "Tower of Waters",
+        "three-critical-hits": "Three Critical Hits",
+        "take-damage": "Take Damage",
+        "other": "Other",
+        "agile-style-move": "Agile Style Move",
+        "strong-style-move": "Strong Style Move",
+        "recoil-damage": "Recoil Damage"
+    },
+    "requirements": {
+      "gender": "Gender",
+      "held_item": "Held Item",
+      "item": "",
+      "known_move": "Move",
+      "known_move_type": "Move Type",
+      "location": "Loc.",
+      "min_affection": "Min Affection",
+      "min_beauty": "Min Beauty",
+      "min_happiness": "Min Happiness",
+      "min_level": "Lvl",
+      "needs_overworld_rain": "Needs Overworld Rain",
+      "party_species": "Party Species",
+      "party_type": "Party Type",
+      "relative_physical_stats": "Relative Physical Stats",
+      "time_of_day": "Time",
+      "trade_species": "Trade Species",
+      "turn_upside_down": "Turn Upside Down"  
+    }
+  },
   "pokemon-info": {
     "headers": {
       "about": "About",

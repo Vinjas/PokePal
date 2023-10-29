@@ -48,7 +48,7 @@ export const TypeButton = ({ type }: TypeButtonProps): JSX.Element => {
         backgroundColor: isPressed
           ? isDarkMode
             ? Colors.darkGrey1
-            : LogoColors.lightBlue
+            : LogoColors.blue
           : isDarkMode
           ? Colors.black
           : Colors.pureWhite

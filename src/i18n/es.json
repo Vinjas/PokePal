@@ -34,7 +34,7 @@
     "psychic": "Psíquico",
     "bug": "Bicho",
     "rock": "Roca",
-    "ghost": "Fantasma",
+    "ghost": "Fantas.",
     "dragon": "Dragón",
     "dark": "Siniestro",
     "steel": "Acero",
@@ -60,7 +60,7 @@
   "pokemon-info": {
     "headers": {
       "about": "General",
-      "stats": "Estats.",
+      "stats": "Estad.",
       "evolution": "Evolución",
       "moves": "Mov."
     },

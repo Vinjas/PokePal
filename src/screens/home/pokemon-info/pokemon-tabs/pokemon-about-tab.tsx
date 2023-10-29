@@ -47,6 +47,34 @@ export const PokemonAboutTab = ({ route }: any) => {
     return newestEntry.flavor_text;
   }, [pokemonSpecies]);
 
+  const pokemonName = useMemo(() => {
+    if (!pokemonSpecies) return '';
+
+    const names = pokemonSpecies.names.filter(
+      (entry: { language: { name: string } }) => entry.language.name === i18n.language
+    );
+
+    if (!names) return '';
+
+    const newestEntry: { name: string } = last(names) ?? { name: '' };
+
+    return newestEntry.name;
+  }, [pokemonSpecies]);
+
+  const pokemonGenera = useMemo(() => {
+    if (!pokemonSpecies) return '';
+
+    const genera = pokemonSpecies.genera.filter(
+      (entry: { language: { name: string } }) => entry.language.name === i18n.language
+    );
+
+    if (!genera) return '';
+
+    const newestEntry: { genus: string } = last(genera) ?? { genus: '' };
+
+    return newestEntry.genus;
+  }, [pokemonSpecies]);
+
   const calculatedWeight: { kilograms: string; pounds: string } = useMemo(() => {
     if (!pokemonData) return { kilograms: '0', pounds: '0' };
 
@@ -87,6 +115,12 @@ export const PokemonAboutTab = ({ route }: any) => {
 
       {!isLoading && pokemonSpecies && (
         <View style={[]}>
+          {/* NAME */}
+          <CustomText
+            style={[styles.header, isDarkMode ? styles.headerDark : styles.headerLight]}
+          >
+            {pokemonName}
+          </CustomText>
           {/* FLAVOR TEXT */}
           <CustomText
             style={[
@@ -97,8 +131,23 @@ export const PokemonAboutTab = ({ route }: any) => {
             {parseNewLines(flavorText)}
           </CustomText>
 
+          <View style={styles.rowWrapper}>
+            <CustomText
+              style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}
+            >
+              {pokemonGenera}
+            </CustomText>
+            <CustomText
+              style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}
+            >
+              {t(`generations.${pokemonSpecies.generation.name}`)}
+            </CustomText>
+          </View>
+
           {/* ABILITIES */}
-          <CustomText style={styles.header}>
+          <CustomText
+            style={[styles.header, isDarkMode ? styles.headerDark : styles.headerLight]}
+          >
             {t('pokemon-info.about.abilities')}
           </CustomText>
           {pokemonData.abilities.map((ability: any, index: number) => (
@@ -129,12 +178,10 @@ export const PokemonAboutTab = ({ route }: any) => {
             {`${calculatedWeight.kilograms} kg - ${calculatedWeight.pounds} lbs`}
           </CustomText>
 
-          <CustomText style={styles.subHeader}>
-            {pokemonSpecies.generation.name}
-          </CustomText>
-
           {/* TRAINING */}
-          <CustomText style={styles.header}>
+          <CustomText
+            style={[styles.header, isDarkMode ? styles.headerDark : styles.headerLight]}
+          >
             {t('pokemon-info.about.training')}
           </CustomText>
 
@@ -182,7 +229,9 @@ export const PokemonAboutTab = ({ route }: any) => {
           </CustomText>
 
           {/* BREEDING */}
-          <CustomText style={styles.header}>
+          <CustomText
+            style={[styles.header, isDarkMode ? styles.headerDark : styles.headerLight]}
+          >
             {t('pokemon-info.about.breeding')}
           </CustomText>
 
@@ -269,5 +318,10 @@ const styles = StyleSheet.create({
     fontFamily: FontFamily.poppinsSemiBold,
     marginTop: 10,
     color: Colors.darkGrey1
+  },
+  rowWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
   }
 });

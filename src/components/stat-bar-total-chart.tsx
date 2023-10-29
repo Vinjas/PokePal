@@ -1,4 +1,4 @@
-import { Colors, StatsColors } from '@constants/styles/colors';
+import { Colors, LogoColors, StatsColors } from '@constants/styles/colors';
 import { AppThemeContext } from 'context/app-theme-context';
 import React, { useContext } from 'react';
 import { View, StyleSheet } from 'react-native';
@@ -6,7 +6,7 @@ import { Svg, Rect } from 'react-native-svg';
 
 export const StatsBarTotalChart = ({ stat }: { stat: number }) => {
   const maxStatValue = 720; // Maximum value for the stats
-  const barHeight = 7; // Height of the bar
+  const barHeight = 8; // Height of the bar
 
   const { isDarkMode } = useContext(AppThemeContext);
 
@@ -18,14 +18,14 @@ export const StatsBarTotalChart = ({ stat }: { stat: number }) => {
     wrapper: {
       width: '60%',
       marginHorizontal: 15,
-      borderRadius: 3,
+      borderRadius: 2,
       marginTop: 8
     },
     wrapperDark: {
       backgroundColor: Colors.darkGrey1
     },
     wrapperLight: {
-      backgroundColor: Colors.ligthGrey1
+      backgroundColor: LogoColors.lightBlue
     }
   });
 
@@ -38,7 +38,7 @@ export const StatsBarTotalChart = ({ stat }: { stat: number }) => {
         <Rect
           x={x}
           y={y}
-          rx={3}
+          rx={2}
           width={barWidth + '%'}
           height={barHeight}
           fill={StatsColors.blue}
