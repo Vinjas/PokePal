@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
     paddingHorizontal: 20,
-    justifyContent: 'space-around',
+    justifyContent: 'flex-start',
     paddingVertical: 10
   },
   row: {
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     marginBottom: 8
   },
   subHeader: {
-    fontSize: 16,
+    fontSize: 14,
     fontFamily: FontFamily.poppinsMedium,
     marginTop: 10,
     color: Colors.darkGrey1

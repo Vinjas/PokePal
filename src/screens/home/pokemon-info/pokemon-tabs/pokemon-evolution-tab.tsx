@@ -155,7 +155,14 @@ export const PokemonEvolutionTab = ({ route }: any) => {
                     onPokemonPress(evolutionChainMapped[pokemon.order - 2].name)
                   }
                 >
-                  <View style={styles.cardImageWrapper}>
+                  <View
+                    style={[
+                      styles.cardImageWrapper,
+                      isDarkMode
+                        ? styles.cardImageWrapperDark
+                        : styles.cardImageWrapperLight
+                    ]}
+                  >
                     <Image
                       resizeMode='contain'
                       style={styles.cardImage}
@@ -199,7 +206,13 @@ export const PokemonEvolutionTab = ({ route }: any) => {
                   <View>
                     {Object.entries(filteredEvolutionDetails).map(([key, req]) => (
                       <View key={key}>
-                        <CustomText>
+                        <CustomText
+                          style={[
+                            isDarkMode
+                              ? styles.requirementTextDark
+                              : styles.requirementTextLight
+                          ]}
+                        >
                           {t(`evolution.requirements.${key}`)} {req}
                         </CustomText>
                       </View>
@@ -211,7 +224,14 @@ export const PokemonEvolutionTab = ({ route }: any) => {
                   style={styles.pokemonWrapper}
                   onPress={() => onPokemonPress(pokemon.name)}
                 >
-                  <View style={styles.cardImageWrapper}>
+                  <View
+                    style={[
+                      styles.cardImageWrapper,
+                      isDarkMode
+                        ? styles.cardImageWrapperDark
+                        : styles.cardImageWrapperLight
+                    ]}
+                  >
                     <Image
                       resizeMode='contain'
                       style={styles.cardImage}
@@ -276,11 +296,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   cardImageWrapper: {
-    backgroundColor: LogoColors.lightBlue,
     borderRadius: 50,
     padding: 10
-    //position: 'absolute',
-    //bottom: -1
+  },
+  cardImageWrapperDark: {
+    backgroundColor: LogoColors.darkerBlue
+  },
+  cardImageWrapperLight: {
+    backgroundColor: LogoColors.lightBlue
   },
   cardImage: {
     width: 80,
@@ -301,5 +324,11 @@ const styles = StyleSheet.create({
   },
   titleLight: {
     color: Colors.black
+  },
+  requirementTextDark: {
+    color: Colors.ligthGrey1
+  },
+  requirementTextLight: {
+    color: Colors.darkGrey1
   }
 });

@@ -16,6 +16,7 @@ export const Colors = {
 export const LogoColors = {
   red: '#DF355A',
   darkBlue: '#033043',
+  darkerBlue: '#254856',
   blue: '#BBD9E3',
   lightBlue: '#EDF7F9'
 };

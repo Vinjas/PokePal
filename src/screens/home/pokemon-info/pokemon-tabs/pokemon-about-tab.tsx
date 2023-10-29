@@ -16,6 +16,28 @@ import { calculateHeight } from '@utils/calculate-height';
 import { calculateHappiness } from '@utils/calculate-happiness';
 import { calculateCaptureRatePercentage } from '@utils/calculate-capture-rate-percentage';
 import { calculateGenderPercentage } from '@utils/calculate-gender-percentage';
+import RulerSvg from '@assets/svg/ruler.svg';
+import WeightSvg from '@assets/svg/weight.svg';
+import RulerSvgWhite from '@assets/svg/ruler--white.svg';
+import WeightSvgWhite from '@assets/svg/weight--white.svg';
+import FemaleSvg from '@assets/svg/female.svg';
+import MaleSvg from '@assets/svg/male.svg';
+
+const FemaleIcon = () => (
+  <FemaleSvg
+    width={24}
+    height={24}
+    style={{ marginRight: 8 }}
+  />
+);
+
+const MaleIcon = () => (
+  <MaleSvg
+    width={20}
+    height={20}
+    style={{ marginRight: 8 }}
+  />
+);
 
 export const PokemonAboutTab = ({ route }: any) => {
   const { t } = useTranslation();
@@ -25,6 +47,36 @@ export const PokemonAboutTab = ({ route }: any) => {
   const { isDarkMode } = useContext(AppThemeContext);
 
   const { name } = pokemonData;
+
+  const RulerIcon = () =>
+    isDarkMode ? (
+      <RulerSvgWhite
+        width={15}
+        height={15}
+        style={{ marginLeft: 5, marginTop: 5 }}
+      />
+    ) : (
+      <RulerSvg
+        width={15}
+        height={15}
+        style={{ marginLeft: 5, marginTop: 5 }}
+      />
+    );
+
+  const WeightIcon = () =>
+    isDarkMode ? (
+      <WeightSvgWhite
+        width={15}
+        height={15}
+        style={{ marginLeft: 5, marginTop: 5 }}
+      />
+    ) : (
+      <WeightSvg
+        width={15}
+        height={15}
+        style={{ marginLeft: 5, marginTop: 5 }}
+      />
+    );
 
   const { data: pokemonSpecies, isLoading } = useQuery({
     queryKey: [RQ_KEY.POKEMON_SPECIES, name],
@@ -116,33 +168,40 @@ export const PokemonAboutTab = ({ route }: any) => {
       {!isLoading && pokemonSpecies && (
         <View style={[]}>
           {/* NAME */}
-          <CustomText
-            style={[styles.header, isDarkMode ? styles.headerDark : styles.headerLight]}
-          >
-            {pokemonName}
-          </CustomText>
+          <View style={styles.rowWrapper}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <CustomText
+                style={[
+                  styles.header,
+                  isDarkMode ? styles.headerDark : styles.headerLight
+                ]}
+              >
+                {pokemonName}
+              </CustomText>
+
+              <View>
+                <CustomText style={[styles.textGenera]}>
+                  {` - ${pokemonGenera}`}
+                </CustomText>
+              </View>
+            </View>
+
+            <View>
+              <CustomText style={[styles.textGeneration]}>
+                {t(`generations.${pokemonSpecies.generation.name}`)}
+              </CustomText>
+            </View>
+          </View>
+
           {/* FLAVOR TEXT */}
           <CustomText
             style={[
-              [styles.text, isDarkMode ? styles.textDark : styles.textLight],
+              [styles.textFlavor, isDarkMode ? styles.textDark : styles.textLight],
               isDarkMode ? styles.textDark : styles.textLight
             ]}
           >
-            {parseNewLines(flavorText)}
+            {`"${parseNewLines(flavorText)}"`}
           </CustomText>
-
-          <View style={styles.rowWrapper}>
-            <CustomText
-              style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}
-            >
-              {pokemonGenera}
-            </CustomText>
-            <CustomText
-              style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}
-            >
-              {t(`generations.${pokemonSpecies.generation.name}`)}
-            </CustomText>
-          </View>
 
           {/* ABILITIES */}
           <CustomText
@@ -150,33 +209,114 @@ export const PokemonAboutTab = ({ route }: any) => {
           >
             {t('pokemon-info.about.abilities')}
           </CustomText>
-          {pokemonData.abilities.map((ability: any, index: number) => (
-            <CustomText
-              key={index}
-              style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}
-            >
-              {t(`pokemon-info.abilities.${ability.ability.name}`)}
-            </CustomText>
-          ))}
+          <View style={{ ...styles.rowWrapper, flexWrap: 'wrap' }}>
+            {pokemonData.abilities.map((ability: any, index: number) => (
+              <View
+                style={[
+                  { width: '48%' },
+                  styles.hightlightSecondary,
+                  isDarkMode
+                    ? styles.highlightSecondaryDark
+                    : styles.highlightSecondaryLight
+                ]}
+              >
+                <CustomText
+                  key={index}
+                  style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}
+                >
+                  {t(`pokemon-info.abilities.${ability.ability.name}`)}
+                </CustomText>
+              </View>
+            ))}
+          </View>
 
           {/* WEIGHT AND HEIGHT */}
-          <CustomText style={styles.subHeader}>
-            {t('pokemon-info.about.height')}
-          </CustomText>
-          <CustomText
-            style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}
+          <View
+            style={[
+              styles.weightPaper,
+              isDarkMode ? styles.weightPaperDark : styles.weightPaperLight
+            ]}
           >
-            {`${calculatedHeight.meters} m - ${calculatedHeight.feet}'${calculatedHeight.inches}"`}
-          </CustomText>
+            <View style={styles.column}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }}
+              >
+                <CustomText style={styles.subHeader}>
+                  {t('pokemon-info.about.height')}
+                </CustomText>
+                <RulerIcon />
+              </View>
 
-          <CustomText style={styles.subHeader}>
-            {t('pokemon-info.about.weight')}
-          </CustomText>
-          <CustomText
-            style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}
-          >
-            {`${calculatedWeight.kilograms} kg - ${calculatedWeight.pounds} lbs`}
-          </CustomText>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  gap: 5,
+                  marginTop: 10
+                }}
+              >
+                <CustomText
+                  style={[
+                    styles.text,
+                    { fontFamily: FontFamily.poppinsSemiBold },
+                    isDarkMode ? styles.textDark : styles.textLight
+                  ]}
+                >
+                  {`${calculatedHeight.meters} m`}
+                </CustomText>
+                <CustomText
+                  style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}
+                >
+                  {`(${calculatedHeight.feet}'${calculatedHeight.inches}")`}
+                </CustomText>
+              </View>
+            </View>
+
+            <View style={styles.column}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }}
+              >
+                <CustomText style={styles.subHeader}>
+                  {t('pokemon-info.about.weight')}
+                </CustomText>
+                <WeightIcon />
+              </View>
+
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  gap: 5,
+                  marginTop: 10
+                }}
+              >
+                <CustomText
+                  style={[
+                    styles.text,
+                    { fontFamily: FontFamily.poppinsSemiBold },
+                    isDarkMode ? styles.textDark : styles.textLight
+                  ]}
+                >
+                  {`${calculatedWeight.kilograms} kg`}
+                </CustomText>
+                <CustomText
+                  style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}
+                >
+                  {`(${calculatedWeight.pounds} lbs)`}
+                </CustomText>
+              </View>
+            </View>
+          </View>
 
           {/* TRAINING */}
           <CustomText
@@ -185,90 +325,230 @@ export const PokemonAboutTab = ({ route }: any) => {
             {t('pokemon-info.about.training')}
           </CustomText>
 
-          <CustomText style={styles.subHeader}>
-            {t('pokemon-info.about.stats.base-exp')}
-          </CustomText>
-          <CustomText
-            style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}
-          >
-            {pokemonData.base_experience}
-          </CustomText>
+          <View style={styles.rowWrapper}>
+            <CustomText style={styles.subHeader}>
+              {t('pokemon-info.about.stats.base-exp')}
+            </CustomText>
+            <View
+              style={[
+                styles.hightlightPrimary,
+                { width: '40%' },
+                isDarkMode ? styles.highlightPrimaryDark : styles.hightlightPrimaryLight
+              ]}
+            >
+              <CustomText
+                style={[
+                  styles.text,
+                  { fontFamily: FontFamily.poppinsSemiBold },
+                  isDarkMode ? styles.textDark : styles.textLight
+                ]}
+              >
+                {pokemonData.base_experience}
+              </CustomText>
+            </View>
+          </View>
 
-          <CustomText style={styles.subHeader}>
-            {t('pokemon-info.about.stats.base-happiness')}
-          </CustomText>
-          <CustomText
-            style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}
-          >
-            {pokemonSpecies.base_happiness +
-              ' (' +
-              t(
-                `pokemon-info.happiness.${calculateHappiness(
-                  pokemonSpecies.base_happiness
-                )}`
-              ) +
-              ')'}
-          </CustomText>
+          <View style={styles.rowWrapper}>
+            <CustomText style={styles.subHeader}>
+              {t('pokemon-info.about.stats.base-happiness')}
+            </CustomText>
+            <View
+              style={[
+                styles.hightlightPrimary,
+                {
+                  width: '40%',
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  gap: 5,
+                  alignItems: 'center'
+                },
+                isDarkMode ? styles.highlightPrimaryDark : styles.hightlightPrimaryLight
+              ]}
+            >
+              <CustomText
+                style={[
+                  styles.text,
+                  { fontFamily: FontFamily.poppinsSemiBold },
+                  isDarkMode ? styles.textDark : styles.textLight
+                ]}
+              >
+                {pokemonSpecies.base_happiness}
+              </CustomText>
+              <CustomText
+                style={{
+                  fontSize: 12,
+                  color: isDarkMode ? LogoColors.blue : Colors.darkGrey1
+                }}
+              >
+                {'(' +
+                  t(
+                    `pokemon-info.happiness.${calculateHappiness(
+                      pokemonSpecies.base_happiness
+                    )}`
+                  ) +
+                  ')'}
+              </CustomText>
+            </View>
+          </View>
 
-          <CustomText style={styles.subHeader}>
-            {t('pokemon-info.about.stats.growth-rate')}
-          </CustomText>
-          <CustomText
-            style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}
-          >
-            {t(`pokemon-info.growth-rate.${pokemonSpecies.growth_rate.name}`)}
-          </CustomText>
+          <View style={styles.rowWrapper}>
+            <CustomText style={styles.subHeader}>
+              {t('pokemon-info.about.stats.growth-rate')}
+            </CustomText>
 
-          <CustomText style={styles.subHeader}>
-            {t('pokemon-info.about.stats.capture-rate')}
-          </CustomText>
-          <CustomText
-            style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}
-          >
-            {`${pokemonSpecies.capture_rate} (${calculateCaptureRate})`}
-          </CustomText>
+            <View
+              style={[
+                styles.hightlightPrimary,
+                { width: '40%' },
+                isDarkMode ? styles.highlightPrimaryDark : styles.hightlightPrimaryLight
+              ]}
+            >
+              <CustomText
+                style={[
+                  styles.text,
+                  { fontFamily: FontFamily.poppinsSemiBold },
+                  isDarkMode ? styles.textDark : styles.textLight
+                ]}
+              >
+                {t(`pokemon-info.growth-rate.${pokemonSpecies.growth_rate.name}`)}
+              </CustomText>
+            </View>
+          </View>
+
+          <View style={styles.rowWrapper}>
+            <CustomText style={styles.subHeader}>
+              {t('pokemon-info.about.stats.capture-rate')}
+            </CustomText>
+
+            <View
+              style={[
+                styles.hightlightPrimary,
+                {
+                  width: '40%',
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  gap: 5,
+                  alignItems: 'center'
+                },
+                isDarkMode ? styles.highlightPrimaryDark : styles.hightlightPrimaryLight
+              ]}
+            >
+              <CustomText
+                style={[
+                  styles.text,
+                  { fontFamily: FontFamily.poppinsSemiBold },
+                  isDarkMode ? styles.textDark : styles.textLight
+                ]}
+              >
+                {`${pokemonSpecies.capture_rate}`}
+              </CustomText>
+              <CustomText
+                style={{
+                  fontSize: 12,
+                  color: isDarkMode ? LogoColors.blue : Colors.darkGrey1
+                }}
+              >
+                {`(${calculateCaptureRate})`}
+              </CustomText>
+            </View>
+          </View>
 
           {/* BREEDING */}
-          <CustomText
-            style={[styles.header, isDarkMode ? styles.headerDark : styles.headerLight]}
+          <View
+            style={[
+              styles.breedingPaper,
+              isDarkMode ? styles.breedingPaperDark : styles.breedingPaperLight
+            ]}
           >
-            {t('pokemon-info.about.breeding')}
-          </CustomText>
-
-          <CustomText style={styles.subHeader}>
-            {t('pokemon-info.about.stats.gender')}
-          </CustomText>
-          <CustomText
-            style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}
-          >
-            {t('pokemon-info.gender.male') + calculatedGenders.male}
-          </CustomText>
-          <CustomText
-            style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}
-          >
-            {t('pokemon-info.gender.female') + calculatedGenders.female}
-          </CustomText>
-
-          <CustomText style={styles.subHeader}>
-            {t('pokemon-info.about.stats.egg-groups')}
-          </CustomText>
-          {pokemonSpecies.egg_groups.map((eggGroup: any, index: number) => (
             <CustomText
-              key={index}
-              style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}
+              style={[styles.header, isDarkMode ? styles.headerDark : styles.headerLight]}
             >
-              {t(`pokemon-info.egg-groups.${eggGroup.name}`)}
+              {t('pokemon-info.about.breeding')}
             </CustomText>
-          ))}
 
-          <CustomText style={styles.subHeader}>
-            {t('pokemon-info.about.stats.egg-cycle')}
-          </CustomText>
-          <CustomText
-            style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}
-          >
-            {pokemonSpecies.hatch_counter}
-          </CustomText>
+            <CustomText style={styles.subHeader}>
+              {t('pokemon-info.about.stats.gender')}
+            </CustomText>
+
+            <View
+              style={{
+                ...styles.rowWrapper,
+                justifyContent: 'space-around',
+                marginVertical: 10
+              }}
+            >
+              <View style={{ ...styles.rowWrapper, marginTop: 0 }}>
+                <MaleIcon />
+                <CustomText
+                  style={[
+                    styles.text,
+                    styles.textFocus,
+                    isDarkMode ? styles.textDark : styles.textLight
+                  ]}
+                >
+                  {calculatedGenders.male}
+                </CustomText>
+              </View>
+
+              <View style={{ ...styles.rowWrapper, marginTop: 0 }}>
+                <FemaleIcon />
+                <CustomText
+                  style={[
+                    styles.text,
+                    styles.textFocus,
+                    isDarkMode ? styles.textDark : styles.textLight
+                  ]}
+                >
+                  {calculatedGenders.female}
+                </CustomText>
+              </View>
+            </View>
+
+            <CustomText style={styles.subHeader}>
+              {t('pokemon-info.about.stats.egg-groups')}
+            </CustomText>
+
+            <View style={styles.rowWrapper}>
+              {pokemonSpecies.egg_groups.map((eggGroup: any, index: number) => (
+                <View
+                  style={[
+                    styles.hightlightSecondary,
+                    { width: '48%' },
+                    { marginVertical: 10 },
+                    isDarkMode
+                      ? styles.highlightSecondaryDark
+                      : styles.highlightSecondaryLight
+                  ]}
+                >
+                  <CustomText
+                    key={index}
+                    style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}
+                  >
+                    {t(`pokemon-info.egg-groups.${eggGroup.name}`)}
+                  </CustomText>
+                </View>
+              ))}
+            </View>
+
+            <CustomText style={styles.subHeader}>
+              {t('pokemon-info.about.stats.egg-cycle')}
+            </CustomText>
+            <View
+              style={[
+                styles.hightlightSecondary,
+                { marginVertical: 10 },
+                isDarkMode
+                  ? styles.highlightSecondaryDark
+                  : styles.highlightSecondaryLight
+              ]}
+            >
+              <CustomText
+                style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}
+              >
+                {pokemonSpecies.hatch_counter}
+              </CustomText>
+            </View>
+          </View>
         </View>
       )}
     </ScrollView>
@@ -291,6 +571,9 @@ const styles = StyleSheet.create({
   aboutWrapperLight: {
     backgroundColor: Colors.pureWhite
   },
+  textFocus: {
+    fontFamily: FontFamily.poppinsSemiBold
+  },
   text: {
     fontSize: 14,
     textAlign: 'center'
@@ -304,7 +587,7 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 16,
     fontFamily: FontFamily.poppinsBold,
-    marginTop: 10,
+    marginTop: 15,
     color: Colors.black
   },
   headerDark: {
@@ -321,7 +604,96 @@ const styles = StyleSheet.create({
   },
   rowWrapper: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginTop: 10
+  },
+  textFlavor: {
+    fontSize: 14,
+    textAlign: 'center',
+    fontStyle: 'italic',
+    marginTop: 10
+  },
+  hightlightPrimary: {
+    borderTopRightRadius: 30,
+    borderBottomEndRadius: 30,
+    borderTopLeftRadius: 30,
+    borderBottomLeftRadius: 30,
+    borderRadius: 30,
+    paddingVertical: 2,
+    paddingHorizontal: 15
+  },
+  hightlightPrimaryLight: {
+    backgroundColor: LogoColors.lightBlue
+  },
+  highlightPrimaryDark: {
+    backgroundColor: LogoColors.darkerBlue,
+    borderRadius: 30
+  },
+  hightlightSecondary: {
+    borderRadius: 30,
+    paddingVertical: 2,
+    paddingHorizontal: 15,
+    borderWidth: 1,
+    borderColor: LogoColors.blue
+  },
+  highlightSecondaryLight: {
+    borderColor: LogoColors.blue
+  },
+  highlightSecondaryDark: {
+    borderColor: LogoColors.blue,
+    backgroundColor: LogoColors.darkBlue
+  },
+  textGenera: {
+    fontSize: 12,
+    marginTop: 10,
+    fontStyle: 'italic',
+    color: Colors.darkGrey1
+  },
+  textGeneration: {
+    fontSize: 14,
+    marginTop: 10,
+    textAlign: 'right',
+    color: Colors.darkGrey1,
+    fontFamily: FontFamily.poppinsSemiBold
+  },
+  weightPaper: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    elevation: 3,
+    borderRadius: 10,
+    paddingBottom: 10,
+    paddingHorizontal: 20,
+    marginTop: 20
+  },
+  weightPaperDark: {
+    backgroundColor: Colors.black,
+    borderWidth: 1,
+    borderColor: Colors.darkGrey1
+  },
+  weightPaperLight: {
+    backgroundColor: Colors.pureWhite
+  },
+  column: {
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  breedingPaper: {
+    elevation: 3,
+    borderRadius: 10,
+    backgroundColor: Colors.pureWhite,
+    paddingBottom: 10,
+    paddingHorizontal: 20,
+    marginTop: 20,
+    marginBottom: 20
+  },
+  breedingPaperDark: {
+    backgroundColor: Colors.black,
+    borderWidth: 1,
+    borderColor: Colors.darkGrey1
+  },
+  breedingPaperLight: {
+    backgroundColor: Colors.pureWhite
   }
 });

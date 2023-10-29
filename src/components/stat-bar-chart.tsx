@@ -6,7 +6,7 @@ import { Svg, Rect } from 'react-native-svg';
 
 export const StatsBarChart = ({ stat, color }: { stat: number; color: string }) => {
   const maxStatValue = 255; // Maximum value for the stats
-  const barHeight = 8; // Height of the bar
+  const barHeight = 5; // Height of the bar
 
   const { isDarkMode } = useContext(AppThemeContext);
 
@@ -22,7 +22,7 @@ export const StatsBarChart = ({ stat, color }: { stat: number; color: string }) 
       marginTop: 8
     },
     wrapperDark: {
-      backgroundColor: Colors.darkGrey1
+      backgroundColor: LogoColors.darkerBlue
     },
     wrapperLight: {
       backgroundColor: LogoColors.lightBlue
