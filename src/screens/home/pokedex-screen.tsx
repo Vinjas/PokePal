@@ -179,8 +179,7 @@ const styles = StyleSheet.create({
     opacity: 0.5
   },
   list: {
-    paddingHorizontal: 20,
-    overflow: 'hidden'
+    paddingHorizontal: 20
   },
   loader: {
     justifyContent: 'center',

@@ -57,6 +57,20 @@
     "first-id": "Oldest Pokemon ID",
     "last-id": "Newest Pokemon ID"
   },
+  "moves": {
+    "headers": {
+      "level": "Lvl",
+      "move": "Move",
+      "pwr": "Pwr",
+      "acc": "Acc",
+      "pp": "PP"
+    },
+    "class": {
+      "physical": "Physical",
+      "special": "Special",
+      "status": "Status"
+    }
+  },
   "evolution": {
     "no-evolution": "No Evolution",
     "triggers": {

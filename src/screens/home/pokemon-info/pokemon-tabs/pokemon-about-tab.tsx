@@ -212,6 +212,7 @@ export const PokemonAboutTab = ({ route }: any) => {
           <View style={{ ...styles.rowWrapper, flexWrap: 'wrap' }}>
             {pokemonData.abilities.map((ability: any, index: number) => (
               <View
+                key={index}
                 style={[
                   { width: '48%' },
                   styles.hightlightSecondary,
@@ -511,6 +512,7 @@ export const PokemonAboutTab = ({ route }: any) => {
             <View style={styles.rowWrapper}>
               {pokemonSpecies.egg_groups.map((eggGroup: any, index: number) => (
                 <View
+                  key={index}
                   style={[
                     styles.hightlightSecondary,
                     { width: '48%' },

@@ -21,6 +21,12 @@ export const LogoColors = {
   lightBlue: '#EDF7F9'
 };
 
+export const DamageColors = {
+  status: '#A4A4A4',
+  physical: '#E08C5D',
+  special: '#8660F4'
+};
+
 export const StatsColors = {
   green: '#99D68A',
   red: '#F5746B',
