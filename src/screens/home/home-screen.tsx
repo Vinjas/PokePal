@@ -85,7 +85,7 @@ export const HomeScreen = ({ navigation }: any): JSX.Element => {
 
       <View style={styles.subButtonsWrapper}>
         <RectButton
-          onPress={() => navigation.navigate(HOME_STACK.MOVES)}
+          onPress={() => navigation.navigate(HOME_STACK.ITEMS)}
           style={styles.itemsButton}
         >
           <CustomText style={styles.subtitleText}>{t('home.items')}</CustomText>
@@ -120,7 +120,7 @@ export const HomeScreen = ({ navigation }: any): JSX.Element => {
       </View>
 
       <RectButton
-        onPress={() => navigation.navigate(HOME_STACK.MOVES)}
+        onPress={() => navigation.navigate(HOME_STACK.TYPES)}
         style={styles.typesButton}
       >
         <CustomText style={styles.subtitleText}>{t('home.types')}</CustomText>
@@ -216,7 +216,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
     elevation: 3,
     borderRadius: 15,
-    overflow: 'hidden'
+    overflow: 'hidden',
+    zIndex: 2
   },
   itemsButton: {
     backgroundColor: HomeScreenColors.green,
@@ -225,7 +226,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
     elevation: 3,
     borderRadius: 15,
-    overflow: 'hidden'
+    overflow: 'hidden',
+    zIndex: 2
   },
   typesButton: {
     backgroundColor: HomeScreenColors.purple,
@@ -234,7 +236,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
     elevation: 3,
     borderRadius: 15,
-    overflow: 'hidden'
+    overflow: 'hidden',
+    zIndex: 2
   },
   titleText: {
     fontSize: 28,

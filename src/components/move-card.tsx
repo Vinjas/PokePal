@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useContext, useEffect, useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { CustomText } from './custom-text';
 import { AppThemeContext } from 'context/app-theme-context';
@@ -24,7 +24,7 @@ export const MoveCard = ({
 }: {
   name: string;
   url: string;
-  level: number;
+  level?: number;
 }) => {
   const { t } = useTranslation();
 
@@ -32,8 +32,8 @@ export const MoveCard = ({
 
   const {
     data: moveData,
-    isLoading,
-    isError
+    isLoading: moveDataLoading,
+    isError: moveDataError
   } = useQuery({
     queryKey: [RQ_KEY.MOVE, url],
     queryFn: () => getMove(url),
@@ -43,17 +43,17 @@ export const MoveCard = ({
   const translatedName = useMemo(() => {
     if (!moveData) return { name: '' };
 
-    return moveData.names.filter((name: any) => name.language.name === i18n.language);
+    return moveData?.names?.filter((name: any) => name.language.name === i18n.language);
   }, [moveData]);
 
   const translatedFlavorText = useMemo(() => {
     if (!moveData) return { name: '' };
 
-    const filteredFlavorText = moveData.flavor_text_entries.filter(
+    const filteredFlavorText = moveData?.flavor_text_entries?.filter(
       (name: any) => name.language.name === i18n.language
     );
 
-    const parsedFlavorText = parseNewLines(filteredFlavorText[0].flavor_text);
+    const parsedFlavorText = parseNewLines(filteredFlavorText?.[0]?.flavor_text);
 
     return parsedFlavorText;
   }, [moveData]);
@@ -65,19 +65,19 @@ export const MoveCard = ({
         isDarkMode ? styles.cardWrapperDark : styles.cardWrapperLight
       ]}
     >
-      {isLoading && (
+      {moveDataLoading && (
         <View>
           <CustomText>Loading...</CustomText>
         </View>
       )}
 
-      {isError && (
+      {moveDataError && (
         <View>
           <CustomText>Error</CustomText>
         </View>
       )}
 
-      {!isLoading && !isError && moveData && (
+      {!moveDataLoading && !moveDataError && moveData && (
         <View>
           <View
             style={[
@@ -104,7 +104,7 @@ export const MoveCard = ({
                   isDarkMode ? styles.dataTextDark : styles.dataTextLight
                 ]}
               >
-                {level.toString()}
+                {level ? level.toString() : '-'}
               </CustomText>
               <CustomText
                 style={[
@@ -113,7 +113,7 @@ export const MoveCard = ({
                   isDarkMode ? styles.dataTextDark : styles.dataTextLight
                 ]}
               >
-                {translatedName[0].name}
+                {translatedName && translatedName[0].name}
               </CustomText>
               <CustomText
                 style={[
@@ -157,7 +157,7 @@ export const MoveCard = ({
                   size={15}
                 />
                 <CustomText style={styles.typeText}>
-                  {formatPokemonName(moveData.type.name)}
+                  {t(`pokemon-types.${moveData.type.name}`)}
                 </CustomText>
               </View>
 

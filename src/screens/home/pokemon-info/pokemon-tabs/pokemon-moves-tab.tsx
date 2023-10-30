@@ -1,24 +1,17 @@
-import { CustomText } from '@components/custom-text';
 import { MoveCard } from '@components/move-card';
-import { AppThemeContext } from 'context/app-theme-context';
-import React, { useContext } from 'react';
-import { useTranslation } from 'react-i18next';
-import { FlatList, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { DEFAULT_VIEWABILITY_CONFIG } from '@constants/flat-list-load';
+import React from 'react';
+import { FlatList, StyleSheet, View } from 'react-native';
 
-export const PokemonMovesTab = ({ navigation, route }) => {
-  const { t } = useTranslation();
-
+export const PokemonMovesTab = ({ route }: { route: any }) => {
   const { pokemonData } = route;
 
   const { moves } = pokemonData;
 
-  const { isDarkMode } = useContext(AppThemeContext);
-
-  const filteredMoves = moves.filter(move => {
+  const filteredMoves = moves.filter((move: any) => {
     let foundLevelUp = false;
 
-    const uniqueDetails = move.version_group_details.reverse().filter(detail => {
+    const uniqueDetails = move.version_group_details.reverse().filter((detail: any) => {
       if (detail.move_learn_method.name === 'level-up' && !foundLevelUp) {
         foundLevelUp = true;
         return true;
@@ -30,8 +23,7 @@ export const PokemonMovesTab = ({ navigation, route }) => {
     return foundLevelUp;
   });
 
-  // Ordena los movimientos por nivel (level_learned_at)
-  filteredMoves.sort((a, b) => {
+  filteredMoves.sort((a: any, b: any) => {
     const levelA = a.version_group_details[0].level_learned_at;
     const levelB = b.version_group_details[0].level_learned_at;
     return levelA - levelB;
@@ -61,6 +53,5 @@ export const PokemonMovesTab = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   list: {
     paddingHorizontal: 20
-    //overflow: 'hidden'
   }
 });

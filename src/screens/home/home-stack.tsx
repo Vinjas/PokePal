@@ -10,6 +10,9 @@ import { SettingsScreen } from './settings-screen';
 import { useTranslation } from 'react-i18next';
 import { AppThemeContext } from 'context/app-theme-context';
 import { Colors } from '@constants/styles/colors';
+import { MovesScreen } from './moves-screen';
+import { ItemsScreen } from './items-screen';
+import { TypesScreen } from './types-screen';
 
 const Stack = createNativeStackNavigator();
 
@@ -59,6 +62,45 @@ export function HomeStack(): JSX.Element {
             />
           )
         })}
+      />
+      <Stack.Screen
+        name={HOME_STACK.MOVES}
+        component={MovesScreen}
+        options={{
+          headerShown: true,
+          headerShadowVisible: false,
+          headerTitle: () => <ScreenHeader title={t('home.moves')} />,
+          headerStyle: {
+            backgroundColor: isDarkMode ? Colors.black : Colors.pureWhite
+          },
+          headerTintColor: isDarkMode ? Colors.pureWhite : Colors.black
+        }}
+      />
+      <Stack.Screen
+        name={HOME_STACK.ITEMS}
+        component={ItemsScreen}
+        options={{
+          headerShown: true,
+          headerShadowVisible: false,
+          headerTitle: () => <ScreenHeader title={t('home.items')} />,
+          headerStyle: {
+            backgroundColor: isDarkMode ? Colors.black : Colors.pureWhite
+          },
+          headerTintColor: isDarkMode ? Colors.pureWhite : Colors.black
+        }}
+      />
+      <Stack.Screen
+        name={HOME_STACK.TYPES}
+        component={TypesScreen}
+        options={{
+          headerShown: true,
+          headerShadowVisible: false,
+          headerTitle: () => <ScreenHeader title={t('home.types')} />,
+          headerStyle: {
+            backgroundColor: isDarkMode ? Colors.black : Colors.pureWhite
+          },
+          headerTintColor: isDarkMode ? Colors.pureWhite : Colors.black
+        }}
       />
     </Stack.Navigator>
   );
