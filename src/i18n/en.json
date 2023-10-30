@@ -1,7 +1,10 @@
 {
   "home": {
     "mainTitle": "PokePal",
-    "subTitle": "What are you looking for?"
+    "subTitle": "What are you looking for?",
+    "items": "Items",
+    "moves": "Moves",
+    "types": "Types"
   },
   "label": {
     "filters": "Filters",

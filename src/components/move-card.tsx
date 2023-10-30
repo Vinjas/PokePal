@@ -12,15 +12,13 @@ import {
   DamageColors,
   LogoColors
 } from '@constants/styles/colors';
-import { use } from 'i18next';
 import i18n from '@i18n/i18n';
 import { FontFamily } from '@constants/styles/fontsFamily';
-import { TypeButton } from './type-button';
 import { TypeIcon } from './type-icon';
 import { formatPokemonName } from '@utils/format-pokemon-name';
+import { parseNewLines } from '@utils/parse-new-lines';
 
 export const MoveCard = ({
-  name,
   url,
   level
 }: {
@@ -45,15 +43,19 @@ export const MoveCard = ({
   const translatedName = useMemo(() => {
     if (!moveData) return { name: '' };
 
-    return moveData.names.filter(name => name.language.name === i18n.language);
+    return moveData.names.filter((name: any) => name.language.name === i18n.language);
   }, [moveData]);
 
   const translatedFlavorText = useMemo(() => {
     if (!moveData) return { name: '' };
 
-    return moveData.flavor_text_entries.filter(
-      name => name.language.name === i18n.language
+    const filteredFlavorText = moveData.flavor_text_entries.filter(
+      (name: any) => name.language.name === i18n.language
     );
+
+    const parsedFlavorText = parseNewLines(filteredFlavorText[0].flavor_text);
+
+    return parsedFlavorText;
   }, [moveData]);
 
   return (
@@ -144,7 +146,10 @@ export const MoveCard = ({
               <View
                 style={{
                   ...styles.typeWrapper,
-                  backgroundColor: ColorTypesHightlight[moveData.type.name]
+                  backgroundColor:
+                    ColorTypesHightlight[
+                      moveData.type.name as keyof typeof ColorTypesHightlight
+                    ]
                 }}
               >
                 <TypeIcon
@@ -160,7 +165,10 @@ export const MoveCard = ({
               <View
                 style={{
                   ...styles.catWrapper,
-                  backgroundColor: DamageColors[moveData.damage_class.name]
+                  backgroundColor:
+                    DamageColors[
+                      moveData.damage_class.name as 'status' | 'physical' | 'special'
+                    ]
                 }}
               >
                 <CustomText style={styles.classText}>
@@ -175,7 +183,7 @@ export const MoveCard = ({
                 isDarkMode ? styles.textFlavorDark : styles.textFlavorLight
               ]}
             >
-              {translatedFlavorText[0].flavor_text}
+              {translatedFlavorText.toString()}
             </CustomText>
           </View>
         </View>

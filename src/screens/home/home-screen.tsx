@@ -1,5 +1,5 @@
 import { CustomText } from '@components/custom-text';
-import { Colors, LogoColors } from '@constants/styles/colors';
+import { Colors, HomeScreenColors, LogoColors } from '@constants/styles/colors';
 import { FontFamily } from '@constants/styles/fontsFamily';
 import React, { useContext } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
@@ -9,7 +9,6 @@ import SettingsIconWhite from '@assets/svg/settings--white.svg';
 import { HOME_STACK } from '@constants/screens';
 import { LanguageSettings } from '@components/language-settings';
 import { useTranslation } from 'react-i18next';
-import { storage } from '@app-storage/app-storage';
 import { AppThemeContext } from 'context/app-theme-context';
 
 export const HomeScreen = ({ navigation }: any): JSX.Element => {
@@ -75,7 +74,70 @@ export const HomeScreen = ({ navigation }: any): JSX.Element => {
         <View style={styles.buttonImageWrapper}>
           <Image
             style={styles.buttonImage}
-            source={require('@assets/images/background__pokeball--transparent.png')}
+            source={
+              isDarkMode
+                ? require('@assets/images/pokeball-turn--transparent.png')
+                : require('@assets/images/pokeball-turn--white-transparent.png')
+            }
+          />
+        </View>
+      </RectButton>
+
+      <View style={styles.subButtonsWrapper}>
+        <RectButton
+          onPress={() => navigation.navigate(HOME_STACK.MOVES)}
+          style={styles.itemsButton}
+        >
+          <CustomText style={styles.titleText}>{t('home.items')}</CustomText>
+          <View style={styles.buttonImageWrapperMedium}>
+            <Image
+              style={styles.buttonImageMedium}
+              source={
+                isDarkMode
+                  ? require('@assets/images/backpack.png')
+                  : require('@assets/images/backpack--white.png')
+              }
+            />
+          </View>
+        </RectButton>
+
+        <RectButton
+          onPress={() => navigation.navigate(HOME_STACK.MOVES)}
+          style={styles.movesButton}
+        >
+          <CustomText style={styles.titleText}>{t('home.moves')}</CustomText>
+          <View style={styles.buttonImageWrapperMedium}>
+            <Image
+              style={styles.buttonImageMedium}
+              source={
+                isDarkMode
+                  ? require('@assets/images/thunder.png')
+                  : require('@assets/images/thunder--white.png')
+              }
+            />
+          </View>
+        </RectButton>
+      </View>
+
+      <RectButton
+        onPress={() => navigation.navigate(HOME_STACK.MOVES)}
+        style={styles.typesButton}
+      >
+        <CustomText style={styles.titleText}>{t('home.types')}</CustomText>
+        <View
+          style={[
+            isDarkMode
+              ? styles.buttonImageWrapperSmallDark
+              : styles.buttonImageWrapperSmallLight
+          ]}
+        >
+          <Image
+            style={[styles.buttonImageSmall, isDarkMode && styles.buttonImageSmallDark]}
+            source={
+              isDarkMode
+                ? require('@assets/images/star-shine-cut.png')
+                : require('@assets/images/star-shine--white.png')
+            }
           />
         </View>
       </RectButton>
@@ -113,7 +175,7 @@ const styles = StyleSheet.create({
   },
   titleWrapper: {
     paddingTop: 50,
-    paddingBottom: 80
+    paddingBottom: 100
   },
   homeTitleText: {
     fontSize: 32,
@@ -141,11 +203,38 @@ const styles = StyleSheet.create({
   pokemonButton: {
     backgroundColor: LogoColors.red,
     width: '100%',
-    paddingTop: 80,
+    paddingTop: 90,
     elevation: 3,
     borderRadius: 15,
     overflow: 'hidden',
     zIndex: 2
+  },
+  movesButton: {
+    backgroundColor: HomeScreenColors.blue,
+    width: '48.5%',
+    paddingTop: 40,
+    marginTop: 10,
+    elevation: 3,
+    borderRadius: 15,
+    overflow: 'hidden'
+  },
+  itemsButton: {
+    backgroundColor: HomeScreenColors.green,
+    width: '48.5%',
+    paddingTop: 40,
+    marginTop: 10,
+    elevation: 3,
+    borderRadius: 15,
+    overflow: 'hidden'
+  },
+  typesButton: {
+    backgroundColor: HomeScreenColors.purple,
+    width: '100%',
+    paddingTop: 20,
+    marginTop: 10,
+    elevation: 3,
+    borderRadius: 15,
+    overflow: 'hidden'
   },
   titleText: {
     fontSize: 28,
@@ -168,11 +257,46 @@ const styles = StyleSheet.create({
   },
   buttonImageWrapper: {
     position: 'absolute',
-    right: 0,
-    bottom: 0
+    right: 10,
+    bottom: -20
+  },
+  buttonImageWrapperMedium: {
+    position: 'absolute',
+    right: -20,
+    bottom: -20,
+    opacity: 0.1
+  },
+  buttonImageWrapperSmallLight: {
+    position: 'absolute',
+    right: 20,
+    bottom: -90,
+    opacity: 0.1
+  },
+  buttonImageWrapperSmallDark: {
+    position: 'absolute',
+    right: 20,
+    bottom: 0,
+    opacity: 0.1
   },
   buttonImage: {
-    width: 130,
-    height: 130
+    width: 170,
+    height: 170
+  },
+  buttonImageMedium: {
+    width: 115,
+    height: 115
+  },
+  buttonImageSmall: {
+    width: 170,
+    height: 170
+  },
+  buttonImageSmallDark: {
+    width: 170,
+    height: 80
+  },
+  subButtonsWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
   }
 });

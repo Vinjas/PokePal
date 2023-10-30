@@ -27,6 +27,14 @@ export const DamageColors = {
   special: '#8660F4'
 };
 
+export const HomeScreenColors = {
+  brown: '#B4726A',
+  green: '#5EBF62',
+  blue: '#57A9F3',
+  yellow: '#FFCE4B',
+  purple: '#B862CF'
+};
+
 export const StatsColors = {
   green: '#99D68A',
   red: '#F5746B',
