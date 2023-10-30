@@ -88,7 +88,7 @@ export const HomeScreen = ({ navigation }: any): JSX.Element => {
           onPress={() => navigation.navigate(HOME_STACK.MOVES)}
           style={styles.itemsButton}
         >
-          <CustomText style={styles.titleText}>{t('home.items')}</CustomText>
+          <CustomText style={styles.subtitleText}>{t('home.items')}</CustomText>
           <View style={styles.buttonImageWrapperMedium}>
             <Image
               style={styles.buttonImageMedium}
@@ -105,7 +105,7 @@ export const HomeScreen = ({ navigation }: any): JSX.Element => {
           onPress={() => navigation.navigate(HOME_STACK.MOVES)}
           style={styles.movesButton}
         >
-          <CustomText style={styles.titleText}>{t('home.moves')}</CustomText>
+          <CustomText style={styles.subtitleText}>{t('home.moves')}</CustomText>
           <View style={styles.buttonImageWrapperMedium}>
             <Image
               style={styles.buttonImageMedium}
@@ -123,7 +123,7 @@ export const HomeScreen = ({ navigation }: any): JSX.Element => {
         onPress={() => navigation.navigate(HOME_STACK.MOVES)}
         style={styles.typesButton}
       >
-        <CustomText style={styles.titleText}>{t('home.types')}</CustomText>
+        <CustomText style={styles.subtitleText}>{t('home.types')}</CustomText>
         <View
           style={[
             isDarkMode
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
   },
   titleWrapper: {
     paddingTop: 50,
-    paddingBottom: 100
+    paddingBottom: 90
   },
   homeTitleText: {
     fontSize: 32,
@@ -244,6 +244,14 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginBottom: 20
   },
+  subtitleText: {
+    fontSize: 21,
+    lineHeight: 30,
+    fontFamily: FontFamily.poppinsBold,
+    color: Colors.pureWhite,
+    marginLeft: 20,
+    marginBottom: 20
+  },
   headerImageWrapper: {
     position: 'absolute',
     right: -183,
@@ -283,16 +291,16 @@ const styles = StyleSheet.create({
     height: 170
   },
   buttonImageMedium: {
-    width: 115,
-    height: 115
+    width: 100,
+    height: 100
   },
   buttonImageSmall: {
-    width: 170,
-    height: 170
+    width: 160,
+    height: 160
   },
   buttonImageSmallDark: {
-    width: 170,
-    height: 80
+    width: 160,
+    height: 70
   },
   subButtonsWrapper: {
     flexDirection: 'row',

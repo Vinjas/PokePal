@@ -6,6 +6,13 @@
     "moves": "Moves",
     "types": "Types"
   },
+  "navbar": {
+    "home": "Home",
+    "pokedex": "Pokédex",
+    "compare": "Compare",
+    "favorites": "Favorites",
+    "teams": "Teams"
+  },
   "label": {
     "filters": "Filters",
     "sort": "Sort By",

@@ -10,24 +10,43 @@ import { Colors } from '@constants/styles/colors';
 import { AppThemeContext } from 'context/app-theme-context';
 import { FontFamily } from '@constants/styles/fontsFamily';
 import { useIsFocused } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 
 const Tab = createBottomTabNavigator();
+
 const { HOME, COMPARE, FAVOURITES, TEAMS } = NAVBAR;
 
 const TabsArr = [
-  { route: 'HomeStack', icon: HOME, label: 'Home', component: HomeStack },
-  { route: 'CompareStack', icon: COMPARE, label: 'Compare', component: CompareStack },
+  {
+    route: 'HomeStack',
+    icon: HOME,
+    label: 'pokedex',
+    component: HomeStack
+  },
+  {
+    route: 'CompareStack',
+    icon: COMPARE,
+    label: 'compare',
+    component: CompareStack
+  },
   {
     route: 'FavouritesStack',
     icon: FAVOURITES,
-    label: 'Favourites',
+    label: 'favorites',
     component: FavouritesStack
   },
-  { route: 'TeamsStack', icon: TEAMS, label: 'Teams', component: TeamsStack }
+  {
+    route: 'TeamsStack',
+    icon: TEAMS,
+    label: 'teams',
+    component: TeamsStack
+  }
 ];
 
 export function Navbar() {
   const { isDarkMode } = useContext(AppThemeContext);
+
+  const { t } = useTranslation();
 
   return (
     <Tab.Navigator initialRouteName={'HomeStack'}>
@@ -43,7 +62,7 @@ export function Navbar() {
                 icon={tab.icon}
               />
             ),
-            tabBarLabel: tab.label,
+            tabBarLabel: t(`navbar.${tab.label}`),
             tabBarStyle: {
               backgroundColor: isDarkMode ? Colors.black : Colors.pureWhite,
               height: 70,

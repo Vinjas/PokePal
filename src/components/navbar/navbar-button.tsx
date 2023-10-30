@@ -4,14 +4,14 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { View } from 'react-native';
 import { Colors } from '@constants/styles/colors';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
-import HomeIcon from '@assets/svg/navbar/home.svg';
-import HomeIconGrey from '@assets/svg/navbar/home--grey.svg';
 import CompareIcon from '@assets/svg/navbar/compare.svg';
 import CompareIconGrey from '@assets/svg/navbar/compare--grey.svg';
 import FavouritesIcon from '@assets/svg/navbar/favourites.svg';
 import FavouritesIconGrey from '@assets/svg/navbar/favourites--grey.svg';
-import TeamsIcon from '@assets/svg/navbar/pokeball.svg';
-import TeamsIconGrey from '@assets/svg/navbar/pokeball--grey.svg';
+import PokedexIcon from '@assets/svg/navbar/pokeball.svg';
+import PokedexIconGrey from '@assets/svg/navbar/pokeball--grey.svg';
+import TeamsIcon from '@assets/svg/navbar/teams-better.svg';
+import TeamsIconGrey from '@assets/svg/navbar/teams-better--grey.svg';
 import { AppThemeContext } from 'context/app-theme-context';
 
 type NavbarButtonProps = {
@@ -43,12 +43,12 @@ export function NavbarButton({ focused, icon }: NavbarButtonProps) {
 
   const HomeButton = () =>
     focused ? (
-      <HomeIcon
+      <PokedexIcon
         width={24}
         height={24}
       />
     ) : (
-      <HomeIconGrey
+      <PokedexIconGrey
         width={24}
         height={24}
       />
