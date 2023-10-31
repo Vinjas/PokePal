@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useMemo } from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { useContext, useMemo } from 'react';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { CustomText } from './custom-text';
 import { AppThemeContext } from 'context/app-theme-context';
 import { useTranslation } from 'react-i18next';
@@ -15,7 +15,6 @@ import {
 import i18n from '@i18n/i18n';
 import { FontFamily } from '@constants/styles/fontsFamily';
 import { TypeIcon } from './type-icon';
-import { formatPokemonName } from '@utils/format-pokemon-name';
 import { parseNewLines } from '@utils/parse-new-lines';
 
 export const MoveCard = ({
@@ -66,9 +65,11 @@ export const MoveCard = ({
       ]}
     >
       {moveDataLoading && (
-        <View>
-          <CustomText>Loading...</CustomText>
-        </View>
+        <ActivityIndicator
+          size={50}
+          color={isDarkMode ? LogoColors.darkerBlue : LogoColors.blue}
+          style={styles.loader}
+        />
       )}
 
       {moveDataError && (
@@ -113,7 +114,7 @@ export const MoveCard = ({
                   isDarkMode ? styles.dataTextDark : styles.dataTextLight
                 ]}
               >
-                {translatedName && translatedName[0].name}
+                {translatedName ? translatedName[0]?.name : moveData.name}
               </CustomText>
               <CustomText
                 style={[
@@ -183,7 +184,9 @@ export const MoveCard = ({
                 isDarkMode ? styles.textFlavorDark : styles.textFlavorLight
               ]}
             >
-              {translatedFlavorText.toString()}
+              {translatedFlavorText
+                ? translatedFlavorText.toString()
+                : moveData?.flavor_text_entries[0]?.flavor_text}
             </CustomText>
           </View>
         </View>
@@ -290,5 +293,10 @@ const styles = StyleSheet.create({
   },
   textFlavorLight: {
     color: LogoColors.darkerBlue
+  },
+  loader: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%'
   }
 });

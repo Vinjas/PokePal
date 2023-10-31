@@ -60,7 +60,9 @@ export const PokemonCard = ({ name, navigation }: PokemonCardProps): JSX.Element
       style={{
         ...styles.card,
         backgroundColor: pokemonData
-          ? ColorTypes[pokemonData.types[0]?.type.name]
+          ? ColorTypes[pokemonData.types[0]?.type.name as keyof typeof ColorTypes]
+          : isDarkMode
+          ? Colors.darkGrey1
           : Colors.pureWhite
       }}
       onPress={() => navigation.navigate(HOME_STACK.POKEMON_DETAIL, { pokemonData })}
@@ -77,7 +79,7 @@ export const PokemonCard = ({ name, navigation }: PokemonCardProps): JSX.Element
       {isLoading && (
         <ActivityIndicator
           size={50}
-          color={LogoColors.blue}
+          color={isDarkMode ? LogoColors.darkerBlue : LogoColors.blue}
           style={styles.loader}
         />
       )}
@@ -101,7 +103,10 @@ export const PokemonCard = ({ name, navigation }: PokemonCardProps): JSX.Element
                   key={typeResource.type.name}
                   style={{
                     ...styles.typeElement,
-                    backgroundColor: ColorTypesHightlight[typeResource.type.name]
+                    backgroundColor:
+                      ColorTypesHightlight[
+                        typeResource.type.name as keyof typeof ColorTypesHightlight
+                      ]
                   }}
                 >
                   <TypeIcon
@@ -124,7 +129,6 @@ export const PokemonCard = ({ name, navigation }: PokemonCardProps): JSX.Element
           {/* IMAGE */}
           <View style={styles.cardImageWrapper}>
             <Image
-              disableCache={true}
               resizeMode='contain'
               style={styles.cardImage}
               source={{
