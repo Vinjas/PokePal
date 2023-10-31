@@ -1,5 +1,7 @@
 import Axios from 'axios';
 import { setupCache } from 'axios-cache-interceptor';
+import pokemonList from '../data/pokemon-list.json';
+import movesList from '../data/moves-list.json';
 
 const axios = setupCache(Axios);
 
@@ -33,9 +35,9 @@ export const getPokemonSpecies = async (name: string) => {
 export const getPokemonList = async (params: ListParams) => {
   const { limit, offset } = params;
 
-  console.log('getPokemonList');
+  return pokemonList;
 
-  try {
+  /* try {
     const response = await axios.get(`${API_URL}/pokemon`, {
       params: {
         limit,
@@ -46,7 +48,7 @@ export const getPokemonList = async (params: ListParams) => {
     return response.data;
   } catch (error) {
     throw error;
-  }
+  } */
 };
 
 export const getEvolutionChain = async (url: string) => {
@@ -72,9 +74,9 @@ export const getMove = async (url: string) => {
 export const getAllMoves = async (params: ListParams) => {
   const { limit, offset } = params;
 
-  console.log('getAllMoves');
+  return movesList;
 
-  try {
+  /* try {
     const response = await axios.get(`${API_URL}/move`, {
       params: {
         limit,
@@ -85,5 +87,5 @@ export const getAllMoves = async (params: ListParams) => {
     return response.data;
   } catch (error) {
     throw error;
-  }
+  } */
 };
