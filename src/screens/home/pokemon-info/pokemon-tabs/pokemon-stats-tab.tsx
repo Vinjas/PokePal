@@ -5,7 +5,7 @@ import { FontFamily } from '@constants/styles/fontsFamily';
 import { convertPokemonStats, getPokemonTotalStat } from 'mapper/pokemon-stats-mapper';
 import React, { useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import StarIcon from '@assets/svg/star.svg';
 import { AppThemeContext } from 'context/app-theme-context';
 
@@ -23,7 +23,9 @@ export const PokemonStatsTab = ({ route }: any) => {
 
   const { isDarkMode } = useContext(AppThemeContext);
 
-  const { pokemonData } = route;
+  const { data } = route;
+
+  const { pokemonData, isLoading } = data;
 
   const mappedPokemonStats = useMemo(() => {
     if (!pokemonData) return [];
@@ -39,43 +41,61 @@ export const PokemonStatsTab = ({ route }: any) => {
 
   return (
     <View style={styles.wrapper}>
-      {mappedPokemonStats.map(stat => (
-        <View
-          key={stat.label}
-          style={styles.row}
-        >
-          <View style={styles.dataWrapper}>
-            <Text style={styles.subHeader}>{t(`pokemon-info.stats.${stat.label}`)}</Text>
-            <View style={styles.starWrapper}>
-              {Array.from({ length: Math.min(stat.effort, 3) }).map((_, index) => (
-                <StarButton key={index} />
-              ))}
+      {isLoading && (
+        <ActivityIndicator
+          size={90}
+          color={LogoColors.red}
+          style={styles.loader}
+        />
+      )}
+
+      {!isLoading && mappedPokemonStats && (
+        <View>
+          {mappedPokemonStats.map((stat: any) => (
+            <View
+              key={stat.label}
+              style={styles.row}
+            >
+              <View style={styles.dataWrapper}>
+                <Text style={styles.subHeader}>
+                  {t(`pokemon-info.stats.${stat.label}`)}
+                </Text>
+                <View style={styles.starWrapper}>
+                  {Array.from({ length: Math.min(stat.effort, 3) }).map((_, index) => (
+                    <StarButton key={index} />
+                  ))}
+                </View>
+                <Text
+                  style={[styles.stat, isDarkMode ? styles.statDark : styles.statLight]}
+                >
+                  {stat.value}
+                </Text>
+              </View>
+
+              <StatsBarChart
+                stat={stat.value}
+                color={stat.color}
+              />
             </View>
-            <Text style={[styles.stat, isDarkMode ? styles.statDark : styles.statLight]}>
-              {stat.value}
-            </Text>
+          ))}
+
+          {/* Total stat */}
+          <View style={styles.row}>
+            <View style={styles.dataWrapper}>
+              <Text style={styles.subHeader}>
+                {t(`pokemon-info.stats.${pokemonTotalStat.label}`)}
+              </Text>
+              <Text
+                style={[styles.stat, isDarkMode ? styles.statDark : styles.statLight]}
+              >
+                {pokemonTotalStat.value}
+              </Text>
+            </View>
+
+            <StatsBarTotalChart stat={pokemonTotalStat.value} />
           </View>
-
-          <StatsBarChart
-            stat={stat.value}
-            color={stat.color}
-          />
         </View>
-      ))}
-
-      {/* Total stat */}
-      <View style={styles.row}>
-        <View style={styles.dataWrapper}>
-          <Text style={styles.subHeader}>
-            {t(`pokemon-info.stats.${pokemonTotalStat.label}`)}
-          </Text>
-          <Text style={[styles.stat, isDarkMode ? styles.statDark : styles.statLight]}>
-            {pokemonTotalStat.value}
-          </Text>
-        </View>
-
-        <StatsBarTotalChart stat={pokemonTotalStat.value} />
-      </View>
+      )}
     </View>
   );
 };
@@ -123,5 +143,8 @@ const styles = StyleSheet.create({
   },
   statLight: {
     color: Colors.black
+  },
+  loader: {
+    marginTop: 30
   }
 });

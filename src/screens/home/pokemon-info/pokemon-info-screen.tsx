@@ -1,10 +1,8 @@
-import { PokemonInfoTabView } from '@components/pokemon-info-tab-view';
-import { ColorTypes, Colors, LogoColors } from '@constants/styles/colors';
+import { Colors } from '@constants/styles/colors';
 import { FontFamily } from '@constants/styles/fontsFamily';
-import { formatPokemonName } from '@utils/format-pokemon-name';
 import { t } from 'i18next';
-import React, { useContext, useState } from 'react';
-import { Image, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { SceneMap, TabBar, TabView } from 'react-native-tab-view';
 import {
   PokemonAboutTab,
@@ -13,6 +11,9 @@ import {
   PokemonStatsTab
 } from './pokemon-tabs';
 import { AppThemeContext } from 'context/app-theme-context';
+import { useQueries, useQuery } from '@tanstack/react-query';
+import { RQ_KEY } from '@constants/react-query';
+import { getPokemonSpecies, getPokemon, getEvolutionChain } from '@services/poke-api';
 
 const renderScene = SceneMap({
   about: PokemonAboutTab,
@@ -26,28 +27,86 @@ type PokemonInfoScreenProps = {
 };
 
 export const PokemonInfoScreen = (props: PokemonInfoScreenProps): JSX.Element => {
-  const { pokemonData } = props.route.params;
+  const { name } = props.route.params;
+
+  const [
+    { data: pokemonData, isLoading: isLoadingPokemonData, isError: isErrorPokemonData },
+    {
+      data: pokemonSpecies,
+      isLoading: isLoadingPokemonSpecies,
+      isError: isErrorPokemonSpecies
+    }
+  ] = useQueries({
+    queries: [
+      {
+        queryKey: [RQ_KEY.POKEMON_DATA, name],
+        queryFn: () => getPokemon(name)
+      },
+      {
+        queryKey: [RQ_KEY.POKEMON_SPECIES, name],
+        queryFn: () => getPokemonSpecies(name)
+      }
+    ]
+  });
+
+  const {
+    data: evolutionChain,
+    isLoading: evolutionChainLoading,
+    isError: evolutionChainError
+  } = useQuery({
+    queryKey: [RQ_KEY.EVOLUTION_CHAIN, pokemonSpecies?.evolution_chain?.url],
+    queryFn: () => getEvolutionChain(pokemonSpecies?.evolution_chain?.url),
+    enabled: !!pokemonSpecies?.evolution_chain?.url
+  });
 
   const { isDarkMode } = useContext(AppThemeContext);
 
+  const isLoading =
+    isLoadingPokemonSpecies || isLoadingPokemonData || evolutionChainLoading;
+
+  const isError = isErrorPokemonSpecies || isErrorPokemonData || evolutionChainError;
+
+  const data = { pokemonData, pokemonSpecies, evolutionChain, isLoading, isError };
+
   const defaultRoutes = [
-    { key: 'about', title: t('pokemon-info.headers.about'), pokemonData },
-    { key: 'stats', title: t('pokemon-info.headers.stats'), pokemonData },
-    { key: 'evolution', title: t('pokemon-info.headers.evolution'), pokemonData },
-    { key: 'moves', title: t('pokemon-info.headers.moves'), pokemonData }
+    {
+      key: 'about',
+      title: t('pokemon-info.headers.about'),
+      data
+    },
+    {
+      key: 'stats',
+      title: t('pokemon-info.headers.stats'),
+      data
+    },
+    {
+      key: 'evolution',
+      title: t('pokemon-info.headers.evolution'),
+      data
+    },
+    {
+      key: 'moves',
+      title: t('pokemon-info.headers.moves'),
+      data
+    }
   ];
 
   const layout = useWindowDimensions();
 
   const [index, setIndex] = useState(0);
-  const [routes] = useState(defaultRoutes);
+  const [routes, setRoutes] = useState(defaultRoutes);
 
-  const renderTabBar = props => (
+  useEffect(() => {
+    setRoutes(defaultRoutes);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading, isError]);
+
+  const renderTabBar = (tabProps: any) => (
     <TabBar
-      {...props}
+      {...tabProps}
       indicatorStyle={styles.indicator}
       style={[styles.tabbar, isDarkMode ? styles.tabbarDark : styles.tabbarLight]}
-      renderLabel={({ route, focused, color }) => (
+      renderLabel={({ route, focused }) => (
         <View style={{ marginTop: -15 }}>
           <Text
             style={{

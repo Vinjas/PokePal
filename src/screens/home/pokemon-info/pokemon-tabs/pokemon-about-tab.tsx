@@ -1,9 +1,6 @@
 import { CustomText } from '@components/custom-text';
-import { RQ_KEY } from '@constants/react-query';
 import { Colors, LogoColors } from '@constants/styles/colors';
 import { FontFamily } from '@constants/styles/fontsFamily';
-import { getPokemonSpecies } from '@services/poke-api';
-import { useQuery } from '@tanstack/react-query';
 import { parseNewLines } from '@utils/parse-new-lines';
 import { last } from 'lodash-es';
 import React, { useContext, useMemo } from 'react';
@@ -42,11 +39,11 @@ const MaleIcon = () => (
 export const PokemonAboutTab = ({ route }: any) => {
   const { t } = useTranslation();
 
-  const { pokemonData } = route;
+  const { data } = route;
+
+  const { pokemonData, pokemonSpecies, isLoading } = data;
 
   const { isDarkMode } = useContext(AppThemeContext);
-
-  const { name } = pokemonData;
 
   const RulerIcon = () =>
     isDarkMode ? (
@@ -77,11 +74,6 @@ export const PokemonAboutTab = ({ route }: any) => {
         style={{ marginLeft: 5, marginTop: 5 }}
       />
     );
-
-  const { data: pokemonSpecies, isLoading } = useQuery({
-    queryKey: [RQ_KEY.POKEMON_SPECIES, name],
-    queryFn: () => getPokemonSpecies(name)
-  });
 
   const flavorText = useMemo(() => {
     if (!pokemonSpecies) return '';

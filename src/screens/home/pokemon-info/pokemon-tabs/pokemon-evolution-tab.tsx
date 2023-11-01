@@ -31,22 +31,11 @@ export const PokemonEvolutionTab = ({ route }: any) => {
 
   const navigation = useNavigation();
 
-  const { pokemonData } = route;
-  const { name } = pokemonData;
+  const { data } = route;
+
+  const { pokemonData, evolutionChain, isLoading } = data;
 
   const { isDarkMode } = useContext(AppThemeContext);
-
-  const { data: evolutionChainUrl, isLoading: pokemonSpeciesLoading } = useQuery({
-    queryKey: [RQ_KEY.POKEMON_SPECIES, name],
-    queryFn: () => getPokemonSpecies(name),
-    select: data => data?.evolution_chain?.url
-  });
-
-  const { data: evolutionChain, isLoading: evolutionChainLoading } = useQuery({
-    queryKey: [RQ_KEY.EVOLUTION_CHAIN, evolutionChainUrl],
-    queryFn: () => getEvolutionChain(evolutionChainUrl),
-    enabled: !!evolutionChainUrl
-  });
 
   const LongArrowRight = () =>
     isDarkMode ? (
@@ -68,8 +57,6 @@ export const PokemonEvolutionTab = ({ route }: any) => {
     return `${url}/${pokemonId}.png`;
   }
 
-  const isLoading = pokemonSpeciesLoading || evolutionChainLoading;
-
   const evolutionChainMapped = useMemo(() => {
     if (!evolutionChain) return [];
 
@@ -79,15 +66,23 @@ export const PokemonEvolutionTab = ({ route }: any) => {
   async function onPokemonPress(pokemonName: string) {
     const newPokemonData = await getPokemon(pokemonName);
 
+    const mappedData = {
+      name: newPokemonData.name,
+      id: newPokemonData.id,
+      typePrimary: newPokemonData.types[0].type.name,
+      typeSecondary: newPokemonData.types[1] ? newPokemonData.types[1].type.name : null,
+      spriteOfficial: newPokemonData.sprites.other['official-artwork'].front_default
+    };
+
     if (newPokemonData) {
-      navigation.push(HOME_STACK.POKEMON_DETAIL, { pokemonData: newPokemonData });
+      navigation.push(HOME_STACK.POKEMON_DETAIL, mappedData);
     }
   }
 
-  function renderEvolution(evolutionData) {
+  function renderEvolution(evolutionData: any) {
     return (
       <View style={{ gap: 15 }}>
-        {evolutionData.map((pokemon, index) => {
+        {evolutionData.map((pokemon: any, index: number) => {
           if (evolutionData.length === 1) {
             return (
               <View

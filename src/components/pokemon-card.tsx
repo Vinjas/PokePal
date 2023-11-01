@@ -1,15 +1,7 @@
 import React, { useContext } from 'react';
-import { ActivityIndicator, Image, StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import { CustomText } from './custom-text';
-import { RQ_KEY } from '@constants/react-query';
-import { useQuery } from '@tanstack/react-query';
-import { getPokemon } from '@services/poke-api';
-import {
-  ColorTypes,
-  ColorTypesHightlight,
-  Colors,
-  LogoColors
-} from '@constants/styles/colors';
+import { ColorTypes, ColorTypesHightlight, Colors } from '@constants/styles/colors';
 import { FontFamily } from '@constants/styles/fontsFamily';
 import { formatPokemonId } from '@utils/format-pokemon-id';
 import { formatPokemonName } from '@utils/format-pokemon-name';
@@ -21,51 +13,47 @@ import { AppThemeContext } from 'context/app-theme-context';
 
 type PokemonCardProps = {
   name: string;
+  id: number;
+  typePrimary: string;
+  typeSecondary: string;
+  spriteGif: string;
+  spriteOfficial: string;
   url: string;
   navigation: any;
 };
 
-type TypeResource = {
-  type: {
-    name: string;
-    url: string;
-  };
-};
-
-export const PokemonCard = ({ name, navigation }: PokemonCardProps): JSX.Element => {
-  const {
-    data: pokemonData,
-    isLoading,
-    isError
-  } = useQuery({
-    queryKey: [RQ_KEY.POKEMON_DATA, name],
-    queryFn: () => getPokemon(name)
-  });
-
+export const PokemonCard = ({
+  name,
+  id,
+  typePrimary,
+  typeSecondary,
+  spriteGif,
+  spriteOfficial,
+  navigation
+}: PokemonCardProps): JSX.Element => {
   const { isDarkMode } = useContext(AppThemeContext);
 
   const { t } = useTranslation();
-
-  function getImageUri(pokemon: any) {
-    const staticImage = pokemon.sprites.other['official-artwork'].front_default;
-
-    const gifImage =
-      pokemon.sprites.versions['generation-v']['black-white'].animated.front_default;
-
-    return gifImage ?? staticImage;
-  }
 
   return (
     <RectButton
       style={{
         ...styles.card,
-        backgroundColor: pokemonData
-          ? ColorTypes[pokemonData.types[0]?.type.name as keyof typeof ColorTypes]
+        backgroundColor: typePrimary
+          ? ColorTypes[typePrimary as keyof typeof ColorTypes]
           : isDarkMode
           ? Colors.darkGrey1
           : Colors.pureWhite
       }}
-      onPress={() => navigation.navigate(HOME_STACK.POKEMON_DETAIL, { pokemonData })}
+      onPress={() =>
+        navigation.navigate(HOME_STACK.POKEMON_DETAIL, {
+          name,
+          id,
+          typePrimary,
+          typeSecondary,
+          spriteOfficial
+        })
+      }
     >
       <Image
         style={styles.logoImage}
@@ -76,68 +64,70 @@ export const PokemonCard = ({ name, navigation }: PokemonCardProps): JSX.Element
         }
       />
 
-      {isLoading && (
-        <ActivityIndicator
-          size={50}
-          color={isDarkMode ? LogoColors.darkerBlue : LogoColors.blue}
-          style={styles.loader}
-        />
-      )}
+      <View>
+        <View style={styles.dataWrapper}>
+          {/* NAME */}
+          <CustomText
+            style={{ ...styles.cardName, fontSize: name.length > 14 ? 13 : 18 }}
+          >
+            {formatPokemonName(name)}
+          </CustomText>
 
-      {isError && <Text>Error</Text>}
-
-      {!isLoading && !isError && pokemonData && (
-        <View>
-          <View style={styles.dataWrapper}>
-            {/* NAME */}
-            <CustomText
-              style={{ ...styles.cardName, fontSize: name.length > 14 ? 13 : 18 }}
-            >
-              {formatPokemonName(name)}
-            </CustomText>
-
-            {/* TYPES */}
-            <View style={styles.typesWrapper}>
-              {pokemonData.types.map((typeResource: TypeResource) => (
-                <View
-                  key={typeResource.type.name}
-                  style={{
-                    ...styles.typeElement,
-                    backgroundColor:
-                      ColorTypesHightlight[
-                        typeResource.type.name as keyof typeof ColorTypesHightlight
-                      ]
-                  }}
-                >
-                  <TypeIcon
-                    type={typeResource.type.name}
-                    size={10}
-                  />
-                  <CustomText style={styles.typeText}>
-                    {t(`pokemon-types.${typeResource.type.name}`)}
-                  </CustomText>
-                </View>
-              ))}
-            </View>
-
-            {/* ID */}
-            <CustomText style={styles.pokemonId}>
-              {formatPokemonId(pokemonData.id)}
-            </CustomText>
+          {/* TYPES */}
+          <View style={styles.typesWrapper}>
+            {typePrimary && (
+              <View
+                style={{
+                  ...styles.typeElement,
+                  backgroundColor:
+                    ColorTypesHightlight[typePrimary as keyof typeof ColorTypesHightlight]
+                }}
+              >
+                <TypeIcon
+                  type={typePrimary}
+                  size={10}
+                />
+                <CustomText style={styles.typeText}>
+                  {t(`pokemon-types.${typePrimary}`)}
+                </CustomText>
+              </View>
+            )}
+            {typeSecondary && (
+              <View
+                style={{
+                  ...styles.typeElement,
+                  backgroundColor:
+                    ColorTypesHightlight[
+                      typeSecondary as keyof typeof ColorTypesHightlight
+                    ]
+                }}
+              >
+                <TypeIcon
+                  type={typeSecondary}
+                  size={10}
+                />
+                <CustomText style={styles.typeText}>
+                  {t(`pokemon-types.${typeSecondary}`)}
+                </CustomText>
+              </View>
+            )}
           </View>
 
-          {/* IMAGE */}
-          <View style={styles.cardImageWrapper}>
-            <Image
-              resizeMode='contain'
-              style={styles.cardImage}
-              source={{
-                uri: getImageUri(pokemonData)
-              }}
-            />
-          </View>
+          {/* ID */}
+          <CustomText style={styles.pokemonId}>{formatPokemonId(id)}</CustomText>
         </View>
-      )}
+
+        {/* IMAGE */}
+        <View style={styles.cardImageWrapper}>
+          <Image
+            resizeMode='contain'
+            style={styles.cardImage}
+            source={{
+              uri: spriteGif ?? spriteOfficial
+            }}
+          />
+        </View>
+      </View>
     </RectButton>
   );
 };
@@ -204,10 +194,5 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontFamily: FontFamily.poppinsMedium,
     lineHeight: 18
-  },
-  loader: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100%'
   }
 });

@@ -4,12 +4,11 @@ import { RQ_KEY } from '@constants/react-query';
 import { Colors, LogoColors } from '@constants/styles/colors';
 import { getPokemonList } from '@services/poke-api';
 import { useQuery } from '@tanstack/react-query';
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { ActivityIndicator, Image, StyleSheet, Text, View } from 'react-native';
 import { BorderlessButton, FlatList } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FilterMenu } from '@components/filter-menu/filter-menu';
-import { getIdFromUrl } from '@utils/get-id-from-url';
 import { PokemonResultsContext } from 'context/pokemon-results-context';
 import BackIcon from '@assets/svg/back.svg';
 import BackIconWhite from '@assets/svg/back--white.svg';
@@ -20,6 +19,11 @@ import { DEFAULT_VIEWABILITY_CONFIG } from '@constants/flat-list-load';
 
 type PokemonResource = {
   name: string;
+  id: number;
+  typePrimary: string;
+  typeSecondary: string;
+  spriteGif: string;
+  spriteOfficial: string;
   url: string;
 };
 
@@ -35,23 +39,10 @@ export const PokedexScreen = ({ navigation }: any): JSX.Element => {
 
   const { isLoading, isError } = useQuery({
     queryKey: [RQ_KEY.ALL_POKEMON_LISTS],
-    queryFn: () => getPokemonList({ limit: 1010, offset: 0 }),
-    select: data => {
-      return {
-        ...data,
-        results: data.results.map((pokemon: PokemonResource) => {
-          const pokemonId = getIdFromUrl(pokemon.url);
-
-          return {
-            ...pokemon,
-            id: pokemonId
-          };
-        })
-      };
-    },
+    queryFn: () => getPokemonList(),
     onSuccess: data => {
-      setPokemonResults(data.results);
-      setFullPokemonList(data.results);
+      setPokemonResults(data);
+      setFullPokemonList(data);
     }
   });
 
@@ -125,6 +116,11 @@ export const PokedexScreen = ({ navigation }: any): JSX.Element => {
           renderItem={({ item }) => (
             <PokemonCard
               name={item.name}
+              id={item.id}
+              typePrimary={item.typePrimary}
+              typeSecondary={item.typeSecondary}
+              spriteGif={item.spriteGif}
+              spriteOfficial={item.spriteOfficial}
               url={item.url}
               navigation={navigation}
             />

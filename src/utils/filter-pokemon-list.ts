@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { getIdFromUrl } from './get-id-from-url';
-import { isEmpty, intersectionBy } from 'lodash-es';
+import { isEmpty, intersectionBy, filter as _filter } from 'lodash-es';
+import pokemonListStatic from '../data/pokemon-list.json';
 
 export async function filterPokemonList(
   pokemonList: any[],
@@ -38,16 +38,13 @@ export async function filterPokemonList(
         );
       });
 
-      return sharedTypePokemons
-        .map((pokemon: any) => {
-          const pokemonId = getIdFromUrl(pokemon.url);
+      const dataResult = _filter(pokemonListStatic, (item: any) => {
+        return sharedTypePokemons.some(
+          (pokemonName: { name: string }) => pokemonName.name === item.name
+        );
+      });
 
-          return {
-            ...pokemon,
-            id: pokemonId
-          };
-        })
-        .filter((pokemon: any) => pokemon.id <= 1010);
+      return dataResult;
     } catch (error) {
       console.error('Error for filtering by pokemon type:', error);
       return [];
@@ -69,16 +66,13 @@ export async function filterPokemonList(
         const pokemonOfGeneration = response.data.pokemon_species;
         combinedPokemonList.push(...pokemonOfGeneration);
 
-        return combinedPokemonList
-          .map(pokemon => {
-            const pokemonId = getIdFromUrl(pokemon.url);
+        console.log('combinedPokemonList', combinedPokemonList);
 
-            return {
-              ...pokemon,
-              id: pokemonId
-            };
-          })
-          .filter(pokemon => pokemon.id <= 1010);
+        const dataResult: any[] = _filter(pokemonListStatic, item => {
+          return combinedPokemonList.some(pokemonName => pokemonName.name === item.name);
+        });
+
+        return dataResult;
       }
     } catch (error) {
       console.error('Error for filtering by pokemon generation:', error);
@@ -123,16 +117,11 @@ export async function filterPokemonList(
         'name'
       );
 
-      return combinedAndUnique
-        .map(pokemon => {
-          const pokemonId = getIdFromUrl(pokemon.url);
+      const dataResult = _filter(pokemonListStatic, item => {
+        return combinedAndUnique.some(pokemonName => pokemonName.name === item.name);
+      });
 
-          return {
-            ...pokemon,
-            id: pokemonId
-          };
-        })
-        .filter(pokemon => pokemon.id <= 1010);
+      return dataResult;
     } catch (error) {
       console.error('Error for filtering by pokemon type and generation:', error);
       return [];

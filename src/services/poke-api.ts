@@ -32,23 +32,8 @@ export const getPokemonSpecies = async (name: string) => {
   }
 };
 
-export const getPokemonList = async (params: ListParams) => {
-  const { limit, offset } = params;
-
+export const getPokemonList = async () => {
   return pokemonList;
-
-  /* try {
-    const response = await axios.get(`${API_URL}/pokemon`, {
-      params: {
-        limit,
-        offset
-      }
-    });
-
-    return response.data;
-  } catch (error) {
-    throw error;
-  } */
 };
 
 export const getEvolutionChain = async (url: string) => {
@@ -71,21 +56,6 @@ export const getMove = async (url: string) => {
   }
 };
 
-export const getAllMoves = async (params: ListParams) => {
-  const { limit, offset } = params;
-
+export const getAllMoves = async () => {
   return movesList;
-
-  /* try {
-    const response = await axios.get(`${API_URL}/move`, {
-      params: {
-        limit,
-        offset
-      }
-    });
-
-    return response.data;
-  } catch (error) {
-    throw error;
-  } */
 };

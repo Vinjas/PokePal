@@ -29,7 +29,7 @@ export const MovesScreen = ({ navigation }: any): JSX.Element => {
 
   const { isLoading, isError } = useQuery({
     queryKey: [RQ_KEY.ALL_POKEMON_LISTS],
-    queryFn: () => getAllMoves({ limit: 922, offset: 0 }),
+    queryFn: () => getAllMoves(),
     onSuccess: (data: any) => {
       setMovesList(data.results);
       setSearchResults(data.results);

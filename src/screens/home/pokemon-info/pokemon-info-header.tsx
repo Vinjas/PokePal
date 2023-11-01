@@ -1,7 +1,7 @@
 import { ColorTypes, ColorTypesHightlight, Colors } from '@constants/styles/colors';
 import { formatPokemonName } from '@utils/format-pokemon-name';
 import React, { useContext } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 import HeartIcon from '@assets/svg/heart--white.svg';
 import BackIcon from '@assets/svg/back--white.svg';
 import { formatPokemonId } from '@utils/format-pokemon-id';
@@ -10,9 +10,6 @@ import { FontFamily } from '@constants/styles/fontsFamily';
 import { AppThemeContext } from 'context/app-theme-context';
 import { BorderlessButton } from 'react-native-gesture-handler';
 import { useTranslation } from 'react-i18next';
-import { getPokemon } from '@services/poke-api';
-import { useQuery } from '@tanstack/react-query';
-import { RQ_KEY } from '@constants/react-query';
 import { HOME_STACK } from '@constants/screens';
 
 const HeartButton = () => (
@@ -30,11 +27,9 @@ const BackButton = () => (
 );
 
 export const PokemonInfoHeader = ({ route, navigation }: any) => {
-  const { pokemonData } = route.params;
+  const { name, id, typePrimary, typeSecondary, spriteOfficial } = route.params;
 
   const { t } = useTranslation();
-
-  const { name, id, types, sprites } = pokemonData;
 
   const { isDarkMode } = useContext(AppThemeContext);
 
@@ -42,8 +37,8 @@ export const PokemonInfoHeader = ({ route, navigation }: any) => {
     <View
       style={{
         ...styles.container,
-        backgroundColor: ColorTypes[types[0]?.type.name],
-        paddingTop: types.length > 1 ? 50 : 30
+        backgroundColor: ColorTypes[typePrimary as keyof typeof ColorTypes],
+        paddingTop: typeSecondary ? 50 : 30
       }}
     >
       <View style={styles.headerWrapper}>
@@ -62,23 +57,38 @@ export const PokemonInfoHeader = ({ route, navigation }: any) => {
 
         <View style={styles.contentWrapper}>
           <View style={styles.typesWrapper}>
-            {types.map((type: any) => (
+            {typePrimary && (
               <View
-                key={type.type.name}
                 style={{
                   ...styles.typeElement,
-                  backgroundColor: ColorTypesHightlight[type.type.name]
+                  backgroundColor:
+                    ColorTypesHightlight[typePrimary as keyof typeof ColorTypesHightlight]
                 }}
               >
                 <TypeIcon
-                  type={type.type.name}
+                  type={typePrimary}
                   size={15}
                 />
-                <Text style={styles.typeText}>
-                  {t(`pokemon-types.${type.type.name}`)}
-                </Text>
+                <Text style={styles.typeText}>{t(`pokemon-types.${typePrimary}`)}</Text>
               </View>
-            ))}
+            )}
+            {typeSecondary && (
+              <View
+                style={{
+                  ...styles.typeElement,
+                  backgroundColor:
+                    ColorTypesHightlight[
+                      typeSecondary as keyof typeof ColorTypesHightlight
+                    ]
+                }}
+              >
+                <TypeIcon
+                  type={typeSecondary}
+                  size={15}
+                />
+                <Text style={styles.typeText}>{t(`pokemon-types.${typeSecondary}`)}</Text>
+              </View>
+            )}
           </View>
           <Text style={styles.idText}>{formatPokemonId(id)}</Text>
         </View>
@@ -89,7 +99,7 @@ export const PokemonInfoHeader = ({ route, navigation }: any) => {
           resizeMode='contain'
           style={styles.cardImage}
           source={{
-            uri: sprites.other['official-artwork'].front_default
+            uri: spriteOfficial
           }}
         />
       </View>
