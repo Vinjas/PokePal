@@ -66,7 +66,8 @@ const styles = StyleSheet.create({
   searchBar: {
     fontSize: 16,
     fontFamily: FontFamily.poppinsMedium,
-    marginTop: 5
+    marginTop: 5,
+    width: '100%'
   },
   searchBarDark: {
     color: Colors.pureWhite

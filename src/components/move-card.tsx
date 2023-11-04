@@ -88,11 +88,13 @@ export const MoveCard = ({
               isDarkMode ? styles.cardHeaderDark : styles.cardHeaderLight
             ]}
           >
-            {isLvl && <CustomText>{t('moves.headers.level')}</CustomText>}
-            <CustomText>{t('moves.headers.move')}</CustomText>
-            <CustomText>{t('moves.headers.pwr')}</CustomText>
-            <CustomText>{t('moves.headers.acc')}</CustomText>
-            <CustomText>{t('moves.headers.pp')}</CustomText>
+            {isLvl && (
+              <CustomText style={{ marginTop: 3 }}>{t('moves.headers.level')}</CustomText>
+            )}
+            <CustomText style={{ marginTop: 3 }}>{t('moves.headers.move')}</CustomText>
+            <CustomText style={{ marginTop: 3 }}>{t('moves.headers.pwr')}</CustomText>
+            <CustomText style={{ marginTop: 3 }}>{t('moves.headers.acc')}</CustomText>
+            <CustomText style={{ marginTop: 3 }}>{t('moves.headers.pp')}</CustomText>
           </View>
           <View
             style={[
@@ -211,8 +213,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     elevation: 2,
-    paddingHorizontal: 10,
-    paddingVertical: 2,
+    paddingHorizontal: 15,
+    paddingVertical: 3,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10
   },
@@ -225,7 +227,8 @@ const styles = StyleSheet.create({
   cardContent: {
     flex: 1,
     elevation: 2,
-    padding: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
     borderBottomRightRadius: 10,
     borderBottomLeftRadius: 10
   },
@@ -240,7 +243,8 @@ const styles = StyleSheet.create({
   statsWrapper: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginBottom: 5
   },
   typeText: {
     fontFamily: FontFamily.poppinsSemiBold,
@@ -286,7 +290,7 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase'
   },
   textFlavor: {
-    fontSize: 12,
+    fontSize: 14,
     textAlign: 'center',
     fontStyle: 'italic',
     marginTop: 10,

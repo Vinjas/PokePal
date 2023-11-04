@@ -683,9 +683,7 @@ export const PokemonAboutTab = ({ route }: any) => {
 const styles = StyleSheet.create({
   loader: {
     justifyContent: 'center',
-    alignItems: 'center',
-    height: '80%',
-    marginTop: 30
+    alignItems: 'center'
   },
   container: {
     paddingHorizontal: 20
@@ -839,7 +837,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.pureWhite
   },
   modal: {
-    flex: 1,
     marginBottom: 150,
     marginHorizontal: 80,
     padding: 0
