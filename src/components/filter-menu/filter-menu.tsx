@@ -17,12 +17,17 @@ import { filterPokemonList } from '@utils/filter-pokemon-list';
 import { useTranslation } from 'react-i18next';
 import { AppThemeContext } from 'context/app-theme-context';
 import CloseGreySvg from '@assets/svg/close--grey.svg';
-import { RectButton } from 'react-native-gesture-handler';
-import { set } from 'lodash-es';
-
 type FilterMenuProps = {
   onFilterMenuRef: (ref: any) => void;
 };
+
+const CloseIcon = () => (
+  <CloseGreySvg
+    width={12}
+    height={12}
+    style={{ marginRight: 5 }}
+  />
+);
 
 export const FilterMenu = ({ onFilterMenuRef }: FilterMenuProps): JSX.Element => {
   const filterMenuRef = useRef<RBSheet>();
@@ -37,20 +42,17 @@ export const FilterMenu = ({ onFilterMenuRef }: FilterMenuProps): JSX.Element =>
   const { pokemonResults, setPokemonResults, fullPokemonList } =
     useContext<any>(PokemonResultsContext);
 
-  const CloseIcon = () => (
-    <CloseGreySvg
-      width={12}
-      height={12}
-      style={{ marginRight: 5 }}
-    />
-  );
-
   useEffect(() => {
     onFilterMenuRef(filterMenuRef);
   }, [onFilterMenuRef]);
 
   async function handleApply(isClearingFilters: boolean) {
     const currentPokemonResults = [...pokemonResults];
+
+    if (isClearingFilters) {
+      setFilters({ type: [], generation: [] });
+      setSortValue(SORT_OPTIONS[0].value);
+    }
 
     let filteredPokemonResults = await filterPokemonList(
       currentPokemonResults,

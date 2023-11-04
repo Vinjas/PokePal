@@ -54,6 +54,7 @@ export const PokemonMovesTab = ({ route }: { route: any }) => {
           keyExtractor={item => item.move.name}
           renderItem={({ item }) => (
             <MoveCard
+              isLvl
               key={item.move.name}
               name={item.move.name}
               url={item.move.url}

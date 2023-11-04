@@ -44,7 +44,10 @@ export const PokemonInfoHeader = ({ route, navigation }: any) => {
       <View style={styles.headerWrapper}>
         <View style={styles.topBarWrapper}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <BorderlessButton onPress={() => navigation.navigate(HOME_STACK.POKEDEX)}>
+            <BorderlessButton
+              style={{ padding: 10 }}
+              onPress={() => navigation.navigate(HOME_STACK.POKEDEX)}
+            >
               <BackButton />
             </BorderlessButton>
             <Text style={styles.nameText}>{formatPokemonName(name)}</Text>
@@ -193,7 +196,7 @@ const styles = StyleSheet.create({
     color: Colors.pureWhite,
     fontFamily: FontFamily.poppinsBold,
     fontSize: 30,
-    paddingLeft: 30,
+    paddingLeft: 20,
     marginTop: 8
   },
   idText: {

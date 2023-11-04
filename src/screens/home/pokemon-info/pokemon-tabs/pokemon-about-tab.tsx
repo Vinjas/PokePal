@@ -3,8 +3,16 @@ import { Colors, LogoColors } from '@constants/styles/colors';
 import { FontFamily } from '@constants/styles/fontsFamily';
 import { parseNewLines } from '@utils/parse-new-lines';
 import { last } from 'lodash-es';
-import React, { useContext, useMemo } from 'react';
-import { ActivityIndicator, ScrollView, StyleSheet, View } from 'react-native';
+import React, { useContext, useMemo, useState } from 'react';
+import {
+  ActivityIndicator,
+  Button,
+  ScrollView,
+  StyleSheet,
+  Touchable,
+  TouchableOpacity,
+  View
+} from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { AppThemeContext } from 'context/app-theme-context';
 import i18n from '@i18n/i18n';
@@ -19,6 +27,13 @@ import RulerSvgWhite from '@assets/svg/ruler--white.svg';
 import WeightSvgWhite from '@assets/svg/weight--white.svg';
 import FemaleSvg from '@assets/svg/female.svg';
 import MaleSvg from '@assets/svg/male.svg';
+import DownArrowSvg from '@assets/svg/down-arrow.svg';
+import { RectButton } from 'react-native-gesture-handler';
+import Modal from 'react-native-modal';
+import { useQuery } from '@tanstack/react-query';
+import { RQ_KEY } from '@constants/react-query';
+import { getAbility } from '@services/poke-api';
+import CloseGreySvg from '@assets/svg/close--grey.svg';
 
 const FemaleIcon = () => (
   <FemaleSvg
@@ -36,6 +51,22 @@ const MaleIcon = () => (
   />
 );
 
+const DownArrowIcon = () => (
+  <DownArrowSvg
+    width={12}
+    height={12}
+    style={{}}
+  />
+);
+
+const CloseIcon = () => (
+  <CloseGreySvg
+    width={12}
+    height={12}
+    style={{ marginRight: 5 }}
+  />
+);
+
 export const PokemonAboutTab = ({ route }: any) => {
   const { t } = useTranslation();
 
@@ -44,6 +75,35 @@ export const PokemonAboutTab = ({ route }: any) => {
   const { pokemonData, pokemonSpecies, isLoading } = data;
 
   const { isDarkMode } = useContext(AppThemeContext);
+
+  const [isAbilityModalOpen, setIsAbilityModalOpen] = useState(false);
+  const [currentAbility, setCurrentAbility] = useState('');
+
+  const {
+    data: abilityData,
+    isLoading: isAbilityLoading,
+    isError: isAbilityError
+  } = useQuery({
+    queryKey: [RQ_KEY.ABILITY, currentAbility],
+    queryFn: () => getAbility(currentAbility),
+    enabled: !!currentAbility
+  });
+
+  const abilityFlavorTextTranslated = useMemo(() => {
+    if (!abilityData) return '';
+
+    const flavorTextEntries = abilityData.flavor_text_entries.filter(
+      (entry: { language: { name: string } }) => entry.language.name === i18n.language
+    );
+
+    if (!flavorTextEntries) return '';
+
+    const newestEntry: { flavor_text: string } = last(flavorTextEntries) ?? {
+      flavor_text: ''
+    };
+
+    return newestEntry.flavor_text;
+  }, [abilityData]);
 
   const RulerIcon = () =>
     isDarkMode ? (
@@ -144,6 +204,10 @@ export const PokemonAboutTab = ({ route }: any) => {
     return calculateGenderPercentage(pokemonSpecies.gender_rate);
   }, [pokemonSpecies]);
 
+  function handleAbilityClick() {
+    setIsAbilityModalOpen(!isAbilityModalOpen);
+  }
+
   return (
     <ScrollView
       style={styles.container}
@@ -156,6 +220,73 @@ export const PokemonAboutTab = ({ route }: any) => {
           style={styles.loader}
         />
       )}
+
+      <Modal
+        isVisible={isAbilityModalOpen}
+        animationIn={'slideInLeft'}
+        animationOut={'slideOutRight'}
+        style={styles.modal}
+        backdropOpacity={0.5}
+        onBackButtonPress={handleAbilityClick}
+        onBackdropPress={handleAbilityClick}
+      >
+        <View
+          style={[
+            styles.modalView,
+            isDarkMode ? styles.modalViewDark : styles.modalViewLight
+          ]}
+        >
+          {isAbilityLoading && (
+            <ActivityIndicator
+              size={30}
+              color={LogoColors.red}
+              style={styles.loader}
+            />
+          )}
+
+          {!isAbilityLoading && !isAbilityError && abilityData && (
+            <View>
+              <View
+                style={[
+                  styles.abilityTitleWrapper,
+                  isDarkMode
+                    ? styles.abilityTitleWrapperDark
+                    : styles.abilityTitleWrapperLight
+                ]}
+              >
+                <CustomText
+                  style={[
+                    styles.abilityModalTitleText,
+                    isDarkMode
+                      ? styles.abilityModalTitleTextDark
+                      : styles.abilityModalTitleTextLight
+                  ]}
+                >
+                  {t(`pokemon-info.abilities.${abilityData.name}`)}
+                </CustomText>
+                <TouchableOpacity
+                  style={{ padding: 5 }}
+                  onPress={handleAbilityClick}
+                >
+                  <CloseIcon />
+                </TouchableOpacity>
+              </View>
+              <View>
+                <CustomText
+                  style={[
+                    styles.abilityModalText,
+                    isDarkMode
+                      ? styles.abilityModalTextDark
+                      : styles.abilityModalTextLight
+                  ]}
+                >
+                  {`"${parseNewLines(abilityFlavorTextTranslated)}"`}
+                </CustomText>
+              </View>
+            </View>
+          )}
+        </View>
+      </Modal>
 
       {!isLoading && pokemonSpecies && (
         <View style={[]}>
@@ -203,23 +334,23 @@ export const PokemonAboutTab = ({ route }: any) => {
           </CustomText>
           <View style={{ ...styles.rowWrapper, flexWrap: 'wrap' }}>
             {pokemonData.abilities.map((ability: any, index: number) => (
-              <View
+              <RectButton
                 key={index}
-                style={[
-                  { width: '48%' },
-                  styles.hightlightSecondary,
-                  isDarkMode
-                    ? styles.highlightSecondaryDark
-                    : styles.highlightSecondaryLight
-                ]}
+                onPress={() => {
+                  handleAbilityClick();
+                  setCurrentAbility(ability.ability.name);
+                }}
+                style={[{ width: '48%' }, styles.abilityButton]}
               >
                 <CustomText
                   key={index}
-                  style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}
+                  style={styles.abilityText}
                 >
                   {t(`pokemon-info.abilities.${ability.ability.name}`)}
                 </CustomText>
-              </View>
+
+                <DownArrowIcon />
+              </RectButton>
             ))}
           </View>
 
@@ -625,6 +756,23 @@ const styles = StyleSheet.create({
     backgroundColor: LogoColors.darkerBlue,
     borderRadius: 30
   },
+  abilityButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderRadius: 30,
+    paddingVertical: 5,
+    paddingHorizontal: 15,
+    elevation: 2,
+    marginBottom: 10,
+    backgroundColor: Colors.sortButton
+  },
+  abilityText: {
+    fontSize: 14,
+    color: Colors.pureWhite,
+    fontFamily: FontFamily.poppinsMedium,
+    paddingLeft: 10
+  },
   hightlightSecondary: {
     borderRadius: 30,
     paddingVertical: 2,
@@ -689,5 +837,60 @@ const styles = StyleSheet.create({
   },
   breedingPaperLight: {
     backgroundColor: Colors.pureWhite
+  },
+  modal: {
+    flex: 1,
+    marginBottom: 150,
+    marginHorizontal: 80,
+    padding: 0
+  },
+  modalView: {
+    borderRadius: 15,
+    alignItems: 'center',
+    elevation: 5,
+    paddingHorizontal: 20,
+    paddingVertical: 20
+  },
+  modalViewDark: {
+    backgroundColor: Colors.black
+  },
+  modalViewLight: {
+    backgroundColor: Colors.pureWhite
+  },
+  abilityTitleWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    paddingBottom: 10
+  },
+  abilityTitleWrapperDark: {
+    borderBottomColor: LogoColors.darkerBlue
+  },
+  abilityTitleWrapperLight: {
+    borderBottomColor: LogoColors.blue
+  },
+  abilityModalTitleText: {
+    fontSize: 16,
+    fontFamily: FontFamily.poppinsBold
+  },
+  abilityModalTitleTextDark: {
+    color: Colors.darkGrey1
+  },
+  abilityModalTitleTextLight: {
+    color: Colors.black
+  },
+  abilityModalText: {
+    fontSize: 16,
+    fontFamily: FontFamily.poppinsRegular,
+    textAlign: 'center',
+    fontStyle: 'italic',
+    marginTop: 10
+  },
+  abilityModalTextDark: {
+    color: Colors.pureWhite
+  },
+  abilityModalTextLight: {
+    color: LogoColors.darkBlue
   }
 });

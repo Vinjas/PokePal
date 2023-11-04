@@ -80,7 +80,10 @@ export const PokedexScreen = ({ navigation }: any): JSX.Element => {
       </View>
 
       <View style={styles.headerBar}>
-        <BorderlessButton onPress={() => navigation.goBack()}>
+        <BorderlessButton
+          style={{ padding: 10 }}
+          onPress={() => navigation.goBack()}
+        >
           <BackButton />
         </BorderlessButton>
         <Text
@@ -150,7 +153,7 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontFamily: FontFamily.poppinsBold,
     color: Colors.black,
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
     lineHeight: 40
   },
   headerTextLight: {

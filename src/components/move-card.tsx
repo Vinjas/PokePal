@@ -18,9 +18,11 @@ import { TypeIcon } from './type-icon';
 import { parseNewLines } from '@utils/parse-new-lines';
 
 export const MoveCard = ({
+  isLvl,
   url,
   level
 }: {
+  isLvl: boolean;
   name: string;
   url: string;
   level?: number;
@@ -86,7 +88,7 @@ export const MoveCard = ({
               isDarkMode ? styles.cardHeaderDark : styles.cardHeaderLight
             ]}
           >
-            <CustomText>{t('moves.headers.level')}</CustomText>
+            {isLvl && <CustomText>{t('moves.headers.level')}</CustomText>}
             <CustomText>{t('moves.headers.move')}</CustomText>
             <CustomText>{t('moves.headers.pwr')}</CustomText>
             <CustomText>{t('moves.headers.acc')}</CustomText>
@@ -99,14 +101,16 @@ export const MoveCard = ({
             ]}
           >
             <View style={styles.statsWrapper}>
-              <CustomText
-                style={[
-                  styles.dataText,
-                  isDarkMode ? styles.dataTextDark : styles.dataTextLight
-                ]}
-              >
-                {level ? level.toString() : '-'}
-              </CustomText>
+              {isLvl && (
+                <CustomText
+                  style={[
+                    styles.dataText,
+                    isDarkMode ? styles.dataTextDark : styles.dataTextLight
+                  ]}
+                >
+                  {level ? level.toString() : '-'}
+                </CustomText>
+              )}
               <CustomText
                 style={[
                   styles.dataText,

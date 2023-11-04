@@ -46,6 +46,16 @@ export const getEvolutionChain = async (url: string) => {
   }
 };
 
+export const getAbility = async (name: string) => {
+  try {
+    const response = await axios.get(`${API_URL}/ability/${name}`);
+
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const getMove = async (url: string) => {
   try {
     const response = await axios.get(url);
