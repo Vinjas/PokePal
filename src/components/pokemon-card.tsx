@@ -37,7 +37,7 @@ export const PokemonCard = ({
   id,
   typePrimary,
   typeSecondary,
-  spriteGif,
+  //spriteGif,
   spriteOfficial,
   navigation
 }: PokemonCardProps): JSX.Element => {
@@ -133,7 +133,7 @@ export const PokemonCard = ({
             resizeMode='contain'
             style={styles.cardImage}
             source={{
-              uri: spriteGif ?? spriteOfficial
+              uri: spriteOfficial
             }}
           />
         </View>

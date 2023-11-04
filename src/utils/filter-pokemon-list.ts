@@ -66,8 +66,6 @@ export async function filterPokemonList(
         const pokemonOfGeneration = response.data.pokemon_species;
         combinedPokemonList.push(...pokemonOfGeneration);
 
-        console.log('combinedPokemonList', combinedPokemonList);
-
         const dataResult: any[] = _filter(pokemonListStatic, item => {
           return combinedPokemonList.some(pokemonName => pokemonName.name === item.name);
         });

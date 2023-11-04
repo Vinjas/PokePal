@@ -11,9 +11,9 @@ import {
   PokemonStatsTab
 } from './pokemon-tabs';
 import { AppThemeContext } from 'context/app-theme-context';
-import { useQueries, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { RQ_KEY } from '@constants/react-query';
-import { getPokemonSpecies, getPokemon, getEvolutionChain } from '@services/poke-api';
+import { getEvolutionChain, getPokemonStatic } from '@services/poke-api';
 
 const renderScene = SceneMap({
   about: PokemonAboutTab,
@@ -29,44 +29,36 @@ type PokemonInfoScreenProps = {
 export const PokemonInfoScreen = (props: PokemonInfoScreenProps): JSX.Element => {
   const { name } = props.route.params;
 
-  const [
-    { data: pokemonData, isLoading: isLoadingPokemonData, isError: isErrorPokemonData },
-    {
-      data: pokemonSpecies,
-      isLoading: isLoadingPokemonSpecies,
-      isError: isErrorPokemonSpecies
-    }
-  ] = useQueries({
-    queries: [
-      {
-        queryKey: [RQ_KEY.POKEMON_DATA, name],
-        queryFn: () => getPokemon(name)
-      },
-      {
-        queryKey: [RQ_KEY.POKEMON_SPECIES, name],
-        queryFn: () => getPokemonSpecies(name)
-      }
-    ]
+  const {
+    data: pokemonStatic,
+    isLoading: isLoadingPokemonStatic,
+    isError: isErrorPokemonStatic
+  } = useQuery({
+    queryKey: [RQ_KEY.POKEMON_DATA_STATIC, name],
+    queryFn: () => getPokemonStatic(name)
   });
 
   const {
     data: evolutionChain,
-    isLoading: evolutionChainLoading,
+    isLoading: isLoadingEvolution,
     isError: evolutionChainError
   } = useQuery({
-    queryKey: [RQ_KEY.EVOLUTION_CHAIN, pokemonSpecies?.evolution_chain?.url],
-    queryFn: () => getEvolutionChain(pokemonSpecies?.evolution_chain?.url),
-    enabled: !!pokemonSpecies?.evolution_chain?.url
+    queryKey: [RQ_KEY.EVOLUTION_CHAIN, pokemonStatic?.evolutionChain?.url],
+    queryFn: () => getEvolutionChain(pokemonStatic?.evolutionChain?.url),
+    enabled: !!pokemonStatic?.evolutionChain?.url
   });
 
   const { isDarkMode } = useContext(AppThemeContext);
 
-  const isLoading =
-    isLoadingPokemonSpecies || isLoadingPokemonData || evolutionChainLoading;
+  const isError = isErrorPokemonStatic || evolutionChainError;
 
-  const isError = isErrorPokemonSpecies || isErrorPokemonData || evolutionChainError;
-
-  const data = { pokemonData, pokemonSpecies, evolutionChain, isLoading, isError };
+  const data = {
+    pokemonStatic,
+    evolutionChain,
+    isLoadingPokemonStatic,
+    isLoadingEvolution,
+    isError
+  };
 
   const defaultRoutes = [
     {
@@ -99,7 +91,7 @@ export const PokemonInfoScreen = (props: PokemonInfoScreenProps): JSX.Element =>
   useEffect(() => {
     setRoutes(defaultRoutes);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoading, isError]);
+  }, [isLoadingPokemonStatic, isLoadingEvolution, isError]);
 
   const renderTabBar = (tabProps: any) => (
     <TabBar

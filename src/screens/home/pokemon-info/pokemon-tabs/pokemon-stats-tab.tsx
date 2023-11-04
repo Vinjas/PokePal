@@ -25,23 +25,23 @@ export const PokemonStatsTab = ({ route }: any) => {
 
   const { data } = route;
 
-  const { pokemonData, isLoading } = data;
+  const { pokemonStatic, isLoadingPokemonStatic } = data;
 
   const mappedPokemonStats = useMemo(() => {
-    if (!pokemonData) return [];
+    if (!pokemonStatic) return [];
 
-    return convertPokemonStats(pokemonData.stats);
-  }, [pokemonData]);
+    return convertPokemonStats(pokemonStatic.stats);
+  }, [pokemonStatic]);
 
   const pokemonTotalStat: { label: string; value: number } = useMemo(() => {
-    if (!pokemonData) return { label: 'total', value: 0 };
+    if (!pokemonStatic) return { label: 'total', value: 0 };
 
-    return getPokemonTotalStat(pokemonData.stats);
-  }, [pokemonData]);
+    return getPokemonTotalStat(pokemonStatic.stats);
+  }, [pokemonStatic]);
 
   return (
     <View style={styles.wrapper}>
-      {isLoading && (
+      {isLoadingPokemonStatic && (
         <ActivityIndicator
           size={90}
           color={LogoColors.red}
@@ -49,7 +49,7 @@ export const PokemonStatsTab = ({ route }: any) => {
         />
       )}
 
-      {!isLoading && mappedPokemonStats && (
+      {!isLoadingPokemonStatic && mappedPokemonStats && (
         <View>
           {mappedPokemonStats.map((stat: any) => (
             <View

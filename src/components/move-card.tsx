@@ -25,7 +25,7 @@ export const MoveCard = ({
 }: {
   isLvl: boolean;
   name: string;
-  names: any[];
+  names?: any[];
   url: string;
   level?: number;
 }) => {
@@ -42,6 +42,12 @@ export const MoveCard = ({
     queryFn: () => getMove(url),
     enabled: !!url
   });
+
+  const translatedName = useMemo(() => {
+    if (!moveData) return { name: '' };
+
+    return moveData?.names?.filter((name: any) => name.language.name === i18n.language);
+  }, [moveData]);
 
   const translatedFlavorText = useMemo(() => {
     if (!moveData) return { name: '' };
@@ -111,7 +117,9 @@ export const MoveCard = ({
                     isDarkMode ? styles.dataTextDark : styles.dataTextLight
                   ]}
                 >
-                  {names[i18n.language]}
+                  {names?.[i18n.language as keyof typeof names] ?? translatedName
+                    ? translatedName[0]?.name
+                    : moveData.name}
                 </CustomText>
                 <CustomText
                   style={[

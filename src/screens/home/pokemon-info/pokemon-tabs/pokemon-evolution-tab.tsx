@@ -1,10 +1,7 @@
 import { CustomText } from '@components/custom-text';
-import { RQ_KEY } from '@constants/react-query';
 import { Colors, LogoColors } from '@constants/styles/colors';
-import { getEvolutionChain, getPokemon, getPokemonSpecies } from '@services/poke-api';
-import { useQuery } from '@tanstack/react-query';
-import { use } from 'i18next';
-import { isEmpty, omitBy, transform } from 'lodash-es';
+import { getPokemon } from '@services/poke-api';
+import { transform } from 'lodash-es';
 import { evolutionChainMapper } from 'mapper/evolution-chain-mapper';
 import React, { useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -13,7 +10,6 @@ import {
   Image,
   ScrollView,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View
 } from 'react-native';
@@ -22,7 +18,6 @@ import LongArrowRightIconDark from '@assets/svg/long-arrow-right--dark.svg';
 import { AppThemeContext } from 'context/app-theme-context';
 import { formatPokemonName } from '@utils/format-pokemon-name';
 import { FontFamily } from '@constants/styles/fontsFamily';
-import { BorderlessButton } from 'react-native-gesture-handler';
 import { HOME_STACK } from '@constants/screens';
 import { useNavigation } from '@react-navigation/native';
 
@@ -33,7 +28,7 @@ export const PokemonEvolutionTab = ({ route }: any) => {
 
   const { data } = route;
 
-  const { pokemonData, evolutionChain, isLoading } = data;
+  const { pokemonStatic, evolutionChain, isLoadingEvolution } = data;
 
   const { isDarkMode } = useContext(AppThemeContext);
 
@@ -108,7 +103,7 @@ export const PokemonEvolutionTab = ({ route }: any) => {
                       resizeMode='contain'
                       style={styles.cardImage}
                       source={{
-                        uri: getImageUri(pokemonData.id)
+                        uri: pokemonStatic.sprite.spriteOfficial
                       }}
                     />
                   </View>
@@ -118,7 +113,7 @@ export const PokemonEvolutionTab = ({ route }: any) => {
                       isDarkMode ? styles.titleDark : styles.titleLight
                     ]}
                   >
-                    {formatPokemonName(pokemonData.name)}
+                    {pokemonStatic.names[i18n.language]}
                   </CustomText>
                 </View>
               </View>
@@ -163,7 +158,7 @@ export const PokemonEvolutionTab = ({ route }: any) => {
                       style={styles.cardImage}
                       source={{
                         uri: getImageUri(
-                          evolutionChainMapped[pokemon.order - 2].id ?? pokemonData.id
+                          evolutionChainMapped[pokemon.order - 2].id ?? pokemonStatic.id
                         )
                       }}
                     />
@@ -231,7 +226,7 @@ export const PokemonEvolutionTab = ({ route }: any) => {
                       resizeMode='contain'
                       style={styles.cardImage}
                       source={{
-                        uri: getImageUri(pokemon.id ?? pokemonData.id)
+                        uri: getImageUri(pokemon.id ?? pokemonStatic.id)
                       }}
                     />
                   </View>
@@ -255,7 +250,7 @@ export const PokemonEvolutionTab = ({ route }: any) => {
 
   return (
     <ScrollView style={styles.wrapper}>
-      {isLoading && (
+      {isLoadingEvolution && (
         <ActivityIndicator
           size={90}
           color={LogoColors.red}
@@ -263,7 +258,7 @@ export const PokemonEvolutionTab = ({ route }: any) => {
         />
       )}
 
-      {!isLoading && evolutionChain && (
+      {!isLoadingEvolution && evolutionChain && (
         <View>{renderEvolution(evolutionChainMapped)}</View>
       )}
     </ScrollView>

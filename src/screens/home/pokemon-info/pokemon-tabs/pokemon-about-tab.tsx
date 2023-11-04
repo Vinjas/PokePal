@@ -6,10 +6,8 @@ import { last } from 'lodash-es';
 import React, { useContext, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
-  Button,
   ScrollView,
   StyleSheet,
-  Touchable,
   TouchableOpacity,
   View
 } from 'react-native';
@@ -72,7 +70,7 @@ export const PokemonAboutTab = ({ route }: any) => {
 
   const { data } = route;
 
-  const { pokemonData, pokemonSpecies, isLoading } = data;
+  const { pokemonStatic, isLoadingPokemonStatic } = data;
 
   const { isDarkMode } = useContext(AppThemeContext);
 
@@ -135,77 +133,33 @@ export const PokemonAboutTab = ({ route }: any) => {
       />
     );
 
-  const flavorText = useMemo(() => {
-    if (!pokemonSpecies) return '';
-
-    const flavorTextEntries = pokemonSpecies.flavor_text_entries.filter(
-      (entry: { language: { name: string } }) => entry.language.name === i18n.language
-    );
-
-    if (!flavorTextEntries) return '';
-
-    const newestEntry: { flavor_text: string } = last(flavorTextEntries) ?? {
-      flavor_text: ''
-    };
-
-    return newestEntry.flavor_text;
-  }, [pokemonSpecies]);
-
-  const pokemonName = useMemo(() => {
-    if (!pokemonSpecies) return '';
-
-    const names = pokemonSpecies.names.filter(
-      (entry: { language: { name: string } }) => entry.language.name === i18n.language
-    );
-
-    if (!names) return '';
-
-    const newestEntry: { name: string } = last(names) ?? { name: '' };
-
-    return newestEntry.name;
-  }, [pokemonSpecies]);
-
-  const pokemonGenera = useMemo(() => {
-    if (!pokemonSpecies) return '';
-
-    const genera = pokemonSpecies.genera.filter(
-      (entry: { language: { name: string } }) => entry.language.name === i18n.language
-    );
-
-    if (!genera) return '';
-
-    const newestEntry: { genus: string } = last(genera) ?? { genus: '' };
-
-    return newestEntry.genus;
-  }, [pokemonSpecies]);
-
   const calculatedWeight: { kilograms: string; pounds: string } = useMemo(() => {
-    if (!pokemonData) return { kilograms: '0', pounds: '0' };
+    if (!pokemonStatic) return { kilograms: '0', pounds: '0' };
 
-    return calculateWeight(pokemonData.weight);
-  }, [pokemonData]);
+    return calculateWeight(pokemonStatic.weight);
+  }, [pokemonStatic]);
 
   const calculatedHeight: { meters: string; feet: number; inches: number } =
     useMemo(() => {
-      if (!pokemonData) return { meters: '0', feet: 0, inches: 0 };
+      if (!pokemonStatic) return { meters: '0', feet: 0, inches: 0 };
 
-      return calculateHeight(pokemonData.height);
-    }, [pokemonData]);
+      return calculateHeight(pokemonStatic.height);
+    }, [pokemonStatic]);
 
   const calculateCaptureRate: string = useMemo(() => {
-    if (!pokemonSpecies) return '0%';
+    if (!pokemonStatic) return '0%';
 
-    return calculateCaptureRatePercentage(pokemonSpecies.capture_rate);
-  }, [pokemonSpecies]);
+    return calculateCaptureRatePercentage(pokemonStatic.training.captureRate);
+  }, [pokemonStatic]);
 
   const calculatedGenders: { male: string; female: string } = useMemo(() => {
-    if (!pokemonSpecies) return { male: '0%', female: '0%' };
+    if (!pokemonStatic) return { male: '0%', female: '0%' };
 
-    return calculateGenderPercentage(pokemonSpecies.gender_rate);
-  }, [pokemonSpecies]);
+    return calculateGenderPercentage(pokemonStatic.breeding.genderRate);
+  }, [pokemonStatic]);
 
   function handleAbilityClick() {
-    setIsAbilityModalOpen(!isAbilityModalOpen);
+    setIsAbilityModalOpen(true);
   }
 
   return (
@@ -213,7 +167,7 @@ export const PokemonAboutTab = ({ route }: any) => {
       style={styles.container}
       contentContainerStyle={{ alignItems: 'center' }}
     >
-      {isLoading && (
+      {isLoadingPokemonStatic && (
         <ActivityIndicator
           size={90}
           color={LogoColors.red}
@@ -223,12 +177,11 @@ export const PokemonAboutTab = ({ route }: any) => {
 
       <Modal
         isVisible={isAbilityModalOpen}
-        animationIn={'slideInLeft'}
-        animationOut={'slideOutRight'}
+        hideModalContentWhileAnimating // Prevents rendering issues
         style={styles.modal}
         backdropOpacity={0.5}
-        onBackButtonPress={handleAbilityClick}
-        onBackdropPress={handleAbilityClick}
+        onBackButtonPress={() => setIsAbilityModalOpen(false)}
+        onBackdropPress={() => setIsAbilityModalOpen(false)}
       >
         <View
           style={[
@@ -288,7 +241,7 @@ export const PokemonAboutTab = ({ route }: any) => {
         </View>
       </Modal>
 
-      {!isLoading && pokemonSpecies && (
+      {!isLoadingPokemonStatic && pokemonStatic && (
         <View style={[]}>
           {/* NAME */}
           <View style={styles.rowWrapper}>
@@ -299,19 +252,19 @@ export const PokemonAboutTab = ({ route }: any) => {
                   isDarkMode ? styles.headerDark : styles.headerLight
                 ]}
               >
-                {pokemonName}
+                {pokemonStatic.names[i18n.language]}
               </CustomText>
 
               <View>
                 <CustomText style={[styles.textGenera]}>
-                  {` - ${pokemonGenera}`}
+                  {` - ${pokemonStatic.genera[i18n.language]}`}
                 </CustomText>
               </View>
             </View>
 
             <View>
               <CustomText style={[styles.textGeneration]}>
-                {t(`generations.${pokemonSpecies.generation.name}`)}
+                {t(`generations.${pokemonStatic.generation}`)}
               </CustomText>
             </View>
           </View>
@@ -323,7 +276,7 @@ export const PokemonAboutTab = ({ route }: any) => {
               isDarkMode ? styles.textDark : styles.textLight
             ]}
           >
-            {`"${parseNewLines(flavorText)}"`}
+            {`"${parseNewLines(pokemonStatic.flavorText[i18n.language])}"`}
           </CustomText>
 
           {/* ABILITIES */}
@@ -333,12 +286,12 @@ export const PokemonAboutTab = ({ route }: any) => {
             {t('pokemon-info.about.abilities')}
           </CustomText>
           <View style={{ ...styles.rowWrapper, flexWrap: 'wrap' }}>
-            {pokemonData.abilities.map((ability: any, index: number) => (
+            {pokemonStatic.abilities.map((ability: any, index: number) => (
               <RectButton
                 key={index}
                 onPress={() => {
                   handleAbilityClick();
-                  setCurrentAbility(ability.ability.name);
+                  setCurrentAbility(ability.name);
                 }}
                 style={[{ width: '48%' }, styles.abilityButton]}
               >
@@ -346,7 +299,7 @@ export const PokemonAboutTab = ({ route }: any) => {
                   key={index}
                   style={styles.abilityText}
                 >
-                  {t(`pokemon-info.abilities.${ability.ability.name}`)}
+                  {t(`pokemon-info.abilities.${ability.name}`)}
                 </CustomText>
 
                 <DownArrowIcon />
@@ -467,7 +420,7 @@ export const PokemonAboutTab = ({ route }: any) => {
                   isDarkMode ? styles.textDark : styles.textLight
                 ]}
               >
-                {pokemonData.base_experience}
+                {pokemonStatic.training.baseExperience}
               </CustomText>
             </View>
           </View>
@@ -496,7 +449,7 @@ export const PokemonAboutTab = ({ route }: any) => {
                   isDarkMode ? styles.textDark : styles.textLight
                 ]}
               >
-                {pokemonSpecies.base_happiness}
+                {pokemonStatic.training.baseHappiness}
               </CustomText>
               <CustomText
                 style={{
@@ -507,7 +460,7 @@ export const PokemonAboutTab = ({ route }: any) => {
                 {'(' +
                   t(
                     `pokemon-info.happiness.${calculateHappiness(
-                      pokemonSpecies.base_happiness
+                      pokemonStatic.training.baseHappiness
                     )}`
                   ) +
                   ')'}
@@ -534,7 +487,7 @@ export const PokemonAboutTab = ({ route }: any) => {
                   isDarkMode ? styles.textDark : styles.textLight
                 ]}
               >
-                {t(`pokemon-info.growth-rate.${pokemonSpecies.growth_rate.name}`)}
+                {t(`pokemon-info.growth-rate.${pokemonStatic.training.growthRate}`)}
               </CustomText>
             </View>
           </View>
@@ -564,7 +517,7 @@ export const PokemonAboutTab = ({ route }: any) => {
                   isDarkMode ? styles.textDark : styles.textLight
                 ]}
               >
-                {`${pokemonSpecies.capture_rate}`}
+                {`${pokemonStatic.training.capture_rate}`}
               </CustomText>
               <CustomText
                 style={{
@@ -633,7 +586,7 @@ export const PokemonAboutTab = ({ route }: any) => {
             </CustomText>
 
             <View style={styles.rowWrapper}>
-              {pokemonSpecies.egg_groups.map((eggGroup: any, index: number) => (
+              {pokemonStatic.breeding.eggGroups.map((eggGroup: any, index: number) => (
                 <View
                   key={index}
                   style={[
@@ -670,7 +623,7 @@ export const PokemonAboutTab = ({ route }: any) => {
               <CustomText
                 style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}
               >
-                {pokemonSpecies.hatch_counter}
+                {pokemonStatic.breeding.hatchCounter}
               </CustomText>
             </View>
           </View>

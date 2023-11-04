@@ -2,6 +2,7 @@ import Axios from 'axios';
 import { setupCache } from 'axios-cache-interceptor';
 import pokemonListMin from '../data/pokemon-list-min.json';
 import movesList from '../data/moves-list-translated.json';
+import pokemonFullList from '../data/pokemon-list-full.json';
 
 const axios = setupCache(Axios);
 
@@ -15,6 +16,14 @@ export const getPokemon = async (name: string) => {
   } catch (error) {
     throw error;
   }
+};
+
+export const getPokemonStatic = async (name: string) => {
+  const pokemonResult = await pokemonFullList.find(
+    (pokemon: any) => pokemon.name === name
+  );
+
+  return pokemonResult;
 };
 
 export const getPokemonSpecies = async (name: string) => {

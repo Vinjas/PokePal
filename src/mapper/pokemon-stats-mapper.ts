@@ -1,11 +1,8 @@
 import { StatsColors } from '@constants/styles/colors';
 
 interface PokemonStat {
-  base_stat: number;
-  stat: {
-    name: string;
-    url: string;
-  };
+  name: string;
+  value: number;
   effort: number;
 }
 
@@ -14,7 +11,7 @@ export function convertPokemonStats(
 ): { value: number; label: string; effort: number; color: string }[] {
   const statsCopy = [...stats];
 
-  statsCopy.sort((a, b) => b.base_stat - a.base_stat);
+  statsCopy.sort((a, b) => b.value - a.value);
 
   return stats.map(stat => {
     const index = statsCopy.indexOf(stat);
@@ -27,8 +24,8 @@ export function convertPokemonStats(
       color = StatsColors.yellow; // Medium
     }
     return {
-      value: stat.base_stat,
-      label: stat.stat.name,
+      value: stat.value,
+      label: stat.name,
       effort: stat.effort,
       color
     };
@@ -39,7 +36,7 @@ export function getPokemonTotalStat(stats: PokemonStat[]): {
   value: number;
   label: string;
 } {
-  const totalValue = stats.reduce((total, stat) => total + stat.base_stat, 0);
+  const totalValue = stats.reduce((total, stat) => total + stat.value, 0);
 
   return { value: totalValue, label: 'total' };
 }
