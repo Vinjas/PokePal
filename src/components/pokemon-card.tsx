@@ -56,10 +56,10 @@ export const PokemonCard = ({
       }
     >
       <Image
-        style={styles.logoImage}
+        style={[styles.logoImage, isDarkMode && styles.logoImageDark]}
         source={
           isDarkMode
-            ? require('@assets/images/background__pokeball--transparent.png')
+            ? require('@assets/images/background__pokeball--cut-transparent.png')
             : require('@assets/images/background__pokeball--white-transparent.png')
         }
       />
@@ -160,6 +160,14 @@ const styles = StyleSheet.create({
     height: 140,
     right: -40,
     top: 15,
+    position: 'absolute',
+    zIndex: 2
+  },
+  logoImageDark: {
+    width: 100,
+    height: 100,
+    right: 0,
+    top: 20,
     position: 'absolute',
     zIndex: 2
   },
