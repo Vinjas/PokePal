@@ -5,14 +5,7 @@ import { GENERATIONS } from '@constants/generations';
 import { Colors, LogoColors } from '@constants/styles/colors';
 import { POKEMON_TYPES } from '@constants/types';
 import React, { useContext, useEffect, useRef } from 'react';
-import {
-  Button,
-  ScrollView,
-  StyleSheet,
-  Touchable,
-  TouchableOpacity,
-  View
-} from 'react-native';
+import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import { SORT_OPTIONS } from '@constants/sort-options';
@@ -23,7 +16,9 @@ import { sortPokemonList } from '@utils/sort-pokemon-list';
 import { filterPokemonList } from '@utils/filter-pokemon-list';
 import { useTranslation } from 'react-i18next';
 import { AppThemeContext } from 'context/app-theme-context';
+import CloseGreySvg from '@assets/svg/close--grey.svg';
 import { RectButton } from 'react-native-gesture-handler';
+import { set } from 'lodash-es';
 
 type FilterMenuProps = {
   onFilterMenuRef: (ref: any) => void;
@@ -37,24 +32,33 @@ export const FilterMenu = ({ onFilterMenuRef }: FilterMenuProps): JSX.Element =>
   const { t } = useTranslation();
 
   const { filters } = useContext<any>(FilterPokemonContext);
-  const { sortValue, setSortValue, searchText } = useContext<any>(FilterPokemonContext);
+  const { sortValue, setFilters, setSortValue, searchText } =
+    useContext<any>(FilterPokemonContext);
   const { pokemonResults, setPokemonResults, fullPokemonList } =
     useContext<any>(PokemonResultsContext);
+
+  const CloseIcon = () => (
+    <CloseGreySvg
+      width={12}
+      height={12}
+      style={{ marginRight: 5 }}
+    />
+  );
 
   useEffect(() => {
     onFilterMenuRef(filterMenuRef);
   }, [onFilterMenuRef]);
 
-  async function handleApply() {
+  async function handleApply(isClearingFilters: boolean) {
     const currentPokemonResults = [...pokemonResults];
 
     let filteredPokemonResults = await filterPokemonList(
       currentPokemonResults,
-      filters,
+      isClearingFilters ? { type: [], generation: [] } : filters,
       fullPokemonList
     );
 
-    if (searchText) {
+    if (searchText && filteredPokemonResults) {
       filteredPokemonResults = filteredPokemonResults.filter(item =>
         item.name.toLowerCase().includes(searchText.toLowerCase())
       );
@@ -62,10 +66,11 @@ export const FilterMenu = ({ onFilterMenuRef }: FilterMenuProps): JSX.Element =>
 
     const sortedFilteredPokemonResults = sortPokemonList(
       filteredPokemonResults,
-      sortValue
+      isClearingFilters ? SORT_OPTIONS[0].value : sortValue
     );
 
     setPokemonResults(sortedFilteredPokemonResults);
+
     filterMenuRef.current?.close();
   }
 
@@ -90,16 +95,29 @@ export const FilterMenu = ({ onFilterMenuRef }: FilterMenuProps): JSX.Element =>
     >
       <View style={styles.filterMenuContent}>
         <View>
-          <CustomText
-            style={[
-              styles.filterMenuHeadingText,
-              isDarkMode
-                ? styles.filterMenuHeadingTextDark
-                : styles.filterMenuHeadingTextLight
-            ]}
-          >
-            {t('label.filters')}
-          </CustomText>
+          <View style={styles.titleWrapper}>
+            <CustomText
+              style={[
+                styles.filterMenuHeadingText,
+                isDarkMode
+                  ? styles.filterMenuHeadingTextDark
+                  : styles.filterMenuHeadingTextLight
+              ]}
+            >
+              {t('label.filters')}
+            </CustomText>
+            <TouchableOpacity
+              style={styles.clearFiltersWrapper}
+              onPress={() => {
+                handleApply(true);
+              }}
+            >
+              <CloseIcon />
+              <CustomText style={styles.clearFiltersText}>
+                {t('label.clear-filters')}
+              </CustomText>
+            </TouchableOpacity>
+          </View>
 
           <CustomText style={styles.filterMenuTitle}>{t('label.type')}</CustomText>
           <View style={styles.elemList}>
@@ -143,7 +161,7 @@ export const FilterMenu = ({ onFilterMenuRef }: FilterMenuProps): JSX.Element =>
 
         <View style={styles.filterMenuButton}>
           <TouchableOpacity
-            onPress={handleApply}
+            onPress={() => handleApply(false)}
             style={styles.applyButton}
           >
             <CustomText style={styles.applyButtonText}>{t('label.apply')}</CustomText>
@@ -242,5 +260,25 @@ const styles = StyleSheet.create({
     color: LogoColors.darkBlue,
     fontSize: 16,
     fontFamily: FontFamily.poppinsRegular
+  },
+  titleWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  clearFiltersWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: Colors.darkGrey1,
+    paddingHorizontal: 10,
+    borderRadius: 10
+  },
+  clearFiltersText: {
+    fontSize: 14,
+    fontFamily: FontFamily.poppinsMedium,
+    marginTop: 2,
+    color: Colors.darkGrey1,
+    marginLeft: 5
   }
 });

@@ -18,7 +18,8 @@
     "sort": "Sort By",
     "type": "Type",
     "generation": "Generation",
-    "apply": "Apply"
+    "apply": "Apply",
+    "clear-filters": "Clear Filters"
   },
   "screen-headers": {
     "pokedex": "Pokédex",
