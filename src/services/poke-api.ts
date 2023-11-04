@@ -1,16 +1,11 @@
 import Axios from 'axios';
 import { setupCache } from 'axios-cache-interceptor';
-import pokemonList from '../data/pokemon-list.json';
-import movesList from '../data/moves-list.json';
+import pokemonListMin from '../data/pokemon-list-min.json';
+import movesList from '../data/moves-list-translated.json';
 
 const axios = setupCache(Axios);
 
 const API_URL = 'https://pokeapi.co/api/v2';
-
-type ListParams = {
-  limit: number;
-  offset: number;
-};
 
 export const getPokemon = async (name: string) => {
   try {
@@ -33,7 +28,7 @@ export const getPokemonSpecies = async (name: string) => {
 };
 
 export const getPokemonList = async () => {
-  return pokemonList;
+  return pokemonListMin;
 };
 
 export const getEvolutionChain = async (url: string) => {

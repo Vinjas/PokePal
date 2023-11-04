@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useContext } from 'react';
 import { Colors, LogoColors } from '@constants/styles/colors';
 import { StyleSheet, TextInput, View } from 'react-native';
 import { FontFamily } from '@constants/styles/fontsFamily';
@@ -12,6 +12,7 @@ import { filterPokemonList } from '@utils/filter-pokemon-list';
 import { isEmpty } from 'lodash-es';
 import { useTranslation } from 'react-i18next';
 import { AppThemeContext } from 'context/app-theme-context';
+import i18n from '@i18n/i18n';
 
 type SearchBarProps = {
   filterMenuRef?: any;
@@ -64,7 +65,7 @@ export const SearchBar = ({ filterMenuRef }: SearchBarProps): JSX.Element => {
     }
 
     filteredPokemonResults = filteredPokemonResults.filter((item: any) =>
-      item.name.toLowerCase().includes(text.toLowerCase())
+      item.names[i18n.language].toLowerCase().includes(text.toLowerCase())
     );
 
     const sortedFilteredPokemonResults = sortPokemonList(

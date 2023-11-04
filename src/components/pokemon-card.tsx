@@ -4,15 +4,24 @@ import { CustomText } from './custom-text';
 import { ColorTypes, ColorTypesHightlight, Colors } from '@constants/styles/colors';
 import { FontFamily } from '@constants/styles/fontsFamily';
 import { formatPokemonId } from '@utils/format-pokemon-id';
-import { formatPokemonName } from '@utils/format-pokemon-name';
 import { RectButton } from 'react-native-gesture-handler';
 import { TypeIcon } from './type-icon';
 import { HOME_STACK } from '@constants/screens';
 import { useTranslation } from 'react-i18next';
 import { AppThemeContext } from 'context/app-theme-context';
+import i18n from '@i18n/i18n';
 
 type PokemonCardProps = {
   name: string;
+  names: {
+    en: string;
+    ja: string;
+    fr: string;
+    it: string;
+    de: string;
+    es: string;
+    ko: string;
+  };
   id: number;
   typePrimary: string;
   typeSecondary: string;
@@ -24,6 +33,7 @@ type PokemonCardProps = {
 
 export const PokemonCard = ({
   name,
+  names,
   id,
   typePrimary,
   typeSecondary,
@@ -70,7 +80,7 @@ export const PokemonCard = ({
           <CustomText
             style={{ ...styles.cardName, fontSize: name.length > 14 ? 13 : 18 }}
           >
-            {formatPokemonName(name)}
+            {names[i18n.language as keyof typeof names]}
           </CustomText>
 
           {/* TYPES */}

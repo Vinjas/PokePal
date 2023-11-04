@@ -16,14 +16,25 @@ import { useTranslation } from 'react-i18next';
 import { AppThemeContext } from 'context/app-theme-context';
 import { FontFamily } from '@constants/styles/fontsFamily';
 import { DEFAULT_VIEWABILITY_CONFIG } from '@constants/flat-list-load';
+import { FilterPokemonContext } from 'context/filter-pokemon-context';
+import { SORT_OPTIONS } from '@constants/sort-options';
 
 type PokemonResource = {
   name: string;
   id: number;
-  typePrimary: string;
-  typeSecondary: string;
-  spriteGif: string;
-  spriteOfficial: string;
+  type: { typePrimary: string; typeSecondary: string };
+  sprite: { spriteGif: string; spriteOfficial: string };
+  names: {
+    en: string;
+    ja: string;
+    fr: string;
+    it: string;
+    de: string;
+    es: string;
+    ko: string;
+  };
+  generation: string;
+  stats: any[];
   url: string;
 };
 
@@ -34,6 +45,8 @@ export const PokedexScreen = ({ navigation }: any): JSX.Element => {
 
   const { pokemonResults, setPokemonResults, setFullPokemonList } =
     useContext<any>(PokemonResultsContext);
+  const { setSortValue, setSearchText, setFilters } =
+    useContext<any>(FilterPokemonContext);
 
   const { isDarkMode } = useContext(AppThemeContext);
 
@@ -43,6 +56,9 @@ export const PokedexScreen = ({ navigation }: any): JSX.Element => {
     onSuccess: data => {
       setPokemonResults(data);
       setFullPokemonList(data);
+      setSortValue(SORT_OPTIONS[0].value);
+      setSearchText('');
+      setFilters({ type: [], generation: [] });
     }
   });
 
@@ -120,10 +136,11 @@ export const PokedexScreen = ({ navigation }: any): JSX.Element => {
             <PokemonCard
               name={item.name}
               id={item.id}
-              typePrimary={item.typePrimary}
-              typeSecondary={item.typeSecondary}
-              spriteGif={item.spriteGif}
-              spriteOfficial={item.spriteOfficial}
+              names={item.names}
+              typePrimary={item.type.typePrimary}
+              typeSecondary={item.type.typeSecondary}
+              spriteGif={item.sprite.spriteGif}
+              spriteOfficial={item.sprite.spriteOfficial}
               url={item.url}
               navigation={navigation}
             />

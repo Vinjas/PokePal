@@ -17,6 +17,8 @@ import { filterPokemonList } from '@utils/filter-pokemon-list';
 import { useTranslation } from 'react-i18next';
 import { AppThemeContext } from 'context/app-theme-context';
 import CloseGreySvg from '@assets/svg/close--grey.svg';
+import i18n from '@i18n/i18n';
+
 type FilterMenuProps = {
   onFilterMenuRef: (ref: any) => void;
 };
@@ -62,7 +64,7 @@ export const FilterMenu = ({ onFilterMenuRef }: FilterMenuProps): JSX.Element =>
 
     if (searchText && filteredPokemonResults) {
       filteredPokemonResults = filteredPokemonResults.filter(item =>
-        item.name.toLowerCase().includes(searchText.toLowerCase())
+        item.names[i18n.language].toLowerCase().includes(searchText.toLowerCase())
       );
     }
 

@@ -19,11 +19,13 @@ import { parseNewLines } from '@utils/parse-new-lines';
 
 export const MoveCard = ({
   isLvl,
+  names,
   url,
   level
 }: {
   isLvl: boolean;
   name: string;
+  names: any[];
   url: string;
   level?: number;
 }) => {
@@ -40,12 +42,6 @@ export const MoveCard = ({
     queryFn: () => getMove(url),
     enabled: !!url
   });
-
-  const translatedName = useMemo(() => {
-    if (!moveData) return { name: '' };
-
-    return moveData?.names?.filter((name: any) => name.language.name === i18n.language);
-  }, [moveData]);
 
   const translatedFlavorText = useMemo(() => {
     if (!moveData) return { name: '' };
@@ -66,137 +62,133 @@ export const MoveCard = ({
         isDarkMode ? styles.cardWrapperDark : styles.cardWrapperLight
       ]}
     >
-      {moveDataLoading && (
-        <ActivityIndicator
-          size={50}
-          color={isDarkMode ? LogoColors.darkerBlue : LogoColors.blue}
-          style={styles.loader}
-        />
-      )}
-
-      {moveDataError && (
-        <View>
-          <CustomText>Error</CustomText>
+      <View>
+        <View
+          style={[
+            styles.cardHeader,
+            isDarkMode ? styles.cardHeaderDark : styles.cardHeaderLight
+          ]}
+        >
+          {isLvl && (
+            <CustomText style={{ marginTop: 3 }}>{t('moves.headers.level')}</CustomText>
+          )}
+          <CustomText style={{ marginTop: 3 }}>{t('moves.headers.move')}</CustomText>
+          <CustomText style={{ marginTop: 3 }}>{t('moves.headers.pwr')}</CustomText>
+          <CustomText style={{ marginTop: 3 }}>{t('moves.headers.acc')}</CustomText>
+          <CustomText style={{ marginTop: 3 }}>{t('moves.headers.pp')}</CustomText>
         </View>
-      )}
+        <View
+          style={[
+            styles.cardContent,
+            isDarkMode ? styles.cardContentDark : styles.cardContentLight
+          ]}
+        >
+          {moveDataLoading && (
+            <ActivityIndicator
+              size={50}
+              color={LogoColors.red}
+              style={styles.loader}
+            />
+          )}
 
-      {!moveDataLoading && !moveDataError && moveData && (
-        <View>
-          <View
-            style={[
-              styles.cardHeader,
-              isDarkMode ? styles.cardHeaderDark : styles.cardHeaderLight
-            ]}
-          >
-            {isLvl && (
-              <CustomText style={{ marginTop: 3 }}>{t('moves.headers.level')}</CustomText>
-            )}
-            <CustomText style={{ marginTop: 3 }}>{t('moves.headers.move')}</CustomText>
-            <CustomText style={{ marginTop: 3 }}>{t('moves.headers.pwr')}</CustomText>
-            <CustomText style={{ marginTop: 3 }}>{t('moves.headers.acc')}</CustomText>
-            <CustomText style={{ marginTop: 3 }}>{t('moves.headers.pp')}</CustomText>
-          </View>
-          <View
-            style={[
-              styles.cardContent,
-              isDarkMode ? styles.cardContentDark : styles.cardContentLight
-            ]}
-          >
-            <View style={styles.statsWrapper}>
-              {isLvl && (
+          {!moveDataLoading && !moveDataError && moveData && (
+            <View>
+              <View style={styles.statsWrapper}>
+                {isLvl && (
+                  <CustomText
+                    style={[
+                      styles.dataText,
+                      isDarkMode ? styles.dataTextDark : styles.dataTextLight
+                    ]}
+                  >
+                    {level ? level.toString() : '-'}
+                  </CustomText>
+                )}
+                <CustomText
+                  style={[
+                    styles.dataText,
+                    { fontFamily: FontFamily.poppinsSemiBold },
+                    isDarkMode ? styles.dataTextDark : styles.dataTextLight
+                  ]}
+                >
+                  {names[i18n.language]}
+                </CustomText>
                 <CustomText
                   style={[
                     styles.dataText,
                     isDarkMode ? styles.dataTextDark : styles.dataTextLight
                   ]}
                 >
-                  {level ? level.toString() : '-'}
+                  {moveData.power ?? '-'}
                 </CustomText>
-              )}
-              <CustomText
-                style={[
-                  styles.dataText,
-                  { fontFamily: FontFamily.poppinsSemiBold },
-                  isDarkMode ? styles.dataTextDark : styles.dataTextLight
-                ]}
-              >
-                {translatedName ? translatedName[0]?.name : moveData.name}
-              </CustomText>
-              <CustomText
-                style={[
-                  styles.dataText,
-                  isDarkMode ? styles.dataTextDark : styles.dataTextLight
-                ]}
-              >
-                {moveData.power ?? '-'}
-              </CustomText>
-              <CustomText
-                style={[
-                  styles.dataText,
-                  isDarkMode ? styles.dataTextDark : styles.dataTextLight
-                ]}
-              >
-                {moveData.accuracy ?? '-'}
-              </CustomText>
-              <CustomText
-                style={[
-                  styles.dataText,
-                  isDarkMode ? styles.dataTextDark : styles.dataTextLight
-                ]}
-              >
-                {moveData.pp}
-              </CustomText>
-            </View>
-
-            <View style={styles.typeRow}>
-              {/* Type */}
-              <View
-                style={{
-                  ...styles.typeWrapper,
-                  backgroundColor:
-                    ColorTypesHightlight[
-                      moveData.type.name as keyof typeof ColorTypesHightlight
-                    ]
-                }}
-              >
-                <TypeIcon
-                  type={moveData.type.name}
-                  size={15}
-                />
-                <CustomText style={styles.typeText}>
-                  {t(`pokemon-types.${moveData.type.name}`)}
+                <CustomText
+                  style={[
+                    styles.dataText,
+                    isDarkMode ? styles.dataTextDark : styles.dataTextLight
+                  ]}
+                >
+                  {moveData.accuracy ?? '-'}
+                </CustomText>
+                <CustomText
+                  style={[
+                    styles.dataText,
+                    isDarkMode ? styles.dataTextDark : styles.dataTextLight
+                  ]}
+                >
+                  {moveData.pp}
                 </CustomText>
               </View>
 
-              {/* Category */}
-              <View
-                style={{
-                  ...styles.catWrapper,
-                  backgroundColor:
-                    DamageColors[
-                      moveData.damage_class.name as 'status' | 'physical' | 'special'
-                    ]
-                }}
-              >
-                <CustomText style={styles.classText}>
-                  {t(`moves.class.${moveData.damage_class.name}`)}
-                </CustomText>
-              </View>
-            </View>
+              <View style={styles.typeRow}>
+                {/* Type */}
+                <View
+                  style={{
+                    ...styles.typeWrapper,
+                    backgroundColor:
+                      ColorTypesHightlight[
+                        moveData.type.name as keyof typeof ColorTypesHightlight
+                      ]
+                  }}
+                >
+                  <TypeIcon
+                    type={moveData.type.name}
+                    size={15}
+                  />
+                  <CustomText style={styles.typeText}>
+                    {t(`pokemon-types.${moveData.type.name}`)}
+                  </CustomText>
+                </View>
 
-            <CustomText
-              style={[
-                styles.textFlavor,
-                isDarkMode ? styles.textFlavorDark : styles.textFlavorLight
-              ]}
-            >
-              {translatedFlavorText
-                ? translatedFlavorText.toString()
-                : moveData?.flavor_text_entries[0]?.flavor_text}
-            </CustomText>
-          </View>
+                {/* Category */}
+                <View
+                  style={{
+                    ...styles.catWrapper,
+                    backgroundColor:
+                      DamageColors[
+                        moveData.damage_class.name as 'status' | 'physical' | 'special'
+                      ]
+                  }}
+                >
+                  <CustomText style={styles.classText}>
+                    {t(`moves.class.${moveData.damage_class.name}`)}
+                  </CustomText>
+                </View>
+              </View>
+
+              <CustomText
+                style={[
+                  styles.textFlavor,
+                  isDarkMode ? styles.textFlavorDark : styles.textFlavorLight
+                ]}
+              >
+                {translatedFlavorText
+                  ? translatedFlavorText.toString()
+                  : moveData?.flavor_text_entries[0]?.flavor_text}
+              </CustomText>
+            </View>
+          )}
         </View>
-      )}
+      </View>
     </View>
   );
 };

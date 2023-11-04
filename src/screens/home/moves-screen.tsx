@@ -7,20 +7,16 @@ import { getAllMoves } from '@services/poke-api';
 import { useQuery } from '@tanstack/react-query';
 import { AppThemeContext } from 'context/app-theme-context';
 import React, { useContext, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import {
-  View,
-  TouchableOpacity,
   Text,
   StyleSheet,
   SafeAreaView,
   ActivityIndicator,
   FlatList
 } from 'react-native';
+import i18n from '@i18n/i18n';
 
-export const MovesScreen = ({ navigation }: any): JSX.Element => {
-  const { t } = useTranslation();
-
+export const MovesScreen = (): JSX.Element => {
   const { isDarkMode } = useContext(AppThemeContext);
 
   const [movesList, setMovesList] = useState<any[]>([]);
@@ -31,8 +27,8 @@ export const MovesScreen = ({ navigation }: any): JSX.Element => {
     queryKey: [RQ_KEY.ALL_POKEMON_LISTS],
     queryFn: () => getAllMoves(),
     onSuccess: (data: any) => {
-      setMovesList(data.results);
-      setSearchResults(data.results);
+      setMovesList(data);
+      setSearchResults(data);
     }
   });
 
@@ -40,7 +36,7 @@ export const MovesScreen = ({ navigation }: any): JSX.Element => {
     setSearchText(text);
 
     const filteredData = movesList.filter((item: any) => {
-      return item.name.toLowerCase().includes(text.toLowerCase());
+      return item.names[i18n.language].toLowerCase().includes(text.toLowerCase());
     });
 
     setSearchResults(filteredData);
@@ -77,6 +73,8 @@ export const MovesScreen = ({ navigation }: any): JSX.Element => {
             <MoveCard
               key={item.name}
               name={item.name}
+              names={item.names}
+              isLvl={false}
               url={item.url}
             />
           )}

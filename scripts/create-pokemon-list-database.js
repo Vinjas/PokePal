@@ -1,10 +1,18 @@
 const fs = require('fs');
-const originalPokemonList = require('../src/data/pokemon-list.json');
+const originalPokemonList = require('../src/data/pokemon-list-original.json');
 const axios = require('axios');
 const path = require('path');
 
+function last(array) {
+  if (Array.isArray(array) && array.length > 0) {
+    return array[array.length - 1];
+  }
+
+  return undefined;
+}
+
 async function fetchPokemonData(pokemon) {
-  const filename = path.join('pokemon-data', `${pokemon.name}.json`);
+  const filename = path.join('../src/data/pokemon-min', `${pokemon.name}.json`);
 
   // Check if the file already exists
   if (fs.existsSync(filename)) {
@@ -15,14 +23,39 @@ async function fetchPokemonData(pokemon) {
   const response = await axios.get(pokemon.url);
   const data = response.data;
 
+  const responseSpecies = await axios.get(data.species.url);
+  const speciesData = responseSpecies.data;
+
+  const en = speciesData.names.filter(name => name.language.name === 'en');
+  const es = speciesData.names.filter(name => name.language.name === 'es');
+  const ko = speciesData.names.filter(name => name.language.name === 'ko');
+  const ja = speciesData.names.filter(name => name.language.name === 'ja');
+  const fr = speciesData.names.filter(name => name.language.name === 'fr');
+  const it = speciesData.names.filter(name => name.language.name === 'it');
+  const de = speciesData.names.filter(name => name.language.name === 'de');
+
   const extraData = {
     ...pokemon,
     id: data.id,
-    typePrimary: data.types[0].type.name,
-    typeSecondary: data.types[1] ? data.types[1].type.name : null,
-    spriteGif:
-      data.sprites.versions['generation-v']['black-white'].animated.front_default,
-    spriteOfficial: data.sprites.other['official-artwork'].front_default,
+    names: {
+      en: last(en)?.name ?? pokemon.name,
+      es: last(es)?.name ?? pokemon.name,
+      ko: last(ko)?.name ?? pokemon.name,
+      ja: last(ja)?.name ?? pokemon.name,
+      fr: last(fr)?.name ?? pokemon.name,
+      it: last(it)?.name ?? pokemon.name,
+      de: last(de)?.name ?? pokemon.name
+    },
+    type: {
+      typePrimary: data.types[0].type.name,
+      typeSecondary: data.types[1] ? data.types[1].type.name : null
+    },
+    sprite: {
+      spriteGif:
+        data.sprites.versions['generation-v']['black-white'].animated.front_default,
+      spriteOfficial: data.sprites.other['official-artwork'].front_default
+    },
+    generation: speciesData.generation.name,
     stats: data.stats.map(stat => {
       return {
         name: stat.stat.name,
@@ -42,12 +75,12 @@ async function addPokemonData() {
 
   for (const pokemon of originalPokemonList.results) {
     await fetchPokemonData(pokemon);
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise(resolve => setTimeout(resolve, 10));
   }
 
   // Fetch data from individual files and add it to allPokemonData
   for (const pokemon of originalPokemonList.results) {
-    const filename = path.join('pokemon-data', `${pokemon.name}.json`);
+    const filename = path.join('../src/data/pokemon-min', `${pokemon.name}.json`);
 
     if (fs.existsSync(filename)) {
       const data = JSON.parse(fs.readFileSync(filename, 'utf8'));
@@ -57,7 +90,11 @@ async function addPokemonData() {
   }
 
   // Write all data to a unique file
-  fs.writeFileSync('pokemon-list-test.json', JSON.stringify(allPokemonData), 'utf8');
+  fs.writeFileSync(
+    '../src/data/pokemon-list-min.json',
+    JSON.stringify(allPokemonData),
+    'utf8'
+  );
   console.log('All Pokémon data has been saved to pokemon-list-test.json');
 }
 

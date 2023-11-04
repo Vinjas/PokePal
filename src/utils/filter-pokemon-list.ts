@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { isEmpty, intersectionBy, filter as _filter } from 'lodash-es';
-import pokemonListStatic from '../data/pokemon-list.json';
+import pokemonListStatic from '../data/pokemon-list-min.json';
 
 export async function filterPokemonList(
   pokemonList: any[],
