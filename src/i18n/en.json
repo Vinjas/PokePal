@@ -49,7 +49,11 @@
     "dragon": "Dragon",
     "dark": "Dark",
     "steel": "Steel",
-    "fairy": "Fairy"
+    "fairy": "Fairy",
+    "status": {
+      "vulnerable": "Vulnerable",
+      "strong": "Strong"
+    }
   },
   "generations": {
     "generation-i": "Generation I",
@@ -117,6 +121,18 @@
       "time_of_day": "Time",
       "trade_species": "Trade Species",
       "turn_upside_down": "Turn Upside Down"  
+    }
+  },
+  "items": {
+    "pockets": {
+      "pokeballs": "Pokeballs",
+      "medicine": "Medicine",
+      "berries": "Berries",
+      "machines": "Machines",
+      "battle-items": "Battle Items",
+      "key-items": "Key Items",
+      "misc": "Misc",
+      "mail": "Mail"
     }
   },
   "pokemon-info": {

@@ -87,3 +87,9 @@ export const ColorTypesHightlight = {
   unknown: '#82A19A',
   shadow: '#2C2C2C'
 };
+
+export const TypesEffectColors = {
+  superEffective: '#4e9a06',
+  notVeryEffective: '#a40000',
+  noEffect: '#2e3436'
+};

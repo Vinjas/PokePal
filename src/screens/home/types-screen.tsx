@@ -7,6 +7,7 @@ import BackIcon from '@assets/svg/back.svg';
 import BackIconWhite from '@assets/svg/back--white.svg';
 import { FontFamily } from '@constants/styles/fontsFamily';
 import { Colors } from '@constants/styles/colors';
+import { TypeChartTable } from '@components/types-table';
 
 export const TypesScreen = ({ navigation }: any): JSX.Element => {
   const { t } = useTranslation();
@@ -58,6 +59,8 @@ export const TypesScreen = ({ navigation }: any): JSX.Element => {
           }
         />
       </View>
+
+      <TypeChartTable />
     </SafeAreaView>
   );
 };
