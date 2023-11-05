@@ -91,5 +91,5 @@ export const ColorTypesHightlight = {
 export const TypesEffectColors = {
   superEffective: '#4e9a06',
   notVeryEffective: '#a40000',
-  noEffect: '#2e3436'
+  noEffect: '#033043'
 };
