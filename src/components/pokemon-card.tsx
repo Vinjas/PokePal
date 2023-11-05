@@ -58,6 +58,7 @@ export const PokemonCard = ({
       onPress={() =>
         navigation.navigate(HOME_STACK.POKEMON_DETAIL, {
           name,
+          names,
           id,
           typePrimary,
           typeSecondary,

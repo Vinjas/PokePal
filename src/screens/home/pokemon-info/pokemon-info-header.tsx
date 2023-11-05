@@ -11,6 +11,7 @@ import { AppThemeContext } from 'context/app-theme-context';
 import { BorderlessButton } from 'react-native-gesture-handler';
 import { useTranslation } from 'react-i18next';
 import { HOME_STACK } from '@constants/screens';
+import i18n from '@i18n/i18n';
 
 const HeartButton = () => (
   <HeartIcon
@@ -27,7 +28,9 @@ const BackButton = () => (
 );
 
 export const PokemonInfoHeader = ({ route, navigation }: any) => {
-  const { name, id, typePrimary, typeSecondary, spriteOfficial } = route.params;
+  const { name, names, id, typePrimary, typeSecondary, spriteOfficial } = route.params;
+
+  console.log('names :>> ', names);
 
   const { t } = useTranslation();
 
@@ -50,7 +53,7 @@ export const PokemonInfoHeader = ({ route, navigation }: any) => {
             >
               <BackButton />
             </BorderlessButton>
-            <Text style={styles.nameText}>{formatPokemonName(name)}</Text>
+            <Text style={styles.nameText}>{names[i18n.language]}</Text>
           </View>
 
           <View>

@@ -245,26 +245,15 @@ export const PokemonAboutTab = ({ route }: any) => {
         <View style={[]}>
           {/* NAME */}
           <View style={styles.rowWrapper}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <CustomText
-                style={[
-                  styles.header,
-                  isDarkMode ? styles.headerDark : styles.headerLight
-                ]}
-              >
-                {pokemonStatic.names[i18n.language]}
-              </CustomText>
-
-              <View>
-                <CustomText style={[styles.textGenera]}>
-                  {` - ${pokemonStatic.genera[i18n.language]}`}
-                </CustomText>
-              </View>
-            </View>
-
             <View>
               <CustomText style={[styles.textGeneration]}>
                 {t(`generations.${pokemonStatic.generation}`)}
+              </CustomText>
+            </View>
+
+            <View>
+              <CustomText style={[styles.textGenera]}>
+                {pokemonStatic.genera[i18n.language]}
               </CustomText>
             </View>
           </View>
@@ -739,8 +728,9 @@ const styles = StyleSheet.create({
     backgroundColor: LogoColors.darkBlue
   },
   textGenera: {
-    fontSize: 12,
-    marginTop: 10,
+    fontSize: 14,
+    marginTop: 5,
+    fontFamily: FontFamily.poppinsSemiBold,
     fontStyle: 'italic',
     color: Colors.darkGrey1
   },

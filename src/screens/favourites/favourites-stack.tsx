@@ -18,13 +18,8 @@ export function FavouritesStack(): JSX.Element {
         name='Favourites'
         component={FavouritesScreen}
         options={{
-          headerShown: true,
-          headerShadowVisible: false,
-          headerTitle: () => <ScreenHeader title={t('screen-headers.favorites')} />,
-          headerStyle: {
-            backgroundColor: isDarkMode ? Colors.black : Colors.pureWhite
-          },
-          headerTintColor: isDarkMode ? Colors.pureWhite : Colors.black
+          headerShown: false,
+          headerShadowVisible: false
         }}
       />
     </Stack.Navigator>

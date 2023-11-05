@@ -67,39 +67,24 @@ export function HomeStack(): JSX.Element {
         name={HOME_STACK.MOVES}
         component={MovesScreen}
         options={{
-          headerShown: true,
-          headerShadowVisible: false,
-          headerTitle: () => <ScreenHeader title={t('home.moves')} />,
-          headerStyle: {
-            backgroundColor: isDarkMode ? Colors.black : Colors.pureWhite
-          },
-          headerTintColor: isDarkMode ? Colors.pureWhite : Colors.black
+          headerShown: false,
+          headerShadowVisible: false
         }}
       />
       <Stack.Screen
         name={HOME_STACK.ITEMS}
         component={ItemsScreen}
         options={{
-          headerShown: true,
-          headerShadowVisible: false,
-          headerTitle: () => <ScreenHeader title={t('home.items')} />,
-          headerStyle: {
-            backgroundColor: isDarkMode ? Colors.black : Colors.pureWhite
-          },
-          headerTintColor: isDarkMode ? Colors.pureWhite : Colors.black
+          headerShown: false,
+          headerShadowVisible: false
         }}
       />
       <Stack.Screen
         name={HOME_STACK.TYPES}
         component={TypesScreen}
         options={{
-          headerShown: true,
-          headerShadowVisible: false,
-          headerTitle: () => <ScreenHeader title={t('home.types')} />,
-          headerStyle: {
-            backgroundColor: isDarkMode ? Colors.black : Colors.pureWhite
-          },
-          headerTintColor: isDarkMode ? Colors.pureWhite : Colors.black
+          headerShown: false,
+          headerShadowVisible: false
         }}
       />
     </Stack.Navigator>

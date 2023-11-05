@@ -12,12 +12,21 @@ import {
   StyleSheet,
   SafeAreaView,
   ActivityIndicator,
-  FlatList
+  FlatList,
+  View,
+  Image
 } from 'react-native';
 import i18n from '@i18n/i18n';
+import BackIcon from '@assets/svg/back.svg';
+import BackIconWhite from '@assets/svg/back--white.svg';
+import { BorderlessButton } from 'react-native-gesture-handler';
+import { useTranslation } from 'react-i18next';
+import { FontFamily } from '@constants/styles/fontsFamily';
 
-export const MovesScreen = (): JSX.Element => {
+export const MovesScreen = ({ navigation }: any): JSX.Element => {
   const { isDarkMode } = useContext(AppThemeContext);
+
+  const { t } = useTranslation();
 
   const [movesList, setMovesList] = useState<any[]>([]);
   const [searchText, setSearchText] = useState('');
@@ -31,6 +40,20 @@ export const MovesScreen = (): JSX.Element => {
       setSearchResults(data);
     }
   });
+
+  const BackButton = () => {
+    return isDarkMode ? (
+      <BackIconWhite
+        width={20}
+        height={20}
+      />
+    ) : (
+      <BackIcon
+        width={20}
+        height={20}
+      />
+    );
+  };
 
   const updateSearch = (text: string) => {
     setSearchText(text);
@@ -46,10 +69,38 @@ export const MovesScreen = (): JSX.Element => {
     <SafeAreaView
       style={[styles.wrapper, isDarkMode ? styles.wrapperDark : styles.wrapperLight]}
     >
+      <View style={styles.headerBar}>
+        <BorderlessButton
+          style={{ padding: 10 }}
+          onPress={() => navigation.goBack()}
+        >
+          <BackButton />
+        </BorderlessButton>
+        <Text
+          style={[
+            styles.headerText,
+            isDarkMode ? styles.headerTextDark : styles.headerTextLight
+          ]}
+        >
+          {t('home.moves')}
+        </Text>
+      </View>
+
       <SearchBarMoves
         updateSearch={updateSearch}
         searchValue={searchText}
       />
+
+      <View style={styles.headerImageWrapper}>
+        <Image
+          style={styles.headerImage}
+          source={
+            isDarkMode
+              ? require('@assets/images/background__pokeball--white-transparent.png')
+              : require('@assets/images/background__pokeball--transparent.png')
+          }
+        />
+      </View>
 
       {isLoading && (
         <ActivityIndicator
@@ -104,5 +155,35 @@ const styles = StyleSheet.create({
   },
   list: {
     paddingHorizontal: 20
+  },
+  headerImageWrapper: {
+    position: 'absolute',
+    right: -120,
+    top: -140
+  },
+  headerImage: {
+    width: 350,
+    height: 350,
+    opacity: 0.5
+  },
+  headerText: {
+    fontSize: 32,
+    fontFamily: FontFamily.poppinsBold,
+    color: Colors.black,
+    paddingHorizontal: 10,
+    lineHeight: 40
+  },
+  headerTextLight: {
+    color: Colors.black
+  },
+  headerTextDark: {
+    color: Colors.pureWhite
+  },
+  headerBar: {
+    flexDirection: 'row',
+    gap: 10,
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    marginBottom: 10
   }
 });

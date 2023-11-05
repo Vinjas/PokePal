@@ -19,13 +19,8 @@ export function TeamsStack(): JSX.Element {
         name='Teams'
         component={TeamsScreen}
         options={{
-          headerShown: true,
-          headerShadowVisible: false,
-          headerTitle: () => <ScreenHeader title={t('screen-headers.teams')} />,
-          headerStyle: {
-            backgroundColor: isDarkMode ? Colors.black : Colors.pureWhite
-          },
-          headerTintColor: isDarkMode ? Colors.pureWhite : Colors.black
+          headerShown: false,
+          headerShadowVisible: false
         }}
       />
     </Stack.Navigator>

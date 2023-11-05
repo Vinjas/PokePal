@@ -19,13 +19,8 @@ export function CompareStack(): JSX.Element {
         name='Compare'
         component={CompareScreen}
         options={{
-          headerShown: true,
-          headerShadowVisible: false,
-          headerTitle: () => <ScreenHeader title={t('screen-headers.compare')} />,
-          headerStyle: {
-            backgroundColor: isDarkMode ? Colors.black : Colors.pureWhite
-          },
-          headerTintColor: isDarkMode ? Colors.pureWhite : Colors.black
+          headerShown: false,
+          headerShadowVisible: false
         }}
       />
     </Stack.Navigator>
