@@ -1,24 +1,24 @@
 import { AppThemeContext } from 'context/app-theme-context';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  View,
-  TouchableOpacity,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  Image
-} from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, Image, ScrollView } from 'react-native';
 import { BorderlessButton } from 'react-native-gesture-handler';
 import BackIcon from '@assets/svg/back.svg';
 import BackIconWhite from '@assets/svg/back--white.svg';
 import { FontFamily } from '@constants/styles/fontsFamily';
 import { Colors } from '@constants/styles/colors';
+import { ITEMS_POCKETS } from '@constants/items';
+import { ItemPocketButton } from '@components/item-pocket-button';
+import { SearchBarGeneric } from '@components/search-bar-generic';
 
 export const ItemsScreen = ({ navigation }: any): JSX.Element => {
   const { t } = useTranslation();
 
   const { isDarkMode } = useContext(AppThemeContext);
+
+  const [movesList, setMovesList] = useState<any[]>([]);
+  const [searchText, setSearchText] = useState('');
+  const [searchResults, setSearchResults] = useState<any[]>([]);
 
   const BackButton = () => {
     return isDarkMode ? (
@@ -33,6 +33,10 @@ export const ItemsScreen = ({ navigation }: any): JSX.Element => {
       />
     );
   };
+
+  function updateSearch(text: string) {
+    console.log(text);
+  }
 
   return (
     <SafeAreaView
@@ -65,6 +69,23 @@ export const ItemsScreen = ({ navigation }: any): JSX.Element => {
           }
         />
       </View>
+
+      <SearchBarGeneric
+        updateSearch={updateSearch}
+        searchValue={searchText}
+      />
+
+      <ScrollView
+        horizontal
+        style={styles.scrollView}
+      >
+        {ITEMS_POCKETS.map((pocket, index) => (
+          <ItemPocketButton
+            key={index}
+            pocket={pocket}
+          />
+        ))}
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -111,5 +132,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     marginBottom: 10
+  },
+  scrollView: {
+    maxHeight: 45,
+    marginLeft: 25,
+    marginTop: 10
   }
 });

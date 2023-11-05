@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
   },
   buttonImageWrapper: {
     position: 'absolute',
-    right: 10,
+    right: 0,
     bottom: -20
   },
   buttonImageWrapperMedium: {
@@ -279,13 +279,13 @@ const styles = StyleSheet.create({
   },
   buttonImageWrapperSmallLight: {
     position: 'absolute',
-    right: 20,
+    right: 10,
     bottom: -90,
     opacity: 0.1
   },
   buttonImageWrapperSmallDark: {
     position: 'absolute',
-    right: 20,
+    right: 10,
     bottom: 0,
     opacity: 0.1
   },

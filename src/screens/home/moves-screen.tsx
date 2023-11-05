@@ -1,5 +1,5 @@
 import { MoveCard } from '@components/move-card';
-import { SearchBarMoves } from '@components/search-bar-moves';
+import { SearchBarGeneric } from '@components/search-bar-generic';
 import { DEFAULT_VIEWABILITY_CONFIG } from '@constants/flat-list-load';
 import { RQ_KEY } from '@constants/react-query';
 import { Colors, LogoColors } from '@constants/styles/colors';
@@ -86,7 +86,7 @@ export const MovesScreen = ({ navigation }: any): JSX.Element => {
         </Text>
       </View>
 
-      <SearchBarMoves
+      <SearchBarGeneric
         updateSearch={updateSearch}
         searchValue={searchText}
       />

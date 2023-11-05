@@ -1,15 +1,8 @@
-import React, { useContext, useMemo, useState } from 'react';
-import { Colors, LogoColors } from '@constants/styles/colors';
+import React, { useContext } from 'react';
+import { Colors } from '@constants/styles/colors';
 import { StyleSheet, TextInput, View } from 'react-native';
 import { FontFamily } from '@constants/styles/fontsFamily';
 import SearchIcon from '@assets/svg/search--grey.svg';
-import SortIcon from '@assets/svg/sort-icon.svg';
-import { BaseButton } from 'react-native-gesture-handler';
-import { PokemonResultsContext } from 'context/pokemon-results-context';
-import { FilterPokemonContext } from 'context/filter-pokemon-context';
-import { sortPokemonList } from '@utils/sort-pokemon-list';
-import { filterPokemonList } from '@utils/filter-pokemon-list';
-import { isEmpty } from 'lodash-es';
 import { useTranslation } from 'react-i18next';
 import { AppThemeContext } from 'context/app-theme-context';
 
@@ -21,7 +14,13 @@ const SearchButton = () => (
   />
 );
 
-export const SearchBarMoves = ({ updateSearch, searchValue }): JSX.Element => {
+export const SearchBarGeneric = ({
+  updateSearch,
+  searchValue
+}: {
+  updateSearch: any;
+  searchValue: string;
+}): JSX.Element => {
   const { isDarkMode } = useContext(AppThemeContext);
 
   const { t } = useTranslation();
