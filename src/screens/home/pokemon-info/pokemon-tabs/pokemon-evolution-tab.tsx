@@ -20,6 +20,7 @@ import { formatPokemonName } from '@utils/format-pokemon-name';
 import { FontFamily } from '@constants/styles/fontsFamily';
 import { HOME_STACK } from '@constants/screens';
 import { useNavigation } from '@react-navigation/native';
+import i18n from '@i18n/i18n';
 
 export const PokemonEvolutionTab = ({ route }: any) => {
   const { t } = useTranslation();
