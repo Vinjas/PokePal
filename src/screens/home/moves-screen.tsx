@@ -1,6 +1,5 @@
 import { MoveCard } from '@components/move-card';
 import { SearchBarGeneric } from '@components/search-bar-generic';
-import { DEFAULT_VIEWABILITY_CONFIG } from '@constants/flat-list-load';
 import { RQ_KEY } from '@constants/react-query';
 import { Colors, LogoColors } from '@constants/styles/colors';
 import { getAllMoves } from '@services/poke-api';
@@ -117,7 +116,6 @@ export const MovesScreen = ({ navigation }: any): JSX.Element => {
           data={searchResults}
           style={styles.list}
           horizontal={false}
-          viewabilityConfig={DEFAULT_VIEWABILITY_CONFIG}
           numColumns={1}
           keyExtractor={item => item.url}
           renderItem={({ item }) => (

@@ -219,7 +219,7 @@ export const PokemonAboutTab = ({ route }: any) => {
                 </CustomText>
                 <TouchableOpacity
                   style={{ padding: 5 }}
-                  onPress={handleAbilityClick}
+                  onPress={() => setIsAbilityModalOpen(false)}
                 >
                   <CloseIcon />
                 </TouchableOpacity>
@@ -506,7 +506,7 @@ export const PokemonAboutTab = ({ route }: any) => {
                   isDarkMode ? styles.textDark : styles.textLight
                 ]}
               >
-                {`${pokemonStatic.training.capture_rate}`}
+                {`${pokemonStatic.training.captureRate}`}
               </CustomText>
               <CustomText
                 style={{
@@ -612,7 +612,7 @@ export const PokemonAboutTab = ({ route }: any) => {
               <CustomText
                 style={[styles.text, isDarkMode ? styles.textDark : styles.textLight]}
               >
-                {pokemonStatic.breeding.hatchCounter}
+                {pokemonStatic.breeding.hatch_counter}
               </CustomText>
             </View>
           </View>

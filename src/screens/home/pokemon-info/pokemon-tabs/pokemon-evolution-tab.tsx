@@ -1,6 +1,6 @@
 import { CustomText } from '@components/custom-text';
 import { Colors, LogoColors } from '@constants/styles/colors';
-import { getPokemon } from '@services/poke-api';
+import { getPokemonStatic } from '@services/poke-api';
 import { transform } from 'lodash-es';
 import { evolutionChainMapper } from 'mapper/evolution-chain-mapper';
 import React, { useContext, useMemo } from 'react';
@@ -59,19 +59,16 @@ export const PokemonEvolutionTab = ({ route }: any) => {
   }, [evolutionChain]);
 
   async function onPokemonPress(pokemonName: string) {
-    const newPokemonData = await getPokemon(pokemonName);
+    const newPokemonData = await getPokemonStatic(pokemonName);
 
     const mappedData = {
-      name: newPokemonData.name,
-      id: newPokemonData.id,
-      typePrimary: newPokemonData.types[0].type.name,
-      typeSecondary: newPokemonData.types[1] ? newPokemonData.types[1].type.name : null,
-      spriteOfficial: newPokemonData.sprites.other['official-artwork'].front_default
+      ...newPokemonData,
+      spriteOfficial: newPokemonData.sprite.spriteOfficial,
+      typePrimary: newPokemonData.type.typePrimary,
+      typeSecondary: newPokemonData.type.typeSecondary ?? null
     };
 
-    if (newPokemonData) {
-      navigation.push(HOME_STACK.POKEMON_DETAIL, mappedData);
-    }
+    navigation.push(HOME_STACK.POKEMON_DETAIL, mappedData);
   }
 
   function renderEvolution(evolutionData: any) {

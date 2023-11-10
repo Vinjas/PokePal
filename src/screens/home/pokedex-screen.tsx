@@ -5,8 +5,8 @@ import { Colors, LogoColors } from '@constants/styles/colors';
 import { getPokemonList } from '@services/poke-api';
 import { useQuery } from '@tanstack/react-query';
 import React, { useContext, useState } from 'react';
-import { ActivityIndicator, Image, StyleSheet, Text, View } from 'react-native';
-import { BorderlessButton, FlatList } from 'react-native-gesture-handler';
+import { ActivityIndicator, Image, StyleSheet, Text, View, FlatList } from 'react-native';
+import { BorderlessButton } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FilterMenu } from '@components/filter-menu/filter-menu';
 import { PokemonResultsContext } from 'context/pokemon-results-context';
@@ -15,7 +15,6 @@ import BackIconWhite from '@assets/svg/back--white.svg';
 import { useTranslation } from 'react-i18next';
 import { AppThemeContext } from 'context/app-theme-context';
 import { FontFamily } from '@constants/styles/fontsFamily';
-import { DEFAULT_VIEWABILITY_CONFIG } from '@constants/flat-list-load';
 import { FilterPokemonContext } from 'context/filter-pokemon-context';
 import { SORT_OPTIONS } from '@constants/sort-options';
 
@@ -129,7 +128,6 @@ export const PokedexScreen = ({ navigation }: any): JSX.Element => {
           data={pokemonResults}
           style={styles.list}
           horizontal={false}
-          viewabilityConfig={DEFAULT_VIEWABILITY_CONFIG}
           numColumns={2}
           keyExtractor={(item: PokemonResource) => item.name}
           renderItem={({ item }) => (

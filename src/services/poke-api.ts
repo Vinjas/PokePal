@@ -9,13 +9,11 @@ const axios = setupCache(Axios);
 const API_URL = 'https://pokeapi.co/api/v2';
 
 export const getPokemon = async (name: string) => {
-  try {
-    const response = await axios.get(`${API_URL}/pokemon/${name}`);
+  const pokemonResult = await pokemonListMin.find(
+    (pokemon: any) => pokemon.name === name
+  );
 
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+  return pokemonResult;
 };
 
 export const getPokemonStatic = async (name: string) => {

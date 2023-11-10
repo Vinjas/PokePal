@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { CustomText } from './custom-text';
 import { ColorTypes, ColorTypesHightlight, Colors } from '@constants/styles/colors';
 import { FontFamily } from '@constants/styles/fontsFamily';
@@ -46,7 +46,7 @@ export const PokemonCard = ({
   const { t } = useTranslation();
 
   return (
-    <RectButton
+    <TouchableOpacity
       style={{
         ...styles.card,
         backgroundColor: typePrimary
@@ -139,7 +139,7 @@ export const PokemonCard = ({
           />
         </View>
       </View>
-    </RectButton>
+    </TouchableOpacity>
   );
 };
 
@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
     right: -40,
     top: 15,
     position: 'absolute',
-    zIndex: 2
+    zIndex: -1
   },
   logoImageDark: {
     width: 100,
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     right: 0,
     top: 20,
     position: 'absolute',
-    zIndex: 2
+    zIndex: -1
   },
   cardName: {
     color: Colors.pureWhite,

@@ -1,5 +1,4 @@
 import { ColorTypes, ColorTypesHightlight, Colors } from '@constants/styles/colors';
-import { formatPokemonName } from '@utils/format-pokemon-name';
 import React, { useContext } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import HeartIcon from '@assets/svg/heart--white.svg';
@@ -28,9 +27,7 @@ const BackButton = () => (
 );
 
 export const PokemonInfoHeader = ({ route, navigation }: any) => {
-  const { name, names, id, typePrimary, typeSecondary, spriteOfficial } = route.params;
-
-  console.log('names :>> ', names);
+  const { names, id, typePrimary, typeSecondary, spriteOfficial } = route.params;
 
   const { t } = useTranslation();
 
@@ -53,7 +50,7 @@ export const PokemonInfoHeader = ({ route, navigation }: any) => {
             >
               <BackButton />
             </BorderlessButton>
-            <Text style={styles.nameText}>{names[i18n.language]}</Text>
+            <Text style={styles.nameText}>{names?.[i18n.language]}</Text>
           </View>
 
           <View>
